@@ -31,6 +31,9 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Default URL for Devise mailer in development
+  config.action_mailer.default_url_options = { host: 'localhost', port: 3030 }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -44,6 +47,7 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
+
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
