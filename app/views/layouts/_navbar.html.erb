@@ -5,9 +5,10 @@
    <a href="/" class="navbar-brand mr-auto"><%= image_tag "logo.png", class: "nav-logo d-inline-block align-top"%>Checkmateschess</a>
    <div class="navbar-collapse collapse" id="collapsingNavbar">
 
-     <ul class="navbar-nav ml-auto">
+     <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+      <%= link_to "New Game", new_game_path, class: "nav-item, nav-pad" %>
      </ul>
-     <ul class="navbar-nav ml-auto">
+     <ul class="navbar-nav my-2 my-lg-0">
 
      <% if user_signed_in? %>
 
