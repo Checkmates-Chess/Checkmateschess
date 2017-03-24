@@ -1,7 +1,9 @@
 <div class="box col-sm-8 offset-sm-2">
   <h1>Create A Game</h1>
-  <%= simple_form_for @game do |f| %>
-    <%= f.input :name %>
-    <%= f.submit  "Create Game", class: "btn btn-default" %>
+  <% if false %>
+    <%= simple_form_for @game do |f| %>
+      <%= f.input :name %>
+      <%= f.submit  "Create Game", class: "btn btn-default" %>
+    <% end %>
   <% end %>
 </div>
