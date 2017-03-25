@@ -38,12 +38,19 @@ gem 'jbuilder', '~> 2.5'
 gem 'bootstrap', '~> 4.0.0.alpha6'
 # Devise for users
 gem 'devise'
+
 gem 'simple_form'
 gem "font-awesome-rails"
+
+# Factory_Girl
+gem 'factory_girl'
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  # Use rspec for creating and executing tests
+  gem 'rspec-rails', '~> 3.5'
 end
 
 group :development do
