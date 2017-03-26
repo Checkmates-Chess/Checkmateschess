@@ -22,9 +22,9 @@ FactoryGirl.define do
   factory :piece do
     player_id 123
     game_id 123456
-    piece_type "bishop"
-    piece_color "black"
-    piece_status "pretty chill"
+    piece_type 'bishop'
+    piece_color 'black'
+    piece_status 'pretty chill'
     x_coordinate 5
     y_coordinate 5
     piece_id 1
