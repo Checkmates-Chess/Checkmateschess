@@ -1,0 +1,45 @@
+ <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
+     <span class="navbar-toggler-icon"></span>
+   </button>
+   <a href="/" class="navbar-brand mr-auto"><%= image_tag "logo.png", class: "nav-logo d-inline-block align-top"%>Checkmateschess</a>
+   <div class="navbar-collapse collapse" id="collapsingNavbar">
+
+     <ul class="navbar-nav mr-auto mt-2 mt-md-0">
+     <li class="nav-item">
+      <%= link_to "New Game", new_game_path, class: "nav-link" %>
+     </li>
+
+     <li class="nav-item">
+      <%= link_to "Lobby", lobby_path, class: "nav-link" %>
+     </li>
+     </ul>
+     <ul class="navbar-nav my-2 my-lg-0">
+
+     <% if user_signed_in? %>
+
+      <li class="nav-item">
+
+        <%= link_to user_path(current_user), class: "nav-link" do %>
+          Welcome <%= current_user.username %>
+        <% end %>
+      </li>
+
+      <li class="nav-item">
+      <%= link_to "Sign out", destroy_user_session_path, method: :delete, class: "nav-link" %>
+      </li>
+
+     <% else %>
+
+       <li class="nav-item">
+         <%= link_to 'Sign in', new_user_session_path, class: 'nav-link' %>
+       </li>
+       <li class="nav-item">
+        <%= link_to "Sign up", new_user_registration_path, class: "nav-link" %>
+       </li>
+
+
+     <% end %>
+     </ul>
+   </div>
+</nav>
