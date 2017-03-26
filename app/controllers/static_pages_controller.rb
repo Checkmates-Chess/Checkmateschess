@@ -4,4 +4,8 @@ class StaticPagesController < ApplicationController
 
   end
 
+  def lobby
+    @users = User.all
+  end
+
 end

@@ -1,0 +1,25 @@
+<br>
+<div class="row">
+<div class="col-sm-6">
+  <h2 class="text-center">All Users</h2>
+  <div class="user-list box">
+    <% @users.each do |user| %>
+      <div class="box">
+        <p>User: <%= user.username %></p>
+        <a href="#" class="btn btn-primary">Play Game</a>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<div class="col-sm-6">
+  <h2 class="text-center">Current Games</h2>
+  <div class="user-list box">
+    <% 10.times do |i| %>
+      <p>Current game: dummy-user-<%= i %> vs dummy-user-<%= i + 1 %></p>
+    <% end %>
+  </div>
+</div>
+
+</div>
