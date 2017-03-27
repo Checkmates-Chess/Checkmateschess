@@ -4,7 +4,7 @@ RSpec.describe GamesController, type: :controller do
   describe "games#new" do
     it "should show new game page" do
       get :new
-      expect(response).to redirect_to "http://www.BULLSHIT.com"
+      expect(response).to have_http_status(:success)
     end
   end
 
