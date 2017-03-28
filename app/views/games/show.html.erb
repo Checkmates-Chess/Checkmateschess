@@ -1,2 +1,6 @@
 <h1>Games#show</h1>
 <p>Find me in app/views/games/show.html.erb</p>
+
+<% if current_game.player_black_id == 0 %>
+  <p><%= link_to "Join Game!", game_path(current_game), method: :patch %></p>
+<% end %>
