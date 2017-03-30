@@ -67,7 +67,3 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-# to make sure test db is cleared out between tests
-group :test do
-  gem 'database_cleaner'
-end
