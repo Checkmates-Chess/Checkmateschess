@@ -12,10 +12,10 @@ FactoryGirl.define do
 
   factory :game do
     game_title 'meat salad forever'
-    player_black_id -1
-    player_white_id -1
-    player_turn "black"
-    winner_id 0
+    #player_black_id -1
+    #player_white_id -1
+    #player_turn "black"
+    #winner_id 0
 
     association :user
   end

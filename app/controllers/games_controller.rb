@@ -2,7 +2,7 @@ class GamesController < ApplicationController
   before_action :authenticate_user!, except: [:show]
   def new
     @game = Game.new
-    @game.update_attributes(:player_black_id => -1, :player_white_id => -1)
+    #@game.update_attributes(:player_black_id => -1, :player_white_id => -1)
   end
 
   def create
