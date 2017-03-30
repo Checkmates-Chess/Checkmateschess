@@ -45,6 +45,8 @@ gem "omniauth-facebook"
 
 # Factory_Girl
 gem 'factory_girl'
+# Figaro secures our secret keys
+gem 'figaro'
 
 
 group :development, :test do
@@ -52,6 +54,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   # Use rspec for creating and executing tests
   gem 'rspec-rails', '~> 3.5'
+  gem 'factory_girl_rails'
 end
 
 group :development do
