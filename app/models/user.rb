@@ -9,7 +9,7 @@ class User < ApplicationRecord
 
   validates :username, presence: true, length: { minimum: 3,
    maximum: 30 }
-  #validates_uniqueness_of :username
+  validates_uniqueness_of :username
   
   # from_auth method tries to find an existing user by the provider and uid fields. If no user is found, a new one is created with a random password and some extra information. Note that the first_or_create method automatically sets the provider and uid fields when creating a new user.
   def self.from_omniauth(auth)

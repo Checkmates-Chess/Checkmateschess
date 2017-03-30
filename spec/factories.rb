@@ -3,7 +3,9 @@ FactoryGirl.define do
     sequence :email do |n|
       'dummyEmail#{n}@gmail.com'
     end
-    username 'hippoman'
+    sequence :username do |n|
+      'hippoman#{n}'
+    end
     password 'secretPassword'
     password_confirmation 'secretPassword'
   end
@@ -11,7 +13,7 @@ FactoryGirl.define do
   factory :game do
     game_title 'meat salad forever'
     player_black_id -1
-    player_white_id 1
+    player_white_id -1
     player_turn "black"
     winner_id 0
 

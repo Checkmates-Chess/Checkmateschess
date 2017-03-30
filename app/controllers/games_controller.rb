@@ -16,7 +16,7 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    @game.update_attributes(:player_black_id => current_user.id)
+    @game.update_attributes(:player_black_id => current_user.id, :player_white_id => @game.user_id)
     redirect_to game_path(@game)
   end
 
