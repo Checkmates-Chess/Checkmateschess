@@ -5,16 +5,18 @@ class GamesController < ApplicationController
   end
 
   def create
-    Game.create(game_params)
+    current_user.games.create(game_params)
     redirect_to root_path
   end
 
   def show
+    @game = Game.find(params[:id])
   end
 
   def update
-    current_game.update_attributes(:player_black_id => current_user.id)
-    redirect_to game_path(current_game)
+    @game = Game.find(params[:id])
+    @game.update_attributes(:player_black_id => current_user.id)
+    redirect_to game_path(@game)
   end
 
   private
