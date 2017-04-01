@@ -30,5 +30,4 @@ FactoryGirl.define do
     association :user
     association :game
   end
-
 end

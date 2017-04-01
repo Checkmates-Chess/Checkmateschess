@@ -45,6 +45,8 @@ gem "omniauth-facebook"
 
 # Factory_Girl
 gem 'factory_girl'
+# Figaro secures our secret keys
+gem 'figaro'
 
 
 group :development, :test do
