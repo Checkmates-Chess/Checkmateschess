@@ -225,8 +225,8 @@ DEPENDENCIES
   devise
   factory_girl
   factory_girl_rails
-  font-awesome-rails
   figaro
+  font-awesome-rails
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)
