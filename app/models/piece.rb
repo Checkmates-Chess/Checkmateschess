@@ -1,6 +1,8 @@
 class Piece < ApplicationRecord
   belongs_to :game
   belongs_to :user
+  attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
+
 # the variable definitions and board was used to write the method.  once tests are implemented and we develop a board,
 # we will possibly need to change board and o = "open space" variable and how it checks
 # for open space.
@@ -44,7 +46,7 @@ class Piece < ApplicationRecord
     if start_vertical == end_vertical || start_horizontal == end_horizontal    
        move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     elsif ((start_vertical-end_vertical).abs != (start_horizontal - end_horizontal).abs)
-          raise "Invalid Input, not a diagonal horizontal or vertical move"
+          raise 'Invalid Input, not a diagonal horizontal or vertical move'
     else  move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     end
   end
