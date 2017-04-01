@@ -107,7 +107,7 @@ RSpec.describe PiecesController, type: :controller do
 			end
 
 			it "should be invalid when not a straight or diagonal move" do
-				expect (piece.is_obstructed?(board2,3,3,4,7)).to raise_error("raise 'Invalid Input, not a diagonal horizontal or vertical move'")
+				expect (piece.is_obstructed?(board2,3,3,4,7)).to raise_error
 			end
 		end
 	end

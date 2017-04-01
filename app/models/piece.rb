@@ -65,7 +65,6 @@ class Piece < ApplicationRecord
     check_vertical = start_vertical
     check_horizontal = start_horizontal
     vert_incr = get_incr(start_vertical, end_vertical)
-
     hor_incr= get_incr(start_horizontal, end_horizontal)
     while(check_vertical != end_vertical || 
       check_horizontal != end_horizontal)
@@ -73,8 +72,7 @@ class Piece < ApplicationRecord
       check_horizontal += hor_incr
       if [[check_horizontal],[check_vertical]] === [[end_horizontal],[end_vertical]]
         return false
-      end
-      if board[check_vertical][check_horizontal] != "open space"
+      elsif board[check_vertical][check_horizontal] != "open space"
         return true
       end
     end
