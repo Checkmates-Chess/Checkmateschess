@@ -1,7 +1,7 @@
 class Piece < ApplicationRecord
   belongs_to :game
   belongs_to :user
-# this was used to write.  once tests are implemented and we develop a board,
+# the variable definitions and board was used to write the method.  once tests are implemented and we develop a board,
 # we will possibly need to change board and o = "open space" variable and how it checks
 # for open space.
 # Then we can delete this.
@@ -47,7 +47,6 @@ class Piece < ApplicationRecord
 
     # need to raise an error if invalid move
     
-    # should they all be elsif?
     # up/right
     if start_vertical > end_vertical && start_horizontal < end_horizontal
       return move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, -1, 1)
@@ -60,13 +59,15 @@ class Piece < ApplicationRecord
     # down/right
     elsif start_vertical < end_vertical && start_horizontal < end_horizontal
       return move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, 1, 1)
-    end
     # up/down 
-    if start_horizontal === end_horizontal
+
+    # change to elsif start_horizontal === end_horizontal && start_vertical < end_vertical
+    # for uniformity
+    elsif start_horizontal === end_horizontal
       if start_vertical < end_vertical
-        move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, 1, 0)
+        return move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, 1, 0)
       else
-        move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, -1, 0)
+        return move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, -1, 0)
       end
     # left/right
     elsif start_vertical === end_vertical
@@ -76,7 +77,6 @@ class Piece < ApplicationRecord
       move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal, 0, -1)
       end
     end
-
   end
   
   # iterates by one square in whichever direction we specify and checks for "open space"
