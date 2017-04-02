@@ -103,28 +103,14 @@ RSpec.describe PiecesController, type: :controller do
 		end
 		describe "when move is invalid" do
 			it "should be invalid when piece doesn't move" do
-				expect (piece.is_obstructed?(board2,3,3,3,3)).to raise_error
+				expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error
 			end
 
 			it "should be invalid when not a straight or diagonal move" do
-				expect (piece.is_obstructed?(board2,3,3,4,7)).to raise_error
+				expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error
 			end
 		end
 	end
 end
 
-
-
-
-
-
-
-
-
-RSpec.describe "matching error message with string" do
-  it "matches the error message" do
-    expect { raise StandardError, 'this message exactly'}.
-      to raise_error('this message exactly')
-  end
-end
 
