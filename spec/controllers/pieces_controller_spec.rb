@@ -28,7 +28,7 @@ RSpec.describe PiecesController, type: :controller do
 				[e,o,o,x,o,o,x,o],
 				[o,o,o,e,o,o,o,e],
 			]
-		piece = Piece.create(game_id: 1, piece_type: "rook", piece_color: "white", piece_status: "alive", x_coordinate: 3, y_coordinate: 3)
+		piece = Piece.create(game_id: 1, piece_type: "Rook", piece_color: "white", piece_status: "alive", x_coordinate: 3, y_coordinate: 3)
 		describe "when move is valid" do
 			describe "when move is unobstructed" do
 				describe "diagonal moves" do
@@ -103,11 +103,11 @@ RSpec.describe PiecesController, type: :controller do
 		end
 		describe "when move is invalid" do
 			it "should be invalid when piece doesn't move" do
-				expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error
+				expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error(RuntimeError, 'Invalid Input, destination must be different from start')
 			end
 
 			it "should be invalid when not a straight or diagonal move" do
-				expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error
+				expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error(RuntimeError, 'Invalid Input, not a diagonal horizontal or vertical move')
 			end
 		end
 	end
