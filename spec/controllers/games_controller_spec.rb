@@ -1,5 +1,5 @@
 require 'rails_helper'
- 
+
 RSpec.describe GamesController, type: :controller do
   describe "games#new" do
     it "should show new game page to signed in user" do
@@ -48,5 +48,4 @@ RSpec.describe GamesController, type: :controller do
       expect(game_to_join.player_white_id).to eq game_to_join.user_id
     end
   end
-
 end
