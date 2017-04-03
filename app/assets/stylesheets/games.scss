@@ -10,18 +10,22 @@
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.black, .white {
+  flex: 1 0 100px;
+  height: 100px;
 }
 
 .black {
-  height: 100px;
-  width: 100px;
   background-color: black;
-  float: left;
 }
 
 .white {
-  height: 100px;
-  width: 100px;
   background-color: white;
-  float: left;
 }
+
+
+/*Display inline block*/
