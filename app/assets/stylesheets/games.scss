@@ -20,12 +20,18 @@
 }
 
 .black {
-  background-color: black;
+  background-color: #C57148;
 }
 
 .white {
-  background-color: white;
+  background-color: #FFD3AE;
 }
 
+.pieces {
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+  width: 75%;
+  height: 75%;
+}
 
-/*Display inline block*/

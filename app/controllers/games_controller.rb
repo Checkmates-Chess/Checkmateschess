@@ -1,5 +1,6 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!, except: [:show]
+
   def new
     @game = Game.new
   end
@@ -7,7 +8,7 @@ class GamesController < ApplicationController
   def create
     Game.create(game_params)
     redirect_to root_path
- end
+  end
 
   def show
   end
