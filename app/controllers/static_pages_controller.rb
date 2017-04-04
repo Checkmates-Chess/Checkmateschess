@@ -8,7 +8,4 @@ class StaticPagesController < ApplicationController
     @users = User.all
   end
 
-  def board
-  end
-
 end

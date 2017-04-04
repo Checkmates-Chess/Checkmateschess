@@ -1,6 +1,6 @@
 module GamesHelper
 
-  def find_piece(row, col)
+  def place_pieces(row, col)
     if row == 1
       image_tag("black-pawn.svg", class: "pieces") 
     elsif row == 0 && (col == 0 || col == 7)
