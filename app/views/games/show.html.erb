@@ -1,6 +1,10 @@
 <h1>Games#show</h1>
 <p>Find me in app/views/games/show.html.erb</p>
 
+<% if @game.player_black_id.nil? %>
+  <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
+<% end %>
+
 <div id="board">
   <% 8.times do |row| %>
     <% 8.times do |col| %>
@@ -8,5 +12,3 @@
     <% end %>
   <% end %>
 </div>
-
-
