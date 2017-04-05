@@ -114,13 +114,13 @@ RSpec.describe PiecesController, type: :controller do
 
 	describe "pieces#update" do
 		it "should update (x, y) of piece to that of passed parameters" do
-			user = FactoryGirl.create(:user, email: "piece#update_test_user1111@firehoseproject.com", username: "piece#update_test_username111")
+			user = FactoryGirl.create(:user, email: "piece#update_test_user@firehoseproject.com", username: "piece#update_test_username111")
 			game = FactoryGirl.create(:game)
-			#piece = FactoryGirl.create(:generic_piece, x_coordinate: 5, y_coordinate: 5)
-			#byebug
 			piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5, user_id: user.id, game_id: game.id)
+			#piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5)
+			sign_in user
 
-			put :update, params: { 
+			patch :update, params: { 
 				id: piece.id, 
 				piece: {
 					x_coordinate: 4,

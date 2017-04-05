@@ -12,19 +12,13 @@ FactoryGirl.define do
 
   factory :game do
     game_title 'meat salad forever'
-    #player_black_id -1
-    #player_white_id -1
-    #player_turn "black"
-    #winner_id 0
 
     association :user
   end
 
   factory :piece do
-    piece_id 1
-    piece_type 'bishop'
+    piece_type 'Bishop'
     piece_color 'black'
-    piece_status 'pretty chill'
     x_coordinate 5
     y_coordinate 5
 
@@ -32,10 +26,5 @@ FactoryGirl.define do
     association :game
   end
 
-  factory :generic_piece, class: Piece do
-
-    #association :user
-    #association :game
-  end
 end
 
