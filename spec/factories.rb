@@ -21,6 +21,7 @@ FactoryGirl.define do
   end
 
   factory :piece do
+    piece_id 1
     piece_type 'bishop'
     piece_color 'black'
     piece_status 'pretty chill'
@@ -30,4 +31,11 @@ FactoryGirl.define do
     association :user
     association :game
   end
+
+  factory :generic_piece, class: Piece do
+
+    #association :user
+    #association :game
+  end
 end
+

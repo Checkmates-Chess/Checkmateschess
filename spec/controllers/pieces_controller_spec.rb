@@ -111,6 +111,29 @@ RSpec.describe PiecesController, type: :controller do
 			end
 		end
 	end
+
+	describe "pieces#update" do
+		it "should update (x, y) of piece to that of passed parameters" do
+			user = FactoryGirl.create(:user, email: "piece#update_test_user1111@firehoseproject.com", username: "piece#update_test_username111")
+			game = FactoryGirl.create(:game)
+			#piece = FactoryGirl.create(:generic_piece, x_coordinate: 5, y_coordinate: 5)
+			#byebug
+			piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5, user_id: user.id, game_id: game.id)
+
+			put :update, params: { 
+				id: piece.id, 
+				piece: {
+					x_coordinate: 4,
+					y_coordinate: 4
+				}
+			}
+
+			expect(piece.x_coordinate).to eq(4)
+			expect(piece.y_coordinate).to eq(4)
+			expect(response).to redirect_to game_path(piece.game)
+		end
+	end
+
 end
 
 
