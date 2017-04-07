@@ -117,7 +117,6 @@ RSpec.describe PiecesController, type: :controller do
 			user = FactoryGirl.create(:user, email: "piece#update_test_user@firehoseproject.com", username: "piece#update_test_username111")
 			game = FactoryGirl.create(:game)
 			piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5, user_id: user.id, game_id: game.id)
-			#piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5)
 			sign_in user
 
 			patch :update, params: { 
