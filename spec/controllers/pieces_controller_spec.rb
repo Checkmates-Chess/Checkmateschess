@@ -128,9 +128,12 @@ RSpec.describe PiecesController, type: :controller do
 				}
 			}
 
+			expect(response).to redirect_to piece_path(piece)
+			piece.reload
 			expect(piece.x_coordinate).to eq(4)
 			expect(piece.y_coordinate).to eq(4)
-			expect(response).to redirect_to game_path(piece.game)
+			#expect(response).to redirect_to game_path(piece.game)
+
 		end
 	end
 
