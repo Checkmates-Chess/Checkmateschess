@@ -6,6 +6,7 @@ class StaticPagesController < ApplicationController
 
   def lobby
     @users = User.all
+    @games = Game.available
   end
 
 end
