@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PiecesController, type: :controller do
 	describe "test is_obstructed? method" do
-		o = "open space"
+		o = nil
 		s = "start point"
 		e = "end points"
 		x = "piece"
