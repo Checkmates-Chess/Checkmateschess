@@ -62,16 +62,15 @@ RSpec.describe GamesController, type: :controller do
         game = Game.last
         game.populate_game
         game.board_state
-        puts game.board_state
         expect(game.board).to eq([
-                                    [@b_rook, @b_knight1, @b_bishop1, @b_king, @b_queen, @b_bishop2, @b_knight2, @b_rook2],
-                                    [@b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7, @b_pawn8],
+                                    [game.b_rook1, game.b_knight1, game.b_bishop1, game.b_king, game.b_queen, game.b_bishop2, game.b_knight2, game.b_rook2],
+                                    [game.b_pawn1, game.b_pawn2, game.b_pawn3, game.b_pawn4, game.b_pawn5, game.b_pawn6, game.b_pawn7, game.b_pawn8],
                                     [nil, nil, nil, nil, nil, nil, nil, nil],
                                     [nil, nil, nil, nil, nil, nil, nil, nil],
                                     [nil, nil, nil, nil, nil, nil, nil, nil],
                                     [nil, nil, nil, nil, nil, nil, nil, nil],
-                                    [@w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8],
-                                    [@w_rook1, @w_knight1, @w_bishop1, @w_king, @w_queen, @w_bishop2, @w_knight2, @w_rook2]
+                                    [game.w_pawn1, game.w_pawn2, game.w_pawn3, game.w_pawn4, game.w_pawn5, game.w_pawn6, game.w_pawn7, game.w_pawn8],
+                                    [game.w_rook1, game.w_knight1, game.w_bishop1, game.w_king, game.w_queen, game.w_bishop2, game.w_knight2, game.w_rook2]
               ])
       end
     end

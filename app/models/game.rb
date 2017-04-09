@@ -43,7 +43,6 @@ class Game < ApplicationRecord
 		@w_pawn6 = Piece.create :game_id => :id, :piece_type => "Pawn", :piece_color => "white", :piece_status => "alive", :x_coordinate => 5, :y_coordinate => 6
 		@w_pawn7 = Piece.create :game_id => :id, :piece_type => "Pawn", :piece_color => "white", :piece_status => "alive", :x_coordinate => 6, :y_coordinate => 6
 		@w_pawn8 = Piece.create :game_id => :id, :piece_type => "Pawn", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6
-
   end
 
   def board_state
