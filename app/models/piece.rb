@@ -27,7 +27,7 @@ class Piece < ApplicationRecord
         piece = Piece.where(x_coordinate:x, y_coordinate: y).last
         piece.mark_as_captured
       end
-      update_attributes(x_position: new_x, y_position: new_y)
+      update_attributes(x_coordinate: new_x, y_coordinate: new_y)
     else
       return false
     end
@@ -56,7 +56,7 @@ class Piece < ApplicationRecord
     Piece
       .where(x_coordinate: x, y_coordinate: y)
       .where.not(piece_color: piece_color)
-      .exits?
+      .exists?
   end
 
 
