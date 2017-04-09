@@ -27,6 +27,54 @@ RSpec.describe GamesController, type: :controller do
       expect(game.game_title).to eq("best game 1")
       expect(game.user).to eq(user)
     end
+
+    describe "create board" do
+      it "should succesfully populate pieces" do
+        user = FactoryGirl.create(:user)
+        sign_in user
+
+        post :create, params: {
+          game: {
+            game_title: "best game1"
+          }
+        }
+
+        game = Game.last
+        game.populate_game
+        expect(game.b_pawn1.x_coordinate).to be(1)
+        expect(game.b_pawn1.y_coordinate).to be(1)
+        expect(game.w_rook1.x_coordinate).to be (0)
+        expect(game.w_rook1.piece_color).to eq("white")
+        #why doesn't piece_type get set to rook?
+        expect(game.w_rook1.piece_type).to eq("Rook")
+      end
+
+      it "should successfully create a board state" do
+        user = FactoryGirl.create(:user)
+        sign_in user
+
+        post :create, params: {
+          game: {
+            game_title: "best game1"
+          }
+        }
+
+        game = Game.last
+        game.populate_game
+        game.board_state
+        puts game.board_state
+        expect(game.board).to eq([
+                                    [@b_rook, @b_knight1, @b_bishop1, @b_king, @b_queen, @b_bishop2, @b_knight2, @b_rook2],
+                                    [@b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7, @b_pawn8],
+                                    [nil, nil, nil, nil, nil, nil, nil, nil],
+                                    [nil, nil, nil, nil, nil, nil, nil, nil],
+                                    [nil, nil, nil, nil, nil, nil, nil, nil],
+                                    [nil, nil, nil, nil, nil, nil, nil, nil],
+                                    [@w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8],
+                                    [@w_rook1, @w_knight1, @w_bishop1, @w_king, @w_queen, @w_bishop2, @w_knight2, @w_rook2]
+              ])
+      end
+    end
   end
 
   describe "games#show" do
