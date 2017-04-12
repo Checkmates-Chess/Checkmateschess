@@ -30,4 +30,12 @@ FactoryGirl.define do
     association :user
     association :game
   end
+  
+  factory :bishop do
+    piece_type 'bishop'
+
+    association :user
+    association :game
+  end
+
 end
