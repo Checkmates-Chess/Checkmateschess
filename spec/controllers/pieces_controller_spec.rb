@@ -116,7 +116,7 @@ RSpec.describe PiecesController, type: :controller do
 		it "should update (x, y) of piece to that of passed parameters" do
 			user = FactoryGirl.create(:user, email: "piece#update_test_user@firehoseproject.com", username: "piece#update_test_username111")
 			game = FactoryGirl.create(:game)
-			piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5, user_id: user.id, game_id: game.id)
+			piece = FactoryGirl.create(:piece, piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5, user_id: user.id, game_id: game.id)
 			sign_in user
 
 			patch :update, params: { 
@@ -131,6 +131,24 @@ RSpec.describe PiecesController, type: :controller do
 			piece.reload
 			expect(piece.x_coordinate).to eq(4)
 			expect(piece.y_coordinate).to eq(4)
+		end
+	end
+
+	describe "valid move method for pawn" do
+		o = "open space"
+		board = [[o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o],
+						 [o, o, o, o, o, o, o, o]
+						]
+		it "black moving one forward if unobstructed should be valid move" do
+			user = FactoryGirl.create(:user, email: "piece#update_test_user112@firehoseproject.com", username: "piece#update_test_username112")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			expect(piece.valid_move?(board, [4, 2])).to eq(true)
 		end
 	end
 
