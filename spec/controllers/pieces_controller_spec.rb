@@ -311,6 +311,18 @@ RSpec.describe PiecesController, type: :controller do
 			board[5][7] = o
 			expect(pawn.valid_move?(board, [7, 5])).to eq(false)
 		end
+
+		it "should return false for white moving to a square that's not one/two forward or one diagonally" do
+			user = FactoryGirl.create(:user, email: "user1145@firehoseproject.com", username: "user1145")
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "", user_id: user.id)
+			expect(pawn.valid_move?(board, [5, 4])).to eq(false)
+		end
+
+		it "should return false for black moving to a square that's not one/two forward or one diagonally" do
+			user = FactoryGirl.create(:user, email: "user1146@firehoseproject.com", username: "user1146")
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			expect(pawn.valid_move?(board, [3, 0])).to eq(false)
+		end
 	end
 
 end
