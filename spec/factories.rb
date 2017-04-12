@@ -26,5 +26,9 @@ FactoryGirl.define do
     association :game
   end
 
+  factory :pawn, parent: :piece, class: 'Pawn' do
+    piece_type 'Pawn'
+  end
+
 end
 
