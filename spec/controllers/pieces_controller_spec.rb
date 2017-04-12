@@ -145,11 +145,92 @@ RSpec.describe PiecesController, type: :controller do
 						 [o, o, o, o, o, o, o, o],
 						 [o, o, o, o, o, o, o, o]
 						]
-		it "black moving one forward if unobstructed should be valid move" do
-			user = FactoryGirl.create(:user, email: "piece#update_test_user112@firehoseproject.com", username: "piece#update_test_username112")
+
+		class PieceForValMove
+		  attr_reader :piece_color
+		  def initialize(piece_color)
+		    @piece_color = piece_color
+		  end
+		end			
+
+		it "should return true for black moving one forward if unobstructed" do
+			user = FactoryGirl.create(:user, email: "user1110@firehoseproject.com", username: "user1110")
 			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
 			expect(piece.valid_move?(board, [4, 2])).to eq(true)
 		end
+
+		it "should return true for black moving two forward if unobstructed and first move" do
+			user = FactoryGirl.create(:user, email: "user1112@firehoseproject.com", username: "user1112")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "first move", user_id: user.id)
+			expect(piece.valid_move?(board, [4, 3])).to eq(true)
+		end
+
+		it "should return true for black moving one forward if unobstructed and first move" do
+			user = FactoryGirl.create(:user, email: "user1113@firehoseproject.com", username: "user1113")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "first move", user_id: user.id)
+			expect(piece.valid_move?(board, [4, 2])).to eq(true)
+		end
+
+		it "should return false for black moving two forward if not first move" do
+			user = FactoryGirl.create(:user, email: "user1114@firehoseproject.com", username: "user1114")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			expect(piece.valid_move?(board, [4, 3])).to eq(false)
+		end
+
+		it "should return true for black moving one move southwest if that square is occupied by white piece" do
+			user = FactoryGirl.create(:user, email: "user1115@firehoseproject.com", username: "user1115")
+			#other_user = FactoryGirl.create(:user, email: "user1116@firehoseproject.com", username: "user1116")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			#enemy_piece = FactoryGirl.create(:piece, piece_type: "Rook", x_coordinate: 3, y_coordinate: 2, piece_color: "white", piece_status: "", user_id: other_user.id)
+			enemy_piece = PieceForValMove.new("white")
+			board[2][3] = enemy_piece
+			expect(piece.valid_move?(board, [3, 2])).to eq(true)
+		end
+
+		it "should return true for black moving one move southeast if that square is occupied by white piece" do
+			user = FactoryGirl.create(:user, email: "user1117@firehoseproject.com", username: "user1117")
+			#other_user = FactoryGirl.create(:user, email: "user1118@firehoseproject.com", username: "user1118")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			#enemy_piece = FactoryGirl.create(:piece, piece_type: "Rook", x_coordinate: 5, y_coordinate: 2, piece_color: "white", piece_status: "", user_id: other_user.id)
+			enemy_piece = PieceForValMove.new("white")
+			board[2][5] = enemy_piece
+			expect(piece.valid_move?(board, [5, 2])).to eq(true)
+		end
+
+		it "should return false for black moving one move southwest if that square is occupied by black piece" do
+			user = FactoryGirl.create(:user, email: "user1119@firehoseproject.com", username: "user1119")
+			#other_user = FactoryGirl.create(:user, email: "user1120@firehoseproject.com", username: "user1120")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			#friendly_piece = FactoryGirl.create(:piece, piece_type: "Rook", x_coordinate: 3, y_coordinate: 2, piece_color: "black", piece_status: "", user_id: other_user.id)
+			friendly_piece = PieceForValMove.new("black")
+			board[2][3] = friendly_piece
+			expect(piece.valid_move?(board, [3, 2])).to eq(false)
+		end
+
+		it "should return false for black moving one move southeast if that square is occupied by black piece" do
+			user = FactoryGirl.create(:user, email: "user1121@firehoseproject.com", username: "user1121")
+			#other_user = FactoryGirl.create(:user, email: "user1122@firehoseproject.com", username: "user1122")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			#friendly_piece = FactoryGirl.create(:piece, piece_type: "Rook", x_coordinate: 5, y_coordinate: 2, piece_color: "black", piece_status: "", user_id: other_user.id)
+			friendly_piece = PieceForValMove.new("black")
+			board[2][5] = friendly_piece
+			expect(piece.valid_move?(board, [5, 2])).to eq(false)
+		end
+
+		it "should return false for black moving one move southwest if that square is unoccupied" do
+			user = FactoryGirl.create(:user, email: "user1123@firehoseproject.com", username: "user1123")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			board[2][3] = o
+			expect(piece.valid_move?(board, [3, 2])).to eq(false)
+		end
+
+		it "should return false for black moving one move southeast if that square is unoccupied" do
+			user = FactoryGirl.create(:user, email: "user1124@firehoseproject.com", username: "user1124")
+			piece = FactoryGirl.create(:piece, piece_type: "Pawn", x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "", user_id: user.id)
+			board[2][5] = o
+			expect(piece.valid_move?(board, [4, 3])).to eq(false)
+		end
+
 	end
 
 end

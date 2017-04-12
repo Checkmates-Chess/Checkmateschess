@@ -59,24 +59,24 @@ class Piece < ApplicationRecord
 
     # diagonal capture
     if piece_color == "black" && start_row + 1 < 8 && start_col - 1 >= 0 && start_col + 1 < 8
-      if is_obstructed?(board, start_row, start_col, start_row + 1, start_col - 1)
+      if board[start_row + 1][start_col - 1] != "open space"
         if board[start_row + 1][start_col - 1].piece_color == "white"
           possible_squares << [start_col - 1, start_row + 1]
         end
       end
-      if is_obstructed?(board, start_row, start_col, start_row + 1, start_col + 1)
+      if board[start_row + 1][start_col + 1] != "open space"
         if board[start_row + 1][start_col + 1].piece_color == "white"
           possible_squares << [start_col + 1, start_row + 1]
         end
       end
 
     elsif piece_color == "white" && start_row - 1 >= 0 && start_col - 1 >= 0 && start_col + 1 < 8
-      if is_obstructed?(board, start_row, start_col, start_row - 1, start_col - 1)
+      if board[start_row - 1][start_col - 1] != "open space"
         if board[start_row - 1][start_col - 1].piece_color == "black"
           possible_squares << [start_col - 1, start_row - 1]
         end
       end
-      if is_obstructed?(board, start_row, start_col, start_row - 1, start_col + 1)
+      if board[start_row - 1][start_col + 1] != "open space"
         if board[start_row - 1][start_col + 1].piece_color == "black"
           possible_squares << [start_col + 1, start_row - 1]
         end

@@ -20,48 +20,48 @@ class Pawn < Piece
     # forward moves
     if piece_color == "black" && start_row + 1 < 8
       if !is_obstructed?(board, start_row, start_col, start_row + 1, start_col)
-        possible_squares << [start_row + 1, start_col]
+        possible_squares << [start_col, start_row + 1]
       end
     elsif piece_color == "white" && start_row - 1 >= 0
       if !is_obstructed?(board, start_row, start_col, start_row - 1, start_col)
-        possible_squares << [start_row - 1, start_col]
+        possible_squares << [start_col, start_row - 1]
       end
     end
 
     if piece_status.include?("first move")
       if piece_color == "black" && start_row + 2 < 8
         if !is_obstructed?(board, start_row, start_col, start_row + 2, start_col)
-          possible_squares << [start_row + 2, start_col]
+          possible_squares << [start_col, start_row + 2]
         end
       elsif piece_color == "white" && start_row - 2 >= 0
         if !is_obstructed?(board, start_row, start_col, start_row - 2, start_col)
-          possible_squares << [start_row - 2, start_col]
+          possible_squares << [start_col, start_row - 2]
         end
       end
     end
 
     # diagonal capture
     if piece_color == "black" && start_row + 1 < 8 && start_col - 1 >= 0 && start_col + 1 < 8
-      if is_obstructed?(board, start_row, start_col, start_row + 1, start_col - 1)
+      if board[start_row + 1][start_col - 1] != "open space"
         if board[start_row + 1][start_col - 1].piece_color == "white"
-          possible_squares << [start_row + 1, start_col - 1]
+          possible_squares << [start_col - 1, start_row + 1]
         end
       end
-      if is_obstructed?(board, start_row, start_col, start_row + 1, start_col + 1)
+      if board[start_row + 1][start_col + 1] != "open space"
         if board[start_row + 1][start_col + 1].piece_color == "white"
-          possible_squares << [start_row + 1, start_col + 1]
+          possible_squares << [start_col + 1, start_row + 1]
         end
       end
 
     elsif piece_color == "white" && start_row - 1 >= 0 && start_col - 1 >= 0 && start_col + 1 < 8
-      if is_obstructed?(board, start_row, start_col, start_row - 1, start_col - 1)
+      if board[start_row - 1][start_col - 1] != "open space"
         if board[start_row - 1][start_col - 1].piece_color == "black"
-          possible_squares << [start_row - 1, start_col - 1]
+          possible_squares << [start_col - 1, start_row - 1]
         end
       end
-      if is_obstructed?(board, start_row, start_col, start_row - 1, start_col + 1)
+      if board[start_row - 1][start_col + 1] != "open space"
         if board[start_row - 1][start_col + 1].piece_color == "black"
-          possible_squares << [start_row - 1, start_col + 1]
+          possible_squares << [start_col + 1, start_row - 1]
         end
       end
     end
