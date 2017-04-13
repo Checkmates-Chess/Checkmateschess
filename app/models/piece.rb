@@ -57,5 +57,10 @@ class Piece < ApplicationRecord
       end
     end
   end
+
+  def valid_move?(new_x, new_y)
+    new_x <= 7 && new_x >= 0 
+    new_y <= 7 && new_y >= 0 
+  end
 end
 

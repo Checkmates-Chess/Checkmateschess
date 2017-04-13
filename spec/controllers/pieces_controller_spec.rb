@@ -112,6 +112,16 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
+	describe "valid_move? for Pieces model" do
+		it "should prevent piece from moving off the board" do
+			user = FactoryGirl.create(:user, email: "user1149@firehoseproject.com", username: "user1149")
+	    piece = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
+
+
+	    expect(piece.valid_move?(1, 8)).to eq(false)
+		end
+	end
+
 	describe "valid_move? for Bishop" do
 	  it "should allow bishops to move diagonally" do
 	    user = FactoryGirl.create(:user, email: "user1149@firehoseproject.com", username: "user1149")
