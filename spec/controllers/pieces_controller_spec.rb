@@ -111,6 +111,35 @@ RSpec.describe PiecesController, type: :controller do
 			end
 		end
 	end
+
+	describe "valid_move? for Rook" do
+		o = nil
+		s = "piece"
+		e = "end points"
+		board = [
+							[e,o,o,e,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,s,o,o,o,e],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+						]
+user = FactoryGirl.create(:user)
+rook = Piece.create(game_id: 1, piece_type: "Rook", piece_color: "white", piece_status: "alive", x_coordinate: 3, y_coordinate: 3)
+		it "should allow rook to move vertically" do
+			expect(rook.valid_move?(board, rook.y_coordinate, rook.x_coordinate, 0, 3)).to eq(true)
+		end
+
+		it "should allow rook to move horizontally" do
+			expect(rook.valid_move?(board, rook.y_coordinate, rook.x_coordinate, 3, 0)).to eq(true)
+		end
+
+		it "should not allow rook to move diagonally" do
+			expect(rook.valid_move?(board, rook.y_coordinate, rook.x_coordinate, 0, 0)).to eq(false)
+		end
+	end
 end
 
 

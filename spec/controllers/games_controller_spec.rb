@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe GamesController, type: :controller do
+  after(:all) {User.destroy_all}
   describe "games#new" do
     it "should show new game page to signed in user" do
       user = FactoryGirl.create(:user)
