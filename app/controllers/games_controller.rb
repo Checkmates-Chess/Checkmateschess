@@ -1,11 +1,17 @@
 class GamesController < ApplicationController
   before_action :authenticate_user!, except: [:show]
+
   def new
     @game = Game.new
   end
 
   def create
-    current_user.games.create(game_params)
+    @game = current_user.games.create(game_params)  
+    if rand(2) == 0
+      @game.update_attributes(player_white_id: @game.user_id)
+    else 
+      @game.update_attributes(player_black_id: @game.user_id)
+    end
     redirect_to root_path
   end
 
@@ -15,7 +21,11 @@ class GamesController < ApplicationController
 
   def update
     @game = Game.find(params[:id])
-    @game.update_attributes(:player_black_id => current_user.id, :player_white_id => @game.user_id)
+    if @game.player_black_id.nil?
+      @game.update_attributes(:player_black_id => current_user.id)
+    elsif @game.player_white_id.nil?
+      @game.update_attributes(:player_white_id => current_user.id)
+    end
     redirect_to game_path(@game)
   end
 
