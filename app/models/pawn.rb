@@ -1,13 +1,13 @@
 class Pawn < Piece
 
-  def valid_move?(board, end_point)
+  def valid_move?(board, end_vertical, end_horizontal)
     piece_status = self.piece_status
     piece_color = self.piece_color
     start_point = [self.x_coordinate, self.y_coordinate]
     start_row = start_point[1] 
     start_col = start_point[0]
-    end_row = end_point[1]
-    end_col = end_point[0]
+    end_row = end_vertical
+    end_col = end_horizontal
 
     if start_row > 7 || start_row < 0 || start_col > 7 || start_col < 0 || 
       end_row > 7 || end_row < 0 || end_col > 7 || end_col < 0
@@ -66,7 +66,7 @@ class Pawn < Piece
       end
     end
 
-    if possible_squares.include?(end_point)
+    if possible_squares.include?([end_horizontal, end_vertical])
       #return true && super
       return true
     end
