@@ -31,11 +31,8 @@ FactoryGirl.define do
     association :game
   end
   
-  factory :bishop do
-    piece_type 'bishop'
-
-    association :user
-    association :game
+  factory :bishop, parent: :piece, class: 'Bishop' do
+    piece_type 'Bishop'
   end
 
 end
