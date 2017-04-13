@@ -113,43 +113,87 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "valid_move? for Pieces model" do
+		o = "open space"
+		x = "piece"
+		e = "end points"
+		# unobstructed board
+		board = [
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,x,o,o,o],
+							[o,o,x,o,o,x,o,o],
+						]
 		it "should prevent piece from moving off the board" do
 			user = FactoryGirl.create(:user, email: "user1149@firehoseproject.com", username: "user1149")
 	    piece = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
 
 
-	    expect(piece.valid_move?(1, 8)).to eq(false)
+	    expect(piece.valid_move?(board, piece.y_coordinate, piece.x_coordinate, 1, 8)).to eq(false)
+		end
+
+		it "should allow piece to move when valid" do
+			user = FactoryGirl.create(:user, email: "user1149@firehoseproject.com", username: "user1149")
+	    piece = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
+
+
+	    expect(piece.valid_move?(board, piece.y_coordinate, piece.x_coordinate, 5, 4)).to eq(true)
+		end
+
+		it "should prevent piece to move when obstructed" do
+			user = FactoryGirl.create(:user, email: "user1149@firehoseproject.com", username: "user1149")
+	    piece = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 5, y_coordinate: 7, user_id: user.id)
+
+
+	    expect(piece.valid_move?(board, piece.y_coordinate, piece.x_coordinate, 5, 5)).to eq(false)
 		end
 	end
 
 	describe "valid_move? for Bishop" do
+		o = "open space"
+		x = "piece"
+		e = "end points"
+		# unobstructed board
+		board = [
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,x,o,o,o],
+							[o,o,x,o,o,x,o,o],
+						]
 	  it "should allow bishops to move diagonally" do
 	    user = FactoryGirl.create(:user, email: "user1149@firehoseproject.com", username: "user1149")
-	    bishop1 = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
+	    bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
 
 
-	    expect(bishop1.valid_move?(5, 4)).to eq(true)
+	    expect(bishop.valid_move?(board, bishop.y_coordinate, bishop.x_coordinate, 5, 4)).to eq(true)
 	  end
 
 	  it "should prevent bishops from moving horizontally" do
 	    user = FactoryGirl.create(:user, email: "user1147@firehoseproject.com", username: "user1147")
 	    bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
 
-	    expect(bishop.valid_move?(4, 7)).to eq(false)
+	    expect(bishop.valid_move?(board, bishop.y_coordinate, bishop.x_coordinate, 4, 7)).to eq(false)
 	  end
 
 	  it "should prevent bishops from moving vertically" do
 	    user = FactoryGirl.create(:user, email: "user1147@firehoseproject.com", username: "user1147")
 	    bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
 
-	    expect(bishop.valid_move?(2, 3)).to eq(false)
+	    expect(bishop.valid_move?(board, bishop.y_coordinate, bishop.x_coordinate, 2, 3)).to eq(false)
 	  end
 
 	  it "should prevent unallowed moves" do
 	  	user = FactoryGirl.create(:user, email: "user1147@firehoseproject.com", username: "user1147")
 	  	bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id)
 
-	  	expect(bishop.valid_move?(3, 2)).to eq(false)
+	  	expect(bishop.valid_move?(board, bishop.y_coordinate, bishop.x_coordinate, 3, 2)).to eq(false)
 	  end
 	end
 
