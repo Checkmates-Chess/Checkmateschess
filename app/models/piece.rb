@@ -1,7 +1,6 @@
 class Piece < ApplicationRecord
   belongs_to :game
   belongs_to :user
-  attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
   
   self.inheritance_column = :piece_type
 
@@ -15,6 +14,10 @@ class Piece < ApplicationRecord
   scope :rooks, -> { where(piece_type: "Rook") }
   scope :queens, -> { where(piece_type: "Queen") }
   scope :kings, -> { where(piece_type: "King") }
+
+
+  def valid_move?(board, end_point)
+  end
 
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
   # if piece doesn't move raises an error, if piece is not on one of the above planes
