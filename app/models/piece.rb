@@ -37,7 +37,6 @@ class Piece < ApplicationRecord
     update_attributes(x_coordinate: nil, y_coordinate: nil)
   end
 
-  private
 
 
   def valid_move?(x,y)

@@ -1,6 +1,5 @@
 class Knight < Piece
 
-  private
 
   def valid_move?(x, y)
      # check valid move from piece.rb and check if x and y of knight is valid
