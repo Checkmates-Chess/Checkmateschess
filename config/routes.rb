@@ -11,4 +11,5 @@ Rails.application.routes.draw do
 
   # user profile
   resources :users, only: :show
+
 end
