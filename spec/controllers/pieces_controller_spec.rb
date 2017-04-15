@@ -168,7 +168,7 @@ RSpec.describe PiecesController, type: :controller do
 
 			piece.move_to!(4,3)
 			#piece.reload
-			#piece2.reload
+			piece2.reload
 			#expect(piece.x_coordinate).to eq(4)
 			#expect(piece.y_coordinate).to eq(3)
 			expect(piece2.x_coordinate).to eq(nil)
