@@ -24,7 +24,7 @@ class Piece < ApplicationRecord
     if valid_move?(new_x, new_y)
       if capturing_move?(new_x, new_y)
         # mark captured piece as captured
-        piece = Piece.where(x_coordinate:x, y_coordinate: y).last
+        piece = Piece.where(x_coordinate:new_x, y_coordinate: new_y).last
         piece.mark_as_captured
       end
       update_attributes(x_coordinate: new_x, y_coordinate: new_y)

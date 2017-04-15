@@ -156,6 +156,23 @@ RSpec.describe PiecesController, type: :controller do
 
 			#piece.reload
 			expect(piece.move_to!(10,10)).to eq(false)
+		end
+
+		it "should successfully capture a piece of opposite color" do
+			game = FactoryGirl.create(:game)
+			user = FactoryGirl.create(:user, email: "email1@gmail.com", username: "user1")
+			sign_in user
+
+			piece = Piece.create(piece_type: "Knight", x_coordinate: 2, y_coordinate: 2, user_id: user.id, game_id: game.id, piece_color: "black")
+			piece2 = Piece.create(piece_type: "Pawn", x_coordinate: 4, y_coordinate: 3, user_id: game.user, game_id: game.id, piece_color: "white")
+
+			piece.move_to!(4,3)
+			#piece.reload
+			#piece2.reload
+			#expect(piece.x_coordinate).to eq(4)
+			#expect(piece.y_coordinate).to eq(3)
+			expect(piece2.x_coordinate).to eq(nil)
+			expect(piece2.y_coordinate).to eq(nil)
 
 		end
 	end
