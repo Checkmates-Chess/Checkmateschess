@@ -6,10 +6,10 @@ class GamesController < ApplicationController
   end
 
   def create
-    @game = current_user.games.create(game_params)  
+    @game = current_user.games.create(game_params)
     if rand(2) == 0
       @game.update_attributes(player_white_id: @game.user_id)
-    else 
+    else
       @game.update_attributes(player_black_id: @game.user_id)
     end
     redirect_to root_path

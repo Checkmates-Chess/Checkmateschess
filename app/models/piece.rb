@@ -2,7 +2,7 @@ class Piece < ApplicationRecord
   belongs_to :game
   belongs_to :user
   attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
-  
+
   self.inheritance_column = :piece_type
 
   def self.piece_types
@@ -23,7 +23,7 @@ class Piece < ApplicationRecord
     # raises error if end position is same as starting
     raise 'Invalid Input, destination must be different from start' if start_vertical == end_vertical && start_horizontal == end_horizontal
     # raises error if invalid move, otherwise runs
-    if start_vertical == end_vertical || start_horizontal == end_horizontal    
+    if start_vertical == end_vertical || start_horizontal == end_horizontal
        move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     elsif ((start_vertical-end_vertical).abs != (start_horizontal - end_horizontal).abs)
           raise 'Invalid Input, not a diagonal horizontal or vertical move'
@@ -46,7 +46,7 @@ class Piece < ApplicationRecord
     check_horizontal = start_horizontal
     vert_incr = get_incr(start_vertical, end_vertical)
     hor_incr= get_incr(start_horizontal, end_horizontal)
-    while(check_vertical != end_vertical || 
+    while(check_vertical != end_vertical ||
       check_horizontal != end_horizontal)
       check_vertical += vert_incr
       check_horizontal += hor_incr
@@ -58,4 +58,3 @@ class Piece < ApplicationRecord
     end
   end
 end
-
