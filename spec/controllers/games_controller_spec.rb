@@ -38,7 +38,7 @@ RSpec.describe GamesController, type: :controller do
   end
 
   # describe "games#update" do
-  #   it "should randomly assign current user id to player_black_id or player_white_id, nad joining player to the opposite" do
+  #   it "should randomly assign current user id to player_black_id or player_white_id, and joining player to the opposite" do
   #     game_to_join = FactoryGirl.create(:game)
   #     joining_user = FactoryGirl.create(:user)
   #     sign_in joining_user
