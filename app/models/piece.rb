@@ -2,7 +2,7 @@ class Piece < ApplicationRecord
   belongs_to :game
   belongs_to :user
 
-  attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
+  #attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
 
   self.inheritance_column = :piece_type
 
@@ -52,10 +52,7 @@ class Piece < ApplicationRecord
   end
 
   def capturing_move?(x,y)
-    Piece
-      .where(x_coordinate: x, y_coordinate: y)
-      .where.not(piece_color: piece_color)
-      .exists?
+    Piece.where(x_coordinate: x, y_coordinate: y).where.not(piece_color: piece_color).exists?
   end
 
 
