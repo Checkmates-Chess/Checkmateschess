@@ -135,18 +135,6 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "valid move method for pawn" do
-		o = "open space"
-		board = [[o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o],
-						 [o, o, o, o, o, o, o, o]
-						]
-	
-
 		#black piece moves
 		it "should return true for black moving one forward if unobstructed" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
@@ -171,40 +159,34 @@ RSpec.describe PiecesController, type: :controller do
 		it "should return true for black moving one move southwest if that square is occupied by white piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
 			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 3, y_coordinate: 2, piece_color: "white", game: pawn.game)
-			#board[2][3] = enemy_piece
 			expect(pawn.valid_move?(2, 3)).to eq(true)
 		end
 
 		it "should return true for black moving one move southeast if that square is occupied by white piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
 			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 2, piece_color: "white", game: pawn.game)
-			#board[2][5] = enemy_piece
 			expect(pawn.valid_move?(2, 5)).to eq(true)
 		end
 
 		it "should return false for black moving one move southwest if that square is occupied by black piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
 			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 3, y_coordinate: 2, piece_color: "black", game: pawn.game)
-			#board[2][3] = friendly_piece
 			expect(pawn.valid_move?(2, 3)).to eq(false)
 		end
 
 		it "should return false for black moving one move southeast if that square is occupied by black piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
 			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 2, piece_color: "black", game: pawn.game)
-			#board[2][5] = friendly_piece
 			expect(pawn.valid_move?(2, 5)).to eq(false)
 		end
 
 		it "should return false for black moving one move southwest if that square is unoccupied" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
-			#board[2][3] = o
 			expect(pawn.valid_move?(2, 3)).to eq(false)
 		end
 
 		it "should return false for black moving one move southeast if that square is unoccupied" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
-			#board[2][5] = o
 			expect(pawn.valid_move?(3, 4)).to eq(false)
 		end
 
@@ -232,43 +214,34 @@ RSpec.describe PiecesController, type: :controller do
 		it "should return true for white moving one move northwest if that square is occupied by black piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
 			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 5, piece_color: "black", game: pawn.game)
-			#board[5][5] = enemy_piece
 			expect(pawn.valid_move?(5, 5)).to eq(true)
 		end
 
 		it "should return true for white moving one move northeast if that square is occupied by black piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
 			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 7, y_coordinate: 5, piece_color: "black", game: pawn.game)
-			#board[5][7] = enemy_piece
 			expect(pawn.valid_move?(5, 7)).to eq(true)
 		end
 
 		it "should return false for white moving one move northwest if that square is occupied by white piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
 			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 5, piece_color: "white", game: pawn.game)
-			#pawn.game.pieces << friendly_piece
-			#board[5][5] = friendly_piece
 			expect(pawn.valid_move?(5, 5)).to eq(false)
 		end
 
 		it "should return false for white moving one move northeast if that square is occupied by white piece" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
 			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 7, y_coordinate: 5, piece_color: "white", game: pawn.game)
-			#pawn.game.pieces << friendly_piece
-			#board[5][7] = friendly_piece
 			expect(pawn.valid_move?(5, 7)).to eq(false)
 		end
 
 		it "should return false for white moving one move northwest if that square is unoccupied" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
-			#board[5][5] = o
 			expect(pawn.valid_move?(5, 5)).to eq(false)
 		end
 
 		it "should return false for white moving one move northeast if that square is unoccupied" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
-			#board[5][7] = o
-			#expect(pawn.valid_move?(board, 5, 7)).to eq(false)
 			expect(pawn.valid_move?(5, 7)).to eq(false)
 		end
 

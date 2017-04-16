@@ -1,11 +1,6 @@
 class Pawn < Piece
 
   def valid_move?(end_vertical, end_horizontal)
-    #piece_status = self.piece_status
-    #piece_color = self.piece_color
-    #start_point = [self.x_coordinate, self.y_coordinate]
-    #start_row = start_point[1] 
-    #start_col = start_point[0]
     start_row = y_coordinate
     start_col = x_coordinate
     end_row = end_vertical
@@ -31,8 +26,6 @@ class Pawn < Piece
       end_row > 7 || end_row < 0 || end_col > 7 || end_col < 0
       return false
     end
-    #piece_color = piece_color.downcase
-    #piece_status = piece_status.downcase
     possible_squares = []
 
     # forward moves
