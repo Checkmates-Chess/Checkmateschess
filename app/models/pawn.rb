@@ -22,10 +22,6 @@ class Pawn < Piece
       i += 1
     end
 
-    if start_row > 7 || start_row < 0 || start_col > 7 || start_col < 0 || 
-      end_row > 7 || end_row < 0 || end_col > 7 || end_col < 0
-      return false
-    end
     possible_squares = []
 
     # forward moves
@@ -79,7 +75,7 @@ class Pawn < Piece
 
     if possible_squares.include?([end_horizontal, end_vertical])
       #return true && super
-      return true
+      return super && true
     end
     false
   end
