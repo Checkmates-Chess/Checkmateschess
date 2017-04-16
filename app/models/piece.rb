@@ -25,6 +25,11 @@ class Piece < ApplicationRecord
       end_row > 7 || end_row < 0 || end_col > 7 || end_col < 0
       return false
     end
+    if game.pieces.exists?(x_coordinate: end_horizontal, y_coordinate: end_vertical)
+      if game.pieces.where(x_coordinate: end_horizontal, y_coordinate: end_vertical).first.piece_color == piece_color
+        return false
+      end
+    end
     true
   end
 
