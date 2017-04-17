@@ -136,19 +136,27 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
-	describe "move_to! method" do
-		it "should update a piece's x and y position" do
-			game = FactoryGirl.create(:game)
-			user = FactoryGirl.create(:user, email: "email1@gmail.com", username: "user1")
+	describe ".move_to!" do
+		let(:game) { FactoryGirl.create(:game) }
+		let(:user) { FactoryGirl.create(:user, email: "email1@gmail.com", username: "user1") }
+		let(:knight) do
+			FactoryGirl.create(:piece, pice_type: 'Knight', user: user, game: game, x_coordinate: 2, y_coordinate:: 2)
+		end
+		let(:new_coordinate) { { x: 4, y: 3 } }
+		before do
 			sign_in user
+			knight.move_to!(new_coordinate['x'], new_coordinate['y'])
+		end
 
-			piece = Piece.create(piece_type: "Knight", x_coordinate: 2, y_coordinate: 2, user_id: user.id, game_id: game.id)
-			piece.move_to!(4,3)
+		context 'when next coordinate is [4, 3]' do
+		  it
+			end
+		it "should update a piece's x and y position" do
 			# piece.reload
 			expect(piece.x_coordinate).to eq(4)
 			expect(piece.y_coordinate).to eq(3)
 
-			piece.move_to!(6,4)
+			knight.move_to!(6,4)
 			#piece.reload
 			expect(piece.x_coordinate).to eq(6)
 			expect(piece.y_coordinate).to eq(4)
@@ -161,14 +169,11 @@ RSpec.describe PiecesController, type: :controller do
 		it "should successfully capture a piece of opposite color" do
 			# game = FactoryGirl.create(:game)
 			# user = FactoryGirl.create(:user, email: "email1@gmail.com", username: "user1")
-			game = Game.create(game_title: "Game1")
-			user = User.create(username:"user1", email: "email1@gmail.com", password: "password", password_confirmation: "password")
-			sign_in user
 
 			piece = Piece.create(piece_type: "Knight", x_coordinate: 2, y_coordinate: 2, user_id: user.id, game_id: game.id, piece_color: "black")
 			piece2 = Piece.create(piece_type: "Pawn", x_coordinate: 4, y_coordinate: 3, user_id: game.user, game_id: game.id, piece_color: "white")
 
-			piece.move_to!(4,3)
+			knight.move_to!(4,3)
 			#piece.reload
 			expect(piece.x_coordinate).to eq(4)
 			expect(piece.y_coordinate).to eq(3)

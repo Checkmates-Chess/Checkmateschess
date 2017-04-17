@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :user do
     sequence :email do |n|
-      'dummyEmail#{n}@gmail.com'
+      "dummyEmail#{n}@gmail.com"
     end
     sequence :username do |n|
-      'hippoman#{n}'
+      "hippoman#{n}"
     end
     password 'secretPassword'
     password_confirmation 'secretPassword'
@@ -24,8 +24,8 @@ FactoryGirl.define do
     piece_type 'bishop'
     piece_color 'black'
     piece_status 'pretty chill'
-    x_coordinate 5
-    y_coordinate 5
+    x_coordinate 4
+    y_coordinate 3
 
     association :user
     association :game

@@ -41,8 +41,8 @@ class Piece < ApplicationRecord
 
   def valid_move?(x,y)
     # check if x is equal to the piece x postion if so it didn't move in x as well as check y
-      x != x_coordinate && y != y_coordinate &&
-      (x < BOARD_SIZE || x >= 0) || (y < BOARD_SIZE || y >= 0)
+    x != x_coordinate && y != y_coordinate &&
+      ((x < BOARD_SIZE || x >= 0) || (y < BOARD_SIZE || y >= 0))
 
   end
 
@@ -52,7 +52,7 @@ class Piece < ApplicationRecord
   end
 
   def capturing_move?(x,y)
-    Piece.where(x_coordinate: x, y_coordinate: y).where.not(piece_color: piece_color).exists?
+    piece = Piece.where(x_coordinate: x, y_coordinate: y).where.not(piece_color: piece_color).exists?
   end
 
 

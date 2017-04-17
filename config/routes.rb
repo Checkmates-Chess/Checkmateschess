@@ -7,8 +7,12 @@ Rails.application.routes.draw do
   get "lobby", to:"static_pages#lobby"
 
   # games
-  resources :games
+  resources :games do
+    resources :pieces, except: [:index, :show]
+  end
 
   # user profile
   resources :users, only: :show
+
+
 end
