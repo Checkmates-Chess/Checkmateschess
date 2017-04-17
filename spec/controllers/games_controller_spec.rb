@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe GamesController, type: :controller do
+  before(:all) do
+    @user = FactoryGirl.create(:user)
+    @game = FactoryGirl.create(:game)
+  end
+
+  before(:each) {sign_in @user}
   after(:all) {User.destroy_all}
+
   describe "games#new" do
     it "should show new game page to signed in user" do
-      user = FactoryGirl.create(:user)
-      sign_in user
       get :new
       expect(response).to have_http_status(:success)
     end
@@ -13,9 +18,6 @@ RSpec.describe GamesController, type: :controller do
 
   describe "games#create" do
     it "should successfully create a game for signed in user" do
-      user = FactoryGirl.create(:user)
-      sign_in user
-
       post :create, params: { 
         game: { 
           game_title: "best game 1" 
@@ -26,15 +28,11 @@ RSpec.describe GamesController, type: :controller do
 
       game = Game.last
       expect(game.game_title).to eq("best game 1")
-      expect(game.user).to eq(user)
+      expect(game.user).to eq(@user)
     end
 
     describe "create board" do
       it "should succesfully populate pieces" do
-        user = FactoryGirl.create(:user)
-        sign_in user
-
-        game = FactoryGirl.create(:game)
         # checks if 32 pieces were created
         expect(Piece.all.count).to eq(32)
         # checks two specific pieces and whether they have the correct arguments assumed
@@ -45,23 +43,19 @@ RSpec.describe GamesController, type: :controller do
       end
 
       it "should successfully create a board state" do
-        user = FactoryGirl.create(:user)
-        sign_in user
 
-        game = FactoryGirl.create(:game)
         # check 4 different positions of the board
-        expect(game.board[0][0].piece_type).to eq("Rook")
-        expect(game.board[7][7].piece_name).to eq("w_rook2")
-        expect(game.board[4][4]).to eq(nil)
-        expect(game.board[7][4].piece_name).to eq("w_queen")
+        expect(@game.board[0][0].piece_type).to eq("Rook")
+        expect(@game.board[7][7].piece_name).to eq("w_rook2")
+        expect(@game.board[4][4]).to eq(nil)
+        expect(@game.board[7][4].piece_name).to eq("w_queen")
       end
     end
   end
 
   describe "games#show" do
     it "should show game" do
-      game = FactoryGirl.create(:game)
-      get :show, params: { id: game.id }
+      get :show, params: { id: @game.id }
       expect(response).to have_http_status(:success)
     end
   end
