@@ -48,6 +48,7 @@ class Game < ApplicationRecord
                         @w_rook1, @w_rook2, @w_knight1, @w_knight2, @w_bishop1, @w_bishop2, @w_king, @w_queen, @w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8] 
   end
 
+  # creates an empty board and then populates it with the pieces created by populate_game
   def board_state
     @board =  [
                 [nil, nil, nil, nil, nil, nil, nil, nil],
