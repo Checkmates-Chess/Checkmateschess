@@ -31,18 +31,3 @@ class PiecesController < ApplicationController
 end
 
 
-# PUT /pieces/:id, remote: true
-# body
-
-
-# /games/:game_id/pieces/:id
-# body
-
-
-# ajx.body: { 'x': 1, 'y': 2, 'game_id': 1}
-
-# update.js.erb
-
-# #
-
-# board.html.erb
