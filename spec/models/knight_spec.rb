@@ -59,6 +59,7 @@ describe Knight do
         it do
           knight.move_to!(new_coordinate[:x], new_coordinate[:y])
           expect(pawn.x_coordinate).to eq(nil)
+          expect(pawn.y_coordinate).to eq(nil)
         end
       end
     end
