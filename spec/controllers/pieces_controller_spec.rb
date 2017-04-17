@@ -1,8 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe PiecesController, type: :controller do
+	describe "piece#create" do
+		it "should successfully create a piece" do
+		user = FactoryGirl.create(:user)
+        sign_in user
+
+       	game = FactoryGirl.create(:game)
+
+        piece = Piece.create(:game_id => game.id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6)
+        expect(piece.piece_type).to eq("Pawn")
+        expect(piece.piece_color).to eq("white")
+		end
+	end
 	describe "test is_obstructed? method" do
-		o = "open space"
+		o = nil
 		s = "start point"
 		e = "end points"
 		x = "piece"

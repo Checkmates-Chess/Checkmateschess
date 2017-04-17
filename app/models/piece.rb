@@ -1,7 +1,5 @@
 class Piece < ApplicationRecord
   belongs_to :game
-  belongs_to :user
-  attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
   
   self.inheritance_column = :piece_type
 
@@ -52,7 +50,7 @@ class Piece < ApplicationRecord
       check_horizontal += hor_incr
       if [[check_horizontal],[check_vertical]] === [[end_horizontal],[end_vertical]]
         return false
-      elsif board[check_vertical][check_horizontal] != "open space"
+      elsif board[check_vertical][check_horizontal] != nil
         return true
       end
     end

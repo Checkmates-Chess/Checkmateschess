@@ -27,6 +27,34 @@ RSpec.describe GamesController, type: :controller do
       expect(game.game_title).to eq("best game 1")
       expect(game.user).to eq(user)
     end
+
+    describe "create board" do
+      it "should succesfully populate pieces" do
+        user = FactoryGirl.create(:user)
+        sign_in user
+
+        game = FactoryGirl.create(:game)
+        # checks if 32 pieces were created
+        expect(Piece.all.count).to eq(32)
+        # checks two specific pieces and whether they have the correct arguments assumed
+        piece1 = Piece.find_by_piece_name("w_queen")
+        piece2 = Piece.find_by_piece_name("b_rook1")        
+        expect(piece1.y_coordinate).to eq(7)
+        expect(piece2.x_coordinate).to eq(0)
+      end
+
+      it "should successfully create a board state" do
+        user = FactoryGirl.create(:user)
+        sign_in user
+
+        game = FactoryGirl.create(:game)
+        # check 4 different positions of the board
+        expect(game.board[0][0].piece_type).to eq("Rook")
+        expect(game.board[7][7].piece_name).to eq("w_rook2")
+        expect(game.board[4][4]).to eq(nil)
+        expect(game.board[7][4].piece_name).to eq("w_queen")
+      end
+    end
   end
 
   describe "games#show" do
@@ -49,3 +77,4 @@ RSpec.describe GamesController, type: :controller do
   #   end
   # end
 end
+
