@@ -5,13 +5,14 @@ class Game < ApplicationRecord
 
   validates :game_title, presence: true, length: { minimum: 3, 
     maximum: 30 }
+
+    # automatically populates game after one is created
     after_create do
         self.populate_game
-        self.board_state
     end
 
+  # creates pieces and the @board variable 
   def populate_game
-       
     @b_rook1 = Piece.create :game_id => id, :piece_type => "Rook", :piece_name => "b_rook1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 0, :y_coordinate => 0
     @b_knight1 = Piece.create :game_id => id, :piece_type => "Knight", :piece_name => "b_knight1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 1, :y_coordinate => 0
     @b_bishop1 = Piece.create :game_id => id, :piece_type => "Bishop", :piece_name => "b_bishop1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 2, :y_coordinate => 0
@@ -44,12 +45,7 @@ class Game < ApplicationRecord
     @w_pawn6 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn6", :piece_color => "white", :piece_status => "alive", :x_coordinate => 5, :y_coordinate => 6
     @w_pawn7 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn7", :piece_color => "white", :piece_status => "alive", :x_coordinate => 6, :y_coordinate => 6
     @w_pawn8 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6
-    @starting_pieces = [@b_rook1, @b_rook2, @b_knight1, @b_knight2, @b_bishop1, @b_bishop2, @b_king, @b_queen, @b_pawn8, @b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7, @b_pawn8,
-                        @w_rook1, @w_rook2, @w_knight1, @w_knight2, @w_bishop1, @w_bishop2, @w_king, @w_queen, @w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8] 
-  end
-
-  # creates an empty board and then populates it with the pieces created by populate_game
-  def board_state
+    
     @board =  [
                 [@b_rook1, @b_knight1, @b_bishop1, @b_king, @b_queen, @b_bishop2, @b_knight2, @b_rook2],
                 [@b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7, @b_pawn8],
@@ -60,8 +56,5 @@ class Game < ApplicationRecord
                 [@w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8],
                 [@w_rook1, @w_knight1, @w_bishop1, @w_king, @w_queen, @w_bishop2, @w_knight2, @w_rook2],
               ]
-    # @starting_pieces.each { |x|
-    #     @board[x.y_coordinate][x.x_coordinate] = x
-    # }
   end
 end
