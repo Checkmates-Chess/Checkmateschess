@@ -31,26 +31,35 @@ RSpec.describe GamesController, type: :controller do
       expect(game.user).to eq(@user)
     end
 
-    describe "create board" do
-      describe "populate_game method" do
-        it "should succesfully create 32 pieces" do
-          expect(Piece.all.count).to eq(32)
-        end
-        it "should successfully create pieces with their correct attributes" do
+    describe "populate_game method" do
+      it "should succesfully create 32 pieces" do
+        expect(Piece.all.count).to eq(32)
+      end
+
+      describe "create pieces with their correct attributes" do
+        it "should successfully create w_queen with y_coordinate of 7" do
           piece1 = Piece.find_by_piece_name("w_queen")
-          piece2 = Piece.find_by_piece_name("b_rook1")        
           expect(piece1.y_coordinate).to eq(7)
+        end
+        it "should successfully create b_rook1 with x_coordinate of 0" do
+          piece2 = Piece.find_by_piece_name("b_rook1")                  
           expect(piece2.x_coordinate).to eq(0)
         end
       end
 
-      it "should successfully create a board state" do
-
-        # check 4 different positions of the board
-        expect(@game.board[0][0].piece_type).to eq("Rook")
-        expect(@game.board[7][7].piece_name).to eq("w_rook2")
-        expect(@game.board[4][4]).to eq(nil)
-        expect(@game.board[7][4].piece_name).to eq("w_queen")
+      describe "creates the @board variable" do
+        it "should place a Rook at board[0][0]" do
+          expect(@game.board[0][0].piece_type).to eq("Rook")
+        end
+        it "should place w_rook2 at board[7][7]" do
+          expect(@game.board[7][7].piece_name).to eq("w_rook2")
+        end
+        it "should place nothing (and have nil) at board[4][4]" do
+          expect(@game.board[4][4]).to eq(nil)
+        end
+        it "should place w_queen at board[7][4]" do
+          expect(@game.board[7][4].piece_name).to eq("w_queen")
+        end
       end
     end
   end
