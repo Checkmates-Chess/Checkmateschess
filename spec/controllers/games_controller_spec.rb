@@ -32,14 +32,16 @@ RSpec.describe GamesController, type: :controller do
     end
 
     describe "create board" do
-      it "should succesfully populate pieces" do
-        # checks if 32 pieces were created
-        expect(Piece.all.count).to eq(32)
-        # checks two specific pieces and whether they have the correct arguments assumed
-        piece1 = Piece.find_by_piece_name("w_queen")
-        piece2 = Piece.find_by_piece_name("b_rook1")        
-        expect(piece1.y_coordinate).to eq(7)
-        expect(piece2.x_coordinate).to eq(0)
+      describe "populate_game method" do
+        it "should succesfully create 32 pieces" do
+          expect(Piece.all.count).to eq(32)
+        end
+        it "should successfully create pieces with their correct attributes" do
+          piece1 = Piece.find_by_piece_name("w_queen")
+          piece2 = Piece.find_by_piece_name("b_rook1")        
+          expect(piece1.y_coordinate).to eq(7)
+          expect(piece2.x_coordinate).to eq(0)
+        end
       end
 
       it "should successfully create a board state" do
