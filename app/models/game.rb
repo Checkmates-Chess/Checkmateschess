@@ -51,17 +51,17 @@ class Game < ApplicationRecord
   # creates an empty board and then populates it with the pieces created by populate_game
   def board_state
     @board =  [
+                [@b_rook1, @b_knight1, @b_bishop1, @b_king, @b_queen, @b_bishop2, @b_knight2, @b_rook2],
+                [@b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7, @b_pawn8],
                 [nil, nil, nil, nil, nil, nil, nil, nil],
                 [nil, nil, nil, nil, nil, nil, nil, nil],
                 [nil, nil, nil, nil, nil, nil, nil, nil],
                 [nil, nil, nil, nil, nil, nil, nil, nil],
-                [nil, nil, nil, nil, nil, nil, nil, nil],
-                [nil, nil, nil, nil, nil, nil, nil, nil],
-                [nil, nil, nil, nil, nil, nil, nil, nil],
-                [nil, nil, nil, nil, nil, nil, nil, nil],
+                [@w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8],
+                [@w_rook1, @w_knight1, @w_bishop1, @w_king, @w_queen, @w_bishop2, @w_knight2, @w_rook2],
               ]
-    @starting_pieces.each { |x|
-        @board[x.y_coordinate][x.x_coordinate] = x
-    }
+    # @starting_pieces.each { |x|
+    #     @board[x.y_coordinate][x.x_coordinate] = x
+    # }
   end
 end
