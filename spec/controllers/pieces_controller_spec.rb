@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe PiecesController, type: :controller do
 	describe "piece#create" do
 		it "should successfully create a piece" do
-		user = FactoryGirl.create(:user)
-        sign_in user
+			user = FactoryGirl.create(:user)
+	        sign_in user
 
-       	game = FactoryGirl.create(:game)
+	       	game = FactoryGirl.create(:game)
 
-        piece = Piece.create(:game_id => game.id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6)
-        expect(piece.piece_type).to eq("Pawn")
-        expect(piece.piece_color).to eq("white")
+	        piece = Piece.create(:game_id => game.id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6)
+	        expect(piece.piece_type).to eq("Pawn")
+	        expect(piece.piece_color).to eq("white")
 		end
 	end
 	describe "test is_obstructed? method" do
@@ -125,39 +125,33 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "valid_move? for Rook" do
-		it "should allow a valid move vertically" do
+		before(:all) do
+    		@user = FactoryGirl.create(:user)
+    		@game = FactoryGirl.create(:game)
+    		@test_rook = Piece.create :game_id => @game.id, :piece_type => "Rook", :piece_name => "test_rook", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
+  			@game.board[3][3] = @test_rook
+  		end
 
-			user = FactoryGirl.create(:user)
-	        sign_in user
+  		before(:each) {sign_in @user}
 
-	        game = FactoryGirl.create(:game)
-	        test_rook = Piece.create :game_id => game.id, :piece_type => "Rook", :piece_name => "test_rook", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
-	        game.board[3][3] = test_rook
-	        expect(test_rook.valid_move?(game.board, 3, 3, 4, 3)).to eq(true)
+		describe "valid moves" do
+			it "should allow a valid move vertically" do
+		        expect(@test_rook.valid_move?(@game.board, 3, 3, 4, 3)).to eq(true)
+			end
+
+			it "should allow a valid move horizontally" do
+		        expect(@test_rook.valid_move?(@game.board, 3, 3, 3, 4)).to eq(true)
+			end
 		end
 
-		it "should allow a valid move horizontally" do
+		describe "invalid moves" do
+			it "should not allow diagonal moves" do
+		        expect(@test_rook.valid_move?(@game.board, 3, 3, 4, 4)).to eq(false)
+	    	end
 
-			user = FactoryGirl.create(:user)
-	        sign_in user
-
-	        game = FactoryGirl.create(:game)
-	        test_rook = Piece.create :game_id => game.id, :piece_type => "Rook", :piece_name => "test_rook", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
-	        game.board[3][3] = test_rook
-	        expect(test_rook.valid_move?(game.board, 3, 3, 3, 4)).to eq(true)
-		end
-
-		it "should not allow an invalid move" do
-			user = FactoryGirl.create(:user)
-	        sign_in user
-
-	        game = FactoryGirl.create(:game)
-	        test_rook = Piece.create :game_id => game.id, :piece_type => "Rook", :piece_name => "test_rook", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
-	        # creates a rook in the middle of the board
-	        game.board[3][3] = test_rook
-	        # tests movement in a diagonal and L shape
-	        expect(test_rook.valid_move?(game.board, 3, 3, 4, 4)).to eq(false)
-	        expect(test_rook.valid_move?(game.board, 3, 3, 5, 4)).to eq(false)
+	    	it "should not allow L shaped moves" do
+	        	expect(@test_rook.valid_move?(@game.board, 3, 3, 5, 4)).to eq(false)
+	    	end
 		end
 	end
 end
