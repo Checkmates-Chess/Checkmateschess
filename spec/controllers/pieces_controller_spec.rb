@@ -136,21 +136,21 @@ RSpec.describe PiecesController, type: :controller do
 
 		describe "valid moves" do
 			it "should allow a valid move vertically" do
-		        expect(@test_rook.valid_move?(@game.board, 3, 3, 4, 3)).to eq(true)
+		        expect(@test_rook.valid_move?(4, 3)).to eq(true)
 			end
 
 			it "should allow a valid move horizontally" do
-		        expect(@test_rook.valid_move?(@game.board, 3, 3, 3, 4)).to eq(true)
+		        expect(@test_rook.valid_move?(3, 4)).to eq(true)
 			end
 		end
 
 		describe "invalid moves" do
 			it "should not allow diagonal moves" do
-		        expect(@test_rook.valid_move?(@game.board, 3, 3, 4, 4)).to eq(false)
+		        expect(@test_rook.valid_move?(4, 4)).to eq(false)
 	    	end
 
 	    	it "should not allow L shaped moves" do
-	        	expect(@test_rook.valid_move?(@game.board, 3, 3, 5, 4)).to eq(false)
+	        	expect(@test_rook.valid_move?(5, 4)).to eq(false)
 	    	end
 		end
 	end
