@@ -53,6 +53,7 @@ class Piece < ApplicationRecord
 
   def capturing_move?(x,y)
     piece = Piece.where(x_coordinate: x, y_coordinate: y).where.not(piece_color: piece_color).exists?
+    return piece
   end
 
 
