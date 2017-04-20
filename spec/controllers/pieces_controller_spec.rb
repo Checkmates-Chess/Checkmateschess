@@ -157,13 +157,15 @@ RSpec.describe PiecesController, type: :controller do
 								[o,o,o,o,o,o,o,o],
 								[o,o,o,o,o,o,o,o],
 								[o,o,o,e,e,o,o,o],
-								[o,o,o,o,x,o,o,o],
-								[o,o,@w_bishop1,o,o,x,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,@w_bishop1,o,o,@w_bishop2,o,o],
 							]
 			user = FactoryGirl.create(:user)
-	    piece = game.pieces.find_by_piece_name("w_bishop1")
+	    piece1 = game.pieces.find_by_piece_name("w_bishop1")
+	    piece2 = game.pieces.find_by_piece_name("w_bishop2")
 
-	    expect(piece.valid_move?(5, 4)).to eq(true)
+	    expect(piece1.valid_move?(5, 4)).to eq(true)
+	    expect(piece2.valid_move?(5,3)).to eq(true)
 		end
 
 		it "should prevent piece to move when obstructed" do
@@ -176,12 +178,12 @@ RSpec.describe PiecesController, type: :controller do
 								[o,o,o,o,o,o,o,o],
 								[o,o,o,e,e,o,o,o],
 								[o,o,o,o,x,o,o,o],
-								[o,o,x,o,o,x,o,o],
+								[o,o,x,o,o,@w_bishop2,o,o],
 							]
 			user = FactoryGirl.create(:user)
-	    piece = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 5, y_coordinate: 7, user_id: user.id, game_id: game.id)
+	    piece = game.pieces.find_by_piece_name("w_bishop2")
 
-	    expect(piece.valid_move?(5, 5)).to eq(false)
+	    expect(piece.valid_move?(5, 3)).to eq(false)
 		end
 	end
 
