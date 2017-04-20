@@ -124,6 +124,149 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
+	describe "valid_move? for Pieces model" do
+		o = nil
+		e = "end points"
+		x = "piece"
+
+		it "should prevent piece from moving off the board" do
+			game = FactoryGirl.create(:game)
+			game.board = [
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,x,o,o,o],
+								[o,o,x,o,o,x,o,o],
+							]
+
+			user = FactoryGirl.create(:user)
+	    piece = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id, game_id: game.id)
+
+	    expect(piece.valid_move?(1, 8)).to eq(false)
+		end
+
+		it "should allow piece to move when valid" do
+			game = FactoryGirl.create(:game)
+			game.board = [
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,@w_bishop1,o,o,@w_bishop2,o,o],
+							]
+			user = FactoryGirl.create(:user)
+	    piece1 = game.pieces.find_by_piece_name("w_bishop1")
+	    piece2 = game.pieces.find_by_piece_name("w_bishop2")
+
+	    expect(piece1.valid_move?(5, 4)).to eq(true)
+	    expect(piece2.valid_move?(5,3)).to eq(true)
+		end
+
+		it "should prevent piece to move when obstructed" do
+			game = FactoryGirl.create(:game)
+			game.board = [
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,x,o,o,o],
+								[o,o,x,o,o,@w_bishop2,o,o],
+							]
+			user = FactoryGirl.create(:user)
+	    piece = game.pieces.find_by_piece_name("w_bishop2")
+
+	    expect(piece.valid_move?(5, 3)).to eq(false)
+		end
+	end
+
+	describe "valid_move? for Bishop" do
+
+		o = nil
+		e = "end points"
+		x = "piece"
+		# unobstructed board
+
+	  it "should allow bishops to move diagonally" do
+			game = FactoryGirl.create(:game)
+			game.board = [
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,x,o,o,o],
+								[o,o,@w_bishop1,o,o,x,o,o],
+							]
+			user = FactoryGirl.create(:user)
+	    bishop = game.pieces.find_by_piece_name("w_bishop1")
+
+	    expect(bishop.valid_move?(5, 4)).to eq(true)
+	  end
+
+	  it "should prevent bishops from moving horizontally" do
+		game = FactoryGirl.create(:game)
+		game.board = [
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,x,o,o,o],
+							[o,o,x,o,o,x,o,o],
+						]
+	    user = FactoryGirl.create(:user)
+	    bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id, game_id: game.id)
+
+	    expect(bishop.valid_move?(4, 7)).to eq(false)
+	  end
+
+	  it "should prevent bishops from moving vertically" do
+		game = FactoryGirl.create(:game)
+		game.board = [
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,x,o,o,o],
+							[o,o,x,o,o,x,o,o],
+						]
+	    user = FactoryGirl.create(:user)
+	    bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id, game_id: game.id)
+
+	    expect(bishop.valid_move?(2, 3)).to eq(false)
+	  end
+
+	  it "should prevent unallowed moves" do
+		game = FactoryGirl.create(:game)
+		game.board = [
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,x,o,o,o],
+							[o,o,x,o,o,x,o,o],
+						]
+	  	user = FactoryGirl.create(:user)
+	  	bishop = FactoryGirl.create(:bishop, piece_color: "white", x_coordinate: 2, y_coordinate: 7, user_id: user.id, game_id: game.id)
+
+	  	expect(bishop.valid_move?(3, 2)).to eq(false)
+	  end
+	end
+
 	describe "valid_move? for Rook" do
 		before(:all) do
     		@user = FactoryGirl.create(:user)
@@ -154,6 +297,7 @@ RSpec.describe PiecesController, type: :controller do
 	    	end
 		end
 	end
+
 end
 
 
