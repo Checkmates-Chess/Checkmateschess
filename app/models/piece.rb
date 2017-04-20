@@ -1,7 +1,5 @@
 class Piece < ApplicationRecord
   belongs_to :game
-  belongs_to :user
-  attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
   
   self.inheritance_column = :piece_type
 
@@ -52,19 +50,19 @@ class Piece < ApplicationRecord
       check_horizontal += hor_incr
       if [[check_horizontal],[check_vertical]] === [[end_horizontal],[end_vertical]]
         return false
-      elsif board[check_vertical][check_horizontal] != "open space"
+      elsif board[check_vertical][check_horizontal] != nil
         return true
       end
     end
   end
 
-  def valid_move?(board, start_y, start_x, new_y, new_x)
+  def valid_move?(new_y, new_x)
     # Checks if piece is within board coordinates
     if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
       # If new space is within board, check if there are obstructions.
       # If there is an obstruction, return false -- not a valid move. 
       # If there are no obstructions, return true -- is a valid move.
-      if self.is_obstructed?(board, start_y, start_x, new_y, new_x)
+      if self.is_obstructed?(game.board, y_coordinate, x_coordinate, new_y, new_x)
         false
       else
         true
