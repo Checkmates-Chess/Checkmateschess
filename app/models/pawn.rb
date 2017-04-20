@@ -3,9 +3,6 @@ class Pawn < Piece
   def valid_move?(end_vertical, end_horizontal)
     start_row = y_coordinate
     start_col = x_coordinate
-    end_row = end_vertical
-    end_col = end_horizontal
-
     possible_squares = []
 
     # forward moves
@@ -26,6 +23,17 @@ class Pawn < Piece
         end
       end
     end
+
+    if possible_squares.include?([end_horizontal, end_vertical])
+      return super
+    end
+    can_capture?(end_vertical, end_horizontal) && super
+  end
+
+  def can_capture?(end_vertical, end_horizontal)
+    start_row = y_coordinate
+    start_col = x_coordinate
+    possible_squares = []
 
     # diagonal capture
     if piece_color == "black" && start_row + 1 < 8 && start_col - 1 >= 0 && start_col + 1 < 8
@@ -54,7 +62,7 @@ class Pawn < Piece
     end
 
     if possible_squares.include?([end_horizontal, end_vertical])
-      return super && true
+      return true
     end
     false
   end
