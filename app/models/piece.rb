@@ -14,6 +14,7 @@ class Piece < ApplicationRecord
   scope :queens, -> { where(piece_type: "Queen") }
   scope :kings, -> { where(piece_type: "King") }
 
+
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
   # if piece doesn't move raises an error, if piece is not on one of the above planes
   # expects open spaces on the board to have the string "open space"

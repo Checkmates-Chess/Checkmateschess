@@ -6,7 +6,7 @@ RSpec.describe UsersController, type: :controller do
 			user = FactoryGirl.create(:user)
 			sign_in user
 			
-			get :show, params: { id: user.id}
+			get :show, params: { id: user.id }
 			expect(response).to have_http_status(:success)
 		end
 	end
