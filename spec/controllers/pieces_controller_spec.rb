@@ -124,6 +124,85 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
+	describe "valid_move? for Pieces model" do
+		game = FactoryGirl.create(:game)
+		o = nil
+	  e = "end points"
+	  x = "piece"
+		game.board = [
+							[@b_rook1,o,o,o,o,@b_bishop2,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,@w_bishop1,o,o,o,o,@w_rook2]
+						]
+    w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
+    b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+    b_rook1 = game.pieces.find_by_piece_name("b_rook1")
+    w_rook2 = game.pieces.find_by_piece_name("w_rook2")
+
+		it "should prevent piece from moving off the board" do
+	    expect(w_bishop1.valid_move?(1, 8)).to eq(false)
+		end
+
+		it "should allow piece to move when valid" do
+	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
+	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
+	    expect(b_rook1.valid_move?(0, 5)).to eq(true)
+	    expect(w_rook2.valid_move?(4, 7)).to eq(true)
+		end
+
+		it "should prevent piece to move when obstructed" do
+			game = FactoryGirl.create(:game)
+	    piece = game.pieces.find_by_piece_name("w_bishop1")
+
+	    expect(piece.valid_move?(5, 4)).to eq(false)
+		end
+	end
+
+	describe "valid_move? for Bishop" do
+			game = FactoryGirl.create(:game)
+			o = nil
+		  e = "end points"
+		  x = "piece"
+			game.board = [
+								[o,o,@b_bishop1,o,o,@b_bishop2,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,@w_bishop1,o,o,@w_bishop2,o,o]
+							]
+	    w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
+	    w_bishop2 = game.pieces.find_by_piece_name("w_bishop2")
+	    b_bishop1 = game.pieces.find_by_piece_name("b_bishop1")
+	    b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+
+	  it "should allow bishops to move diagonally" do
+	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
+	    expect(w_bishop2.valid_move?(5, 3)).to eq(true)
+	    expect(b_bishop1.valid_move?(2, 4)).to eq(true)
+	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
+	  end
+
+	  it "should prevent bishops from moving horizontally" do
+	    expect(w_bishop1.valid_move?(4, 7)).to eq(false)
+	  end
+
+	  it "should prevent bishops from moving vertically" do
+	    expect(b_bishop2.valid_move?(4, 5)).to eq(false)
+	  end
+
+	  it "should prevent unallowed moves" do
+			expect(w_bishop2.valid_move?(6, 1)).to eq(false)
+	  end
+	end
+
 	describe "valid_move? for Rook" do
 		before(:all) do
     		@user = FactoryGirl.create(:user)
@@ -154,6 +233,7 @@ RSpec.describe PiecesController, type: :controller do
 	    	end
 		end
 	end
+
 end
 
 
