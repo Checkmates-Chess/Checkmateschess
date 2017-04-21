@@ -22,7 +22,6 @@ FactoryGirl.define do
     x_coordinate 5
     y_coordinate 5
 
-    association :user
     association :game
   end
 
