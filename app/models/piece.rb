@@ -68,7 +68,7 @@ class Piece < ApplicationRecord
       check_horizontal += hor_incr
       if [[check_horizontal],[check_vertical]] === [[end_horizontal],[end_vertical]]
         return false
-      elsif board[check_vertical][check_horizontal] != "open space"
+      elsif board[check_vertical][check_horizontal] != nil
         return true
       end
     end

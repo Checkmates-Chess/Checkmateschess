@@ -1,11 +1,12 @@
 class PiecesController < ApplicationController
   before_action :authenticate_user!
 
-  def show
-    @piece = Piece.find(params[:id])
-  end
+  def create
+		@game = current_user.games.find(params[:id])
+		@piece = @game.pieces.create(piece_params)
+	end
 
-  def update
+	def update
     @piece = Piece.find(params[:id])
     @piece.update_attributes(piece_params)
     redirect_to game_path(@piece.game)
@@ -14,6 +15,6 @@ class PiecesController < ApplicationController
 	private
 
 	def piece_params
-		params.require(:piece).permit(:x_coordinate, :y_coordinate)
+		params.require(:piece).permit(:game_id, :piece_type, :piece_name, :piece_color, :piece_status, :x_coordinate, :y_coordinate)
 	end
 end
