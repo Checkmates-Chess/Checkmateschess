@@ -15,23 +15,6 @@ class Piece < ApplicationRecord
   scope :kings, -> { where(piece_type: "King") }
 
 
-  def valid_move?(end_vertical, end_horizontal)
-    start_row = y_coordinate
-    start_col = x_coordinate
-    end_row = end_vertical
-    end_col = end_horizontal
-    if start_row > 7 || start_row < 0 || start_col > 7 || start_col < 0 || 
-      end_row > 7 || end_row < 0 || end_col > 7 || end_col < 0
-      return false
-    end
-    if game.pieces.exists?(x_coordinate: end_horizontal, y_coordinate: end_vertical)
-      if game.pieces.where(x_coordinate: end_horizontal, y_coordinate: end_vertical).first.piece_color == piece_color
-        return false
-      end
-    end
-    true
-  end
-
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
   # if piece doesn't move raises an error, if piece is not on one of the above planes
   # expects open spaces on the board to have the string "open space"
