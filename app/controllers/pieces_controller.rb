@@ -13,6 +13,7 @@ class PiecesController < ApplicationController
     #move the piece
     if valid_movement?(@piece, x_coordinate,y_coordinate)
       @piece.move_to!(x_coordinate,y_coordinate)
+      redirect_to  game_path(@game)
     else
       flash[:notice] = "That is not a valid move"
     end
