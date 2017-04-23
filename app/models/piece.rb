@@ -56,6 +56,26 @@ class Piece < ApplicationRecord
     return piece
   end
 
+  def can_be_captured?
+    opponents = Piece.where.not(piece_color: self.piece_color).all
+    opponents.each do |opponent|
+      if opponent.valid_move?(self.x_coordinate, self.y_coordinate)
+        #the opponent can capture us
+        return true
+      end
+    end
+    return false
+  end
+
+
+
+
+
+
+
+
+
+
 
 
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
