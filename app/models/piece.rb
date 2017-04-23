@@ -20,12 +20,17 @@ class Piece < ApplicationRecord
   # expects open spaces on the board to have the string "open space"
   def is_obstructed?(board, start_vertical,start_horizontal,end_vertical,end_horizontal)
     # raises error if end position is same as starting
-    raise 'Invalid Input, destination must be different from start' if start_vertical == end_vertical && start_horizontal == end_horizontal
+    # raise 'Invalid Input, destination must be different from start' 
+    if start_vertical == end_vertical && start_horizontal == end_horizontal
+      true
+    end
     # raises error if invalid move, otherwise runs
     if start_vertical == end_vertical || start_horizontal == end_horizontal    
-       move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
+      move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     elsif ((start_vertical-end_vertical).abs != (start_horizontal - end_horizontal).abs)
-          raise 'Invalid Input, not a diagonal horizontal or vertical move'
+      #raise 'Invalid Input, not a diagonal horizontal or vertical move'
+      #raise "Invalid Input, not a diagonal horizontal or vertical move #{start_vertical}, #{start_horizontal}, #{end_vertical}, #{end_horizontal}"
+      true
     else  move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     end
   end

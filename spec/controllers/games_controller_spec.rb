@@ -57,8 +57,8 @@ RSpec.describe GamesController, type: :controller do
         it "should place nothing (and have nil) at board[4][4]" do
           expect(@game.board[4][4]).to eq(nil)
         end
-        it "should place w_queen at board[7][4]" do
-          expect(@game.board[7][4].piece_name).to eq("w_queen")
+        it "should place w_king at board[7][4]" do
+          expect(@game.board[7][4].piece_name).to eq("w_king")
         end
       end
     end
@@ -82,5 +82,23 @@ RSpec.describe GamesController, type: :controller do
   #     expect(game_to_join.player_white_id).to eq game_to_join.user_id
   #   end
   # end
+
+  describe "in check method" do
+    it "should return true for black king in check from white pawn" do 
+      game1 = FactoryGirl.create(:game)
+      white_pawn = game1.pieces.where(piece_type: "Pawn", piece_color: "white", x_coordinate: 0, y_coordinate: 6).first
+      black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
+      white_pawn.update_attributes(y_coordinate: 3, x_coordinate: 5)
+      #white_pawn.x_coordinate = 5
+      black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
+      #black_king.x_coordinate = 4
+      game1.board[6][0] = nil
+      game1.board[0][4] = nil
+      game1.board[3][5] = white_pawn
+      game1.board[2][4] = black_king
+      expect(game1.in_check?).to eq(true)
+    end
+  end
+
 end
 
