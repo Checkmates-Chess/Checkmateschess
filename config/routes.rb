@@ -14,7 +14,4 @@ Rails.application.routes.draw do
 
   resources :pieces, only: [:update, :create, :show]
 
-  resources :games, only: [] do
-    resources :pieces, only: [:index]
-  end
 end

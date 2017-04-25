@@ -1,12 +1,6 @@
 class PiecesController < ApplicationController
   before_action :authenticate_user!
 
-  def index
-    @game = Game.find(params[:id])
-    pieces = @game.pieces
-    render json: pieces
-  end
-
   def create
 		@game = current_user.games.find(params[:id])
 		@piece = @game.pieces.create(piece_params)
