@@ -9,22 +9,23 @@ class Game < ApplicationRecord
     # find the king
     checked_king = self.pieces.where(piece_type: "King",piece_color: color).last
 
-    return false unless side_in_check?(color)
 
-     # check if the king can get out of check
+    return false unless side_in_check?(color)
+     # if its in check
+    return true if side_in_check?(color) && !checked_king.move_out_of_check?
+
+    # check if the king can get out of check
     return false if checked_king.move_out_of_check?
     return true if !checked_king.move_out_of_check?
+    return false if checked_king.can_be_captured?
 
 
-    # if its in check
-    return true if side_in_check?(color)
 
     # can the king be captured
     # note I may not need this code below
     #return true if checked_king.can_be_captured?
-
-
   end
+
 
   # def in_check?(color)
   #   king = Piece.where(piece_type: "King", color: color)

@@ -41,8 +41,8 @@ class Piece < ApplicationRecord
 
   def valid_move?(x,y)
     # check if x is equal to the piece x postion if so it didn't move in x as well as check y
-    x != x_coordinate && y != y_coordinate &&
-      ((x < BOARD_SIZE || x >= 0) || (y < BOARD_SIZE || y >= 0))
+    (x != x_coordinate && y != y_coordinate) &&
+      ((x < BOARD_SIZE || x >= 0) && (y < BOARD_SIZE || y >= 0))
 
   end
 
@@ -119,6 +119,23 @@ class Piece < ApplicationRecord
       end
     end
   end
+
+  # def valid_move?(new_y, new_x)
+  #   # Checks if piece is within board coordinates
+  #   if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
+  #     # If new space is within board, check if there are obstructions.
+  #     # If there is an obstruction, return false -- not a valid move.
+  #     # If there are no obstructions, return true -- is a valid move.
+  #     if self.is_obstructed?(game.board, y_coordinate, x_coordinate, new_y, new_x)
+  #       false
+  #     else
+  #       true
+  #     end
+  #   # If piece is not within board, it returns false -- not a valid move
+  #   else
+  #     false
+  #   end
+  # end
 
 end
 
