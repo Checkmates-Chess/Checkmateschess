@@ -70,8 +70,7 @@ RSpec.describe King do
       it{
 
 
-        @rook = @game.pieces.create(piece_type: "Rook", piece_color: "white", x_coordinate: 3,y_coordinate: 0, game: @game1, user: @user)
-        @rook2 = @game.pieces.create(piece_type: "Rook", piece_color: "white", x_coordinate: 3,y_coordinate: 4, game: @game1, user: @user)
+        @knight2 = Piece.create(piece_type: "Knight", x_coordinate: 2,y_coordinate: 5, piece_color: "white", game: @game, user: @user)
         @bishop = @game.pieces.create(piece_type: "Bishop", piece_color: "white", x_coordinate: 0,y_coordinate: 2, game: @game1, user: @user)
         @whitePawn1 = @game.pieces.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 3,y_coordinate: 3, game: @game1, user: @user)
         @whitePawn2 = @game.pieces.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 3,y_coordinate: 2, game: @game1, user: @user)
@@ -80,7 +79,6 @@ RSpec.describe King do
         @whitePawn5 = @game.pieces.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 2,y_coordinate: 1, game: @game1, user: @user)
         @whitePawn6 = @game.pieces.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 1,y_coordinate: 2, game: @game1, user: @user)
         @whitePawn67= @game.pieces.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 1,y_coordinate: 1, game: @game1, user: @user)
-
         expect(@game.checkmate?(@king.piece_color)).to eq(true)
       }
     end
