@@ -16,8 +16,8 @@ class Game < ApplicationRecord
     @b_rook1 = Piece.create :game_id => id, :piece_type => "Rook", :piece_name => "b_rook1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 0, :y_coordinate => 0
     @b_knight1 = Piece.create :game_id => id, :piece_type => "Knight", :piece_name => "b_knight1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 1, :y_coordinate => 0
     @b_bishop1 = Piece.create :game_id => id, :piece_type => "Bishop", :piece_name => "b_bishop1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 2, :y_coordinate => 0
-    @b_king = Piece.create :game_id => id, :piece_type => "King", :piece_name => "b_king", :piece_color => "black", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 0
-    @b_queen = Piece.create :game_id => id, :piece_type => "Queen", :piece_name => "b_queen", :piece_color => "black", :piece_status => "alive", :x_coordinate => 4, :y_coordinate => 0
+    @b_queen = Piece.create :game_id => id, :piece_type => "Queen", :piece_name => "b_queen", :piece_color => "black", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 0
+    @b_king = Piece.create :game_id => id, :piece_type => "King", :piece_name => "b_king", :piece_color => "black", :piece_status => "alive", :x_coordinate => 4, :y_coordinate => 0
     @b_bishop2 = Piece.create :game_id => id, :piece_type => "Bishop", :piece_name => "b_bishop2", :piece_color => "black", :piece_status => "alive", :x_coordinate => 5, :y_coordinate => 0
     @b_knight2 = Piece.create :game_id => id, :piece_type => "Knight", :piece_name => "b_knight2", :piece_color => "black", :piece_status => "alive", :x_coordinate => 6, :y_coordinate => 0
     @b_rook2 = Piece.create :game_id => id, :piece_type => "Rook", :piece_name => "b_rook2", :piece_color => "black", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 0
@@ -32,8 +32,8 @@ class Game < ApplicationRecord
     @w_rook1 = Piece.create :game_id => id, :piece_type => "Rook", :piece_name => "w_rook1", :piece_color => "white", :piece_status => "alive", :x_coordinate => 0, :y_coordinate => 7
     @w_knight1 = Piece.create :game_id => id, :piece_type => "Knight", :piece_name => "w_knight1", :piece_color => "white", :piece_status => "alive", :x_coordinate => 1, :y_coordinate => 7
     @w_bishop1 = Piece.create :game_id => id, :piece_type => "Bishop", :piece_name => "w_bishop1", :piece_color => "white", :piece_status => "alive", :x_coordinate => 2, :y_coordinate => 7
-    @w_king = Piece.create :game_id => id, :piece_type => "King", :piece_name => "w_king", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 7
-    @w_queen = Piece.create :game_id => id, :piece_type => "Queen", :piece_name => "w_queen", :piece_color => "white", :piece_status => "alive", :x_coordinate => 4, :y_coordinate => 7
+    @w_queen = Piece.create :game_id => id, :piece_type => "Queen", :piece_name => "w_queen", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 7
+    @w_king = Piece.create :game_id => id, :piece_type => "King", :piece_name => "w_king", :piece_color => "white", :piece_status => "alive", :x_coordinate => 4, :y_coordinate => 7
     @w_bishop2 = Piece.create :game_id => id, :piece_type => "Bishop", :piece_name => "w_bishop2", :piece_color => "white", :piece_status => "alive", :x_coordinate => 5, :y_coordinate => 7
     @w_knight2 = Piece.create :game_id => id, :piece_type => "Knight", :piece_name => "w_knight2", :piece_color => "white", :piece_status => "alive", :x_coordinate => 6, :y_coordinate => 7
     @w_rook2 = Piece.create :game_id => id, :piece_type => "Rook", :piece_name => "w_rook2", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 7
