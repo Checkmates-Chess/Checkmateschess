@@ -6,10 +6,10 @@ class Game < ApplicationRecord
     maximum: 30 }
 
   def checkmate?(color)
-    return false unless side_in_check?(color)
-
     # find the king
     checked_king = self.pieces.where(piece_type: "King",piece_color: color).last
+
+    return false unless side_in_check?(color)
 
      # check if the king can get out of check
     return false if checked_king.move_out_of_check?

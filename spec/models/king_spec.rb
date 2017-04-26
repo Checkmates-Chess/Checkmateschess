@@ -54,5 +54,20 @@ RSpec.describe King do
       it{expect(@game.checkmate?(@king.piece_color)).to eq(false)}
     end
 
+    context "#checkmate? with a king that CAN'T run away" do
+      it{
+
+        @bishop = Piece.create(piece_type: "Bishop", piece_color: "white", x_coordinate: 1,y_coordinate: 3, game: @game1, user: @user)
+        @blackPawn1 = Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 3,y_coordinate: 3, game: @game1, user: @user)
+        @blackPawn2 = Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 3,y_coordinate: 2, game: @game1, user: @user)
+        @blackPawn3 = Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 3,y_coordinate: 1, game: @game1, user: @user)
+        @blackPawn4 = Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 2,y_coordinate: 3, game: @game1, user: @user)
+        @blackPawn5 = Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 2,y_coordinate: 1, game: @game1, user: @user)
+        @blackPawn6 = Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 1,y_coordinate: 2, game: @game1, user: @user)
+        @blackPawn67= Piece.create(piece_type: "Pawn", piece_color: "white", x_coordinate: 1,y_coordinate: 1, game: @game1, user: @user)
+        expect(@game.checkmate?(@king.piece_color)).to eq(true)
+      }
+    end
+
   end
 end

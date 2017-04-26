@@ -57,10 +57,10 @@ class Piece < ApplicationRecord
   end
 
   def can_be_captured?
-    opponents = Piece.where.not(piece_color: self.piece_color).all
+    opponents = self.games.where.not(piece_color: self.piece_color).all
     opponents.each do |opponent|
       if opponent.valid_move?(self.x_coordinate, self.y_coordinate)
-        #the opponent can capture us
+        #We can capture the piece
         return true
       end
     end
