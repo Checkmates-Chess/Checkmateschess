@@ -17,7 +17,6 @@ FactoryGirl.define do
   end
 
   factory :piece do
-    piece_type 'Bishop'
     piece_color 'black'
     x_coordinate 5
     y_coordinate 5
@@ -31,6 +30,14 @@ FactoryGirl.define do
 
   factory :bishop, parent: :piece, class: 'Bishop' do
     piece_type 'Bishop'
+  end
+
+  factory :king, parent: :piece, class: 'King' do
+    piece_type 'King'
+  end
+
+  factory :rook, parent: :piece, class: 'Rook' do
+    piece_type 'Rook'
   end
 
 end
