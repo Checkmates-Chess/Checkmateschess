@@ -411,27 +411,6 @@ RSpec.describe PiecesController, type: :controller do
 		#end
 	end
 
-	#describe "pieces#update_troubleshoot" do
-	#	it "should update (x, y) of piece to that of passed parameters and redirect to game page" do
-	#		user = FactoryGirl.create(:user)
-	#		sign_in user
-	#		game = FactoryGirl.create(:game)
-	#		piece = game.pieces.first
-			#piece = Piece.create(piece_type: "Bishop", x_coordinate: 5, y_coordinate: 5, 
-		  #	piece_status: "alive|highlighted", game: game)
-  #
-	#		patch :update, params: { 
-	#			id: piece.id, 
-	#			piece: {
-	#				x_coordinate: 4,
-	#				y_coordinate: 4
-	#			}
-	#		}
-  #
-	#		expect(game.board).not_to eq(nil)
-	#	end
-	#end
-
 end
 
 

@@ -5,12 +5,13 @@
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
 
-<div id="board">
-  <% 8.times do |row| %>
-    <% 8.times do |col| %>
-      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", id: "#{row}-#{col}") %>
-    <% end %>
-  <% end %>
+
+<div id="board">   
+  <% 8.times do |col| %>     
+    <% 8.times do |row| %>       
+      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", id_x: "#{row}", id_y: "#{col}") %>     
+    <% end %>   
+  <% end %> 
 </div>
 
 
@@ -19,10 +20,11 @@
 <script>
 
   $( function() {
-    $('.white').draggable();
-    $('.white').droppable();
-    $('.black').draggable();
-    $('.black').droppable();
+    $('.pieces').draggable()
+    $('.pieces').droppable({
+      drop: function( event, ui ) {}
+    });
+
     //$.post("/pieces/" + pieceId, {
     //    _method: "PUT",
     //    piece: {
