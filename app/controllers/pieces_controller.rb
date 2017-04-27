@@ -22,14 +22,15 @@ class PiecesController < ApplicationController
     #@game = @piece.game.find(@piece.game_id)
     #@game = Game.find(params[:piece][:game_id])    
     @game = @piece.game
-    #old_x = @piece.x_coordinate
-    #old_y = @piece.y_coordinate
-    #color = @piece.color
-    @game.board[@piece.y_coordinate][@piece.x_coordinate] = nil
+    old_x = @piece.x_coordinate
+    old_y = @piece.y_coordinate
+    color = @piece.piece_color
+    #@game.board[@piece.y_coordinate][@piece.x_coordinate] = nil
     @piece.update_attributes(piece_params)
-    @game.board[@piece.y_coordinate][@piece.x_coordinate] = @piece
-    #if @game.side_in_check?(color)
-    #  @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+    #@game.board[@piece.y_coordinate][@piece.x_coordinate] = @piece
+    if @game.side_in_check?(color)
+      @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+    end
     #else
       #@game.board[@piece.y_coordinate][@piece.x_coordinate] = nil
       #@game.board[@piece.y_coordinate][@piece.x_coordinate] = @piece

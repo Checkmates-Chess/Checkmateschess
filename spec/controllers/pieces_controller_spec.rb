@@ -402,13 +402,27 @@ RSpec.describe PiecesController, type: :controller do
 			#expect(game.board[5][4]).to eq(nil)
 		end
 
-		#it "should not update piece if it moves king into check" do
-		#	user = FactoryGirl.create(:user)
-		#	sign_in user
-		#	game = FactoryGirl.create(:game)
+		it "should not update piece if it moves king into check" do
+			user = FactoryGirl.create(:user)
+			sign_in user
+			game = FactoryGirl.create(:game)
+			black_king = game.pieces.where(x_coordinate: 4, y_coordinate: 0).first
+			black_king.update_attributes(x_coordinate: 4, y_coordinate: 3)
+			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first
+			white_pawn.update_attributes(x_coordinate: 5, y_coordinate: 5)
 
+			patch :update, params: { 
+				id: black_king.id, 
+				piece: {
+					x_coordinate: 4,
+					y_coordinate: 4
+				}
+			}
 
-		#end
+			black_king.reload
+			expect(black_king.x_coordinate).to eq(4)
+			expect(black_king.y_coordinate).to eq(3)
+		end
 	end
 
 end

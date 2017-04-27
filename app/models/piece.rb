@@ -64,7 +64,14 @@ class Piece < ApplicationRecord
       # If new space is within board, check if there are obstructions.
       # If there is an obstruction, return false -- not a valid move. 
       # If there are no obstructions, return true -- is a valid move.
-      if self.is_obstructed?(game.board, y_coordinate, x_coordinate, new_y, new_x)
+      board = [[], [], [], [], [], [], [], []]
+      8.times do |row|
+        8.times do |col|
+          board_piece = game.pieces.where(x_coordinate: col, y_coordinate: row).first
+          board[row][col] = board_piece
+        end
+      end
+      if self.is_obstructed?(board, y_coordinate, x_coordinate, new_y, new_x)
         false
       else
         true
