@@ -12,5 +12,6 @@ Rails.application.routes.draw do
   # user profile
   resources :users, only: :show
 
-  resources :pieces, only: [:update, :create]
+  resources :pieces, only: [:update, :create, :show]
+
 end
