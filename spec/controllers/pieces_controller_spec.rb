@@ -114,15 +114,15 @@ RSpec.describe PiecesController, type: :controller do
 				end			
 			end
 		end
-		describe "when move is invalid" do
-			it "should be invalid when piece doesn't move" do
-				expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error(RuntimeError, 'Invalid Input, destination must be different from start')
-			end
+		#describe "when move is invalid" do
+	  #	it "should be invalid when piece doesn't move" do
+		#		expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error(RuntimeError, 'Invalid Input, destination must be different from start')
+		#	end
 
-			it "should be invalid when not a straight or diagonal move" do
-				expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error(RuntimeError, 'Invalid Input, not a diagonal horizontal or vertical move')
-			end
-		end
+		#	it "should be invalid when not a straight or diagonal move" do
+		#		expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error(RuntimeError, 'Invalid Input, not a diagonal horizontal or vertical move')
+		#	end
+		#end
 	end
 
 	describe "valid move method for pawn" do

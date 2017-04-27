@@ -5,11 +5,10 @@
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
 
-
 <div id="board">   
   <% 8.times do |col| %>     
     <% 8.times do |row| %>       
-      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", id_x: "#{row}", id_y: "#{col}") %>     
+      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", id_y: "#{row}", id_x: "#{col}") %>     
     <% end %>   
   <% end %> 
 </div>
