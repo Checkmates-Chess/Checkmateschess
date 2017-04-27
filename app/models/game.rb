@@ -55,7 +55,6 @@ class Game < ApplicationRecord
             puts friendly_piece.y_coordinate
             puts friendly_piece.piece_type
             puts friendly_piece.piece_color
-            puts total_valid_moves
             return false
           end
         end

@@ -83,12 +83,23 @@ RSpec.describe King do
       }
     end
 
-    context "#stalemate? with 2 kings" do
+    context "#stalemate? with 2 kings and a knight that is off the board" do
       it{
-        @knight.update_attributes(x_coordinate:0, y_coordinate:0, piece_color: "black")
+        @knight.update_attributes(x_coordinate:nil, y_coordinate:nil, piece_color: "black")
         @knight.reload
         @king2 = Piece.create(piece_type: "King", x_coordinate: 5,y_coordinate: 5, piece_color: "white", game: @game, user: @user)
         expect(@game.stalemate?(@king.piece_color)).to eq(true)
+      }
+    end
+
+        context "#stalemate? king with opponents knight and bishop" do
+      it{
+
+
+
+        @bishop = @game.pieces.create(piece_type: "Bishop", piece_color: "white", x_coordinate: 0,y_coordinate: 2, game: @game1, user: @user)
+
+        expect(@game.stalemate?(@king.piece_color)).to eq(false)
       }
     end
 
