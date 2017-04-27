@@ -36,6 +36,10 @@ FactoryGirl.define do
     piece_type 'King'
   end
 
+  factory :queen, parent: :piece, class: 'Queen' do
+    piece_type 'Queen'
+  end
+
   factory :rook, parent: :piece, class: 'Rook' do
     piece_type 'Rook'
   end
