@@ -83,5 +83,14 @@ RSpec.describe King do
       }
     end
 
+    context "#stalemate? with 2 kings" do
+      it{
+        @knight.update_attributes(x_coordinate:0, y_coordinate:0, piece_color: "black")
+        @knight.reload
+        @king2 = Piece.create(piece_type: "King", x_coordinate: 5,y_coordinate: 5, piece_color: "white", game: @game, user: @user)
+        expect(@game.stalemate?(@king.piece_color)).to eq(true)
+      }
+    end
+
   end
 end

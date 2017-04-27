@@ -55,11 +55,14 @@ describe Knight do
 
       context "captures a piece of opposite color" do
 
-        let(:new_coordinate) { { x: 4, y: 3 } }
+        let(:new_coordinate) { { x: 0, y: 3 } }
         it do
+
+          @pawn2 = FactoryGirl.create(:piece, piece_type: "Pawn", game: game, user: game.user, piece_color: "white", x_coordinate: 0, y_coordinate: 3)
           knight.move_to!(new_coordinate[:x], new_coordinate[:y])
-          expect(pawn.x_coordinate).to eq(nil)
-          expect(pawn.y_coordinate).to eq(nil)
+          @pawn2.reload
+          expect(@pawn2.x_coordinate).to eq(nil)
+          expect(@pawn2.y_coordinate).to eq(nil)
         end
       end
     end

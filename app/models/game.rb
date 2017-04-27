@@ -42,8 +42,26 @@ class Game < ApplicationRecord
   # end
 
   def stalemate?(color)
-    king = Piece.where(piece_type: "King", piece_color: color)
-    return true if side_in_check?(color) && !king.move_out_of_check?
+    king = self.pieces.where(piece_type: "King", piece_color: color).last
+    friendly_pieces = self.pieces.where(piece_color: king.piece_color).where.not(x_coordinate:nil, y_coordinate: nil, piece_type: "King").all
+
+    return false if side_in_check?(king.piece_color) #can't be in check
+
+    (0..7).to_a.each do |x|
+      (0..7).to_a.each do |y|
+        friendly_pieces.each do |friendly_piece|
+          if (friendly_piece.valid_move?(x,y) && !side_in_check?(king.piece_color))
+            puts friendly_piece.x_coordinate
+            puts friendly_piece.y_coordinate
+            puts friendly_piece.piece_type
+            puts friendly_piece.piece_color
+            puts total_valid_moves
+            return false
+          end
+        end
+      end
+    end
+    return true
   end
 
 
