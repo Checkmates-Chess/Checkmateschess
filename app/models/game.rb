@@ -3,7 +3,7 @@ class Game < ApplicationRecord
   belongs_to :user
   attr_accessor :board
 
-  validates :game_title, presence: true, length: { minimum: 3, 
+  validates :game_title, presence: true, length: { minimum: 3,
     maximum: 30 }
 
     # automatically populates game after one is created
@@ -11,7 +11,7 @@ class Game < ApplicationRecord
         self.populate_game
     end
 
-  # creates pieces and the @board variable 
+  # creates pieces and the @board variable
   def populate_game
     @b_rook1 = Piece.create :game_id => id, :piece_type => "Rook", :piece_name => "b_rook1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 0, :y_coordinate => 0
     @b_knight1 = Piece.create :game_id => id, :piece_type => "Knight", :piece_name => "b_knight1", :piece_color => "black", :piece_status => "alive", :x_coordinate => 1, :y_coordinate => 0
@@ -51,7 +51,7 @@ class Game < ApplicationRecord
     @w_pawn6 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn6", :piece_color => "white", :piece_status => "alive", :x_coordinate => 5, :y_coordinate => 6
     @w_pawn7 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn7", :piece_color => "white", :piece_status => "alive", :x_coordinate => 6, :y_coordinate => 6
     @w_pawn8 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6
-    
+
     @board =  [
                 #[@b_rook1, @b_knight1, @b_bishop1, @b_king, @b_queen, @b_bishop2, @b_knight2, @b_rook2],
                 [@b_rook1, @b_knight1, @b_bishop1, @b_queen, @b_king, @b_bishop2, @b_knight2, @b_rook2],
@@ -72,7 +72,7 @@ class Game < ApplicationRecord
 
   def side_in_check?(color)
     enemy = color == "white" ? "black" : "white"
-    
+
     if pieces.exists?(piece_type: "King", piece_color: color)
       king = pieces.where(piece_type: "King", piece_color: color).first
       king_row = king.y_coordinate
@@ -86,7 +86,7 @@ class Game < ApplicationRecord
         end
       end
     end
-    
+
     pieces.where(piece_type: "Pawn", piece_color: enemy).each do |pawn|
       if !pawn.x_coordinate.nil? && !pawn.y_coordinate.nil?
         if pawn.can_capture?(king_row, king_col)
@@ -97,4 +97,23 @@ class Game < ApplicationRecord
     false
   end
 
+  def switch_turn(color)
+    if color == "white"
+      update_attributes(player_turn: player_white_id)
+    else
+      update_attributes(player_turn: player_black_id)
+    end
+  end
+
+  # update turn and game state after successful move
+ def update_state(current_player_color)
+
+
+   else
+     # if not, game state is not check
+     update_attributes(state: nil)
+   end
+   # give turn over to other player
+   switch_players(!current_player_color)
+ end
 end
