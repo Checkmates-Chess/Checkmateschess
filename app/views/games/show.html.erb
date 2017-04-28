@@ -8,7 +8,7 @@
 <div id="board">   
   <% 8.times do |col| %>     
     <% 8.times do |row| %>       
-      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", id_y: "#{row}", id_x: "#{col}") %>     
+      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", data: {x: "#{row}", y: "#{col}"} ) %>     
     <% end %>   
   <% end %> 
 </div>
@@ -19,9 +19,23 @@
 <script>
 
   $( function() {
-    $('.pieces').draggable()
-    $('.pieces').droppable({
-      drop: function( event, ui ) {}
+    $('.pieces').draggable({
+      stack: '#board',
+      containment: '#board',
+      start: function(event, ui){
+      var old_x = $(this).data("x")
+      var old_y = $(this).data("x")
+      console.log(old_x)
+      }
+    })
+
+    $('.white, .black').droppable({
+      drop: function(ev, ui) {
+        $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
+        var new_x = $(this).data("x")
+        var new_y = $(this).data("y")
+        console.log(new_x);
+      }
     });
 
     //$.post("/pieces/" + pieceId, {

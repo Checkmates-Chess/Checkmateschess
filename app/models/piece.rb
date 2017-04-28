@@ -64,6 +64,7 @@ class Piece < ApplicationRecord
       # If new space is within board, check if there are obstructions.
       # If there is an obstruction, return false -- not a valid move. 
       # If there are no obstructions, return true -- is a valid move.
+
       board = [[], [], [], [], [], [], [], []]
       8.times do |row|
         8.times do |col|

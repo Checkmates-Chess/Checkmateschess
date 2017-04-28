@@ -398,8 +398,6 @@ RSpec.describe PiecesController, type: :controller do
 			expect(piece.piece_status).to eq("alive")
 			expect(piece.x_coordinate).to eq(4)
 			expect(piece.y_coordinate).to eq(4)
-			#expect(game.board[4][4]).to eq(piece)
-			#expect(game.board[5][4]).to eq(nil)
 		end
 
 		it "should not update piece if it moves king into check" do
