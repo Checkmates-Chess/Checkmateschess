@@ -19,25 +19,23 @@ class PiecesController < ApplicationController
 
   def update
     @piece = Piece.find(params[:id])
-    #@game = @piece.game.find(@piece.game_id)
-    #@game = Game.find(params[:piece][:game_id])    
-    @game = @piece.game
-    old_x = @piece.x_coordinate
-    old_y = @piece.y_coordinate
-    color = @piece.piece_color
+    #@game = @piece.game
+    #old_x = @piece.x_coordinate
+    #old_y = @piece.y_coordinate
+    #color = @piece.piece_color
     #@game.board[@piece.y_coordinate][@piece.x_coordinate] = nil
     @piece.update_attributes(piece_params)
     #@game.board[@piece.y_coordinate][@piece.x_coordinate] = @piece
-    if @game.side_in_check?(color)
-      @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
-    end
+    #if @game.side_in_check?(color)
+    #  @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+    #end
     #else
       #@game.board[@piece.y_coordinate][@piece.x_coordinate] = nil
       #@game.board[@piece.y_coordinate][@piece.x_coordinate] = @piece
     #end
-    new_status = @piece.piece_status
-    new_status.sub! "|highlighted", ""
-    @piece.update_attributes(piece_status: new_status)
+    #new_status = @piece.piece_status
+    #new_status.sub! "|highlighted", ""
+    #@piece.update_attributes(piece_status: new_status)
     #redirect_to game_path(@piece.game)
   end
 
