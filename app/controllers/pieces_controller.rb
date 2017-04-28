@@ -38,7 +38,7 @@ class PiecesController < ApplicationController
     new_status = @piece.piece_status
     new_status.sub! "|highlighted", ""
     @piece.update_attributes(piece_status: new_status)
-    redirect_to game_path(@piece.game)
+    #redirect_to game_path(@piece.game)
   end
 
 	private

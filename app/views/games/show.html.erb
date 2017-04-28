@@ -16,36 +16,33 @@
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-
+<script> 
   $( function() {
+    
     $('.pieces').draggable({
       stack: '#board',
-      containment: '#board',
-      start: function(event, ui){
-      var old_x = $(this).data("x")
-      var old_y = $(this).data("x")
-      console.log(old_x)
-      }
-    })
+      containment: '#board'
+    });
 
     $('.white, .black').droppable({
       drop: function(ev, ui) {
         $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
-        var new_x = $(this).data("x")
-        var new_y = $(this).data("y")
-        console.log(new_x);
+        var new_x = $(this).data("x");
+        var new_y = $(this).data("y");
+        var pieceId = ui.draggable.data("pid");
+        
+        $.post("/pieces/" + pieceId, {
+          _method: "PUT",
+          piece: {
+            x_coordinate: new_x,
+            y_coordinate: new_y
+          }
+        }).success( function() {
+          console.log("success");
+        });
       }
     });
 
-    //$.post("/pieces/" + pieceId, {
-    //    _method: "PUT",
-    //    piece: {
-    //      x_coordinate: new_x,
-    //      y_coordinate: new_y
-    //    }
-    //  }).success( function( data ) {
-    //  });
   });
 
 </script>
