@@ -99,21 +99,11 @@ class Game < ApplicationRecord
 
   def switch_turn(color)
     if color == "white"
-      update_attributes(player_turn: player_white_id)
+      update_attributes(player_turn: "black")
     else
-      update_attributes(player_turn: player_black_id)
+      update_attributes(player_turn: "white")
     end
   end
 
-  # update turn and game state after successful move
- def update_state(current_player_color)
 
-
-   else
-     # if not, game state is not check
-     update_attributes(state: nil)
-   end
-   # give turn over to other player
-   switch_players(!current_player_color)
- end
 end
