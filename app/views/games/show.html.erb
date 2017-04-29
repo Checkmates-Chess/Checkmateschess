@@ -26,19 +26,21 @@
 
     $('.white, .black').droppable({
       drop: function(ev, ui) {
-        $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(this);
         var new_x = $(this).data("x");
         var new_y = $(this).data("y");
         var pieceId = ui.draggable.data("pid");
-        
+        var dropThis = $(this)
         $.post("/pieces/" + pieceId, {
           _method: "PUT",
           piece: {
             x_coordinate: new_x,
             y_coordinate: new_y
           }
-        }).success( function() {
-          console.log("success");
+        }).success( function(data) {
+          if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(dropThis);
+          }
+          console.log(data.x_coordinate == new_x && data.y_coordinate == new_y);
         });
       }
     });
