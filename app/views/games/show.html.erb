@@ -29,19 +29,29 @@
         var new_x = $(this).data("x");
         var new_y = $(this).data("y");
         var pieceId = ui.draggable.data("pid");
-        var dropThis = $(this)
-        $.post("/pieces/" + pieceId, {
-          _method: "PUT",
-          piece: {
+        var destination = $(this);
+        var origin = ui.draggable.parent();
+        //console.log(origin);
+        //$(ui.draggable).detach().css({top: 0,left: 0}).appendTo( 
+          $.post("/pieces/" + pieceId, {
+            _method: "PUT",
+            piece: {
             x_coordinate: new_x,
             y_coordinate: new_y
-          }
-        }).success( function(data) {
-          if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
-            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(dropThis);
-          }
-          console.log(data.x_coordinate == new_x && data.y_coordinate == new_y);
-        });
+            }
+          }).success( function(data) {
+            if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+              //return destination;
+              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+              console.log("destination");
+            } else {
+              //return origin;
+              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
+              console.log("origin");
+            }  
+            
+          });
+
       }
     });
 
