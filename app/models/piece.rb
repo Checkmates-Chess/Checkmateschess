@@ -12,12 +12,23 @@ class Piece < ApplicationRecord
     ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
   end
 
+  PIECE_TYPES = ["Pawn", "Knight", "Bishop", "Rook", "Queen", "King"]
+
   scope :pawns, -> { where(piece_type: "Pawn") }
   scope :knights, -> { where(piece_type: "Knight") }
   scope :bishops, -> { where(piece_type: "Bishop") }
   scope :rooks, -> { where(piece_type: "Rook") }
   scope :queens, -> { where(piece_type: "Queen") }
   scope :kings, -> { where(piece_type: "King") }
+  scope :white, -> { where(piece_color: "white")}
+  scope :black, -> { where(piece_color: "black")}
+  scope :color, -> c { where(piece_color: c) }
+
+  PIECE_TYPES.each do |type|
+    define_method("#{type.downcase}?") { piece_type == type}
+  end
+
+
 
 
   def move_to!(new_x, new_y)

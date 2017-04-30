@@ -19,6 +19,8 @@ class King < Piece
       ((y_coordinate-1)..(y_coordinate+1)).each do |y|
 
         # check if that square is available
+        # self.x_coordinate = x
+        # self.y_coordinate = y
         self.update_attributes(x_coordinate:x, y_coordinate: y) if self.valid_move?(x,y)
         return success = true if self.game.side_in_check?(self.piece_color) == false
 
