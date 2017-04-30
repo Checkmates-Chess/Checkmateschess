@@ -262,23 +262,24 @@ RSpec.describe PiecesController, type: :controller do
 		#					[o,o,o,o,o,o,o,o],
 		#					[o,o,@w_bishop1,o,o,o,o,@w_rook2]
 		#				]
-		game.pieces.where(piece_type: "Pawn").each do |pawn|
-			pawn.update_attributes(x_coordinate: nil, y_coordinate: nil)
-		end
     w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
+    w_bishop1.update_attributes(y_coordinate: 5, x_coordinate: 2)
     b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+    b_bishop2.update_attributes(y_coordinate: 2, x_coordinate: 5)
     b_rook1 = game.pieces.find_by_piece_name("b_rook1")
+    b_rook1.update_attributes(y_coordinate: 2, x_coordinate: 0)
     w_rook2 = game.pieces.find_by_piece_name("w_rook2")
+    w_rook2.update_attributes(y_coordinate: 5, x_coordinate: 7)
 
 		it "should prevent piece from moving off the board" do
 	    expect(w_bishop1.valid_move?(1, 8)).to eq(false)
 		end
 
 		it "should allow piece to move when valid" do
-	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
-	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
-	    expect(b_rook1.valid_move?(0, 5)).to eq(true)
-	    expect(w_rook2.valid_move?(4, 7)).to eq(true)
+	    expect(w_bishop1.valid_move?(3, 4)).to eq(true)
+	    expect(b_bishop2.valid_move?(4, 3)).to eq(true)
+	    expect(b_rook1.valid_move?(2, 5)).to eq(true)
+	    expect(w_rook2.valid_move?(5, 2)).to eq(true)
 		end
 
 		it "should prevent piece to move when obstructed" do
