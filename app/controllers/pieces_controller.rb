@@ -23,18 +23,41 @@ class PiecesController < ApplicationController
     old_x = @piece.x_coordinate
     old_y = @piece.y_coordinate
     color = @piece.piece_color
-    @piece.update_attributes(piece_params)
-    if @game.side_in_check?(color)
-      @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+    new_x = params[:piece][:x_coordinate]
+    new_y = params[:piece][:y_coordinate]
+    valid_move = @piece.valid_move?(new_y.to_i, new_x.to_i)
+    in_check = nil
+    board = [[], [], [], [], [], [], [], []]
+    8.times do |row|
+      8.times do |col|
+        board_piece = @game.pieces.where(x_coordinate: col, y_coordinate: row).first
+        board[row][col] = board_piece
+      end
     end
-    #old_and_new = {
-    #  old_row: old_y
-    #  old_col: old_x
-    #  new_row: params[:piece][:y_coordinate]
-    #  new_col: params[:piece][:x_coordinate]
-    #  piece_id: params[:id]
-    #}
-    render json: @piece
+    is_obstructed = @piece.is_obstructed?(board, old_y.to_i, old_x.to_i, new_y.to_i, new_x.to_i)
+    if valid_move
+      @piece.update_attributes(piece_params)
+      status = @piece.piece_status
+      if status.include?("first move")
+        status.sub! "|first move", ""
+        @piece.update_attributes(piece_status: status)
+      end
+      in_check = @game.side_in_check?(color)
+      if in_check
+        @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+      end
+    end
+    json_piece = {
+      x_coordinate: @piece.x_coordinate,
+      y_coordinate: @piece.y_coordinate,
+      passed_x: new_x,
+      passed_y: new_y,
+      valid_move: valid_move, 
+      in_check: in_check,
+      is_obstructed: is_obstructed,
+      piece_status: @piece.piece_status
+    }
+    render json: json_piece
   end
 
 	private

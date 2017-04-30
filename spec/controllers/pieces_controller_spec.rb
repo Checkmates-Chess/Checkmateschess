@@ -178,7 +178,7 @@ RSpec.describe PiecesController, type: :controller do
 
 		it "should return false for black moving one move southeast if that square is unoccupied" do
 			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
-			expect(pawn.valid_move?(3, 4)).to eq(false)
+			expect(pawn.valid_move?(2, 5)).to eq(false)
 		end
 
 		# white piece moves
@@ -373,7 +373,7 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "pieces#update" do
-		it "should update (x, y) of piece to that of passed parameters and redirect to game page" do
+		it "should update (x, y) of piece to that of passed parameters" do
 			user = FactoryGirl.create(:user)
 			sign_in user
 			game = FactoryGirl.create(:game)
@@ -393,7 +393,7 @@ RSpec.describe PiecesController, type: :controller do
 				}
 			}
 
-			expect(response).to redirect_to game_path(piece.game)
+			#expect(response).to redirect_to game_path(piece.game)
 			piece.reload
 			expect(piece.piece_status).to eq("alive")
 			expect(piece.x_coordinate).to eq(4)

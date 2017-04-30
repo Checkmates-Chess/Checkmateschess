@@ -26,31 +26,52 @@
 
     $('.white, .black').droppable({
       drop: function(ev, ui) {
-        var new_x = $(this).data("x");
-        var new_y = $(this).data("y");
-        var pieceId = ui.draggable.data("pid");
+        var new_x = parseInt($(this).data("x"));
+        var new_y = parseInt($(this).data("y"));
+        var pieceId = parseInt(ui.draggable.data("pid"));
         var destination = $(this);
         var origin = ui.draggable.parent();
-        //console.log(origin);
-        //$(ui.draggable).detach().css({top: 0,left: 0}).appendTo( 
-          $.post("/pieces/" + pieceId, {
-            _method: "PUT",
-            piece: {
-            x_coordinate: new_x,
-            y_coordinate: new_y
-            }
-          }).success( function(data) {
-            if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
-              //return destination;
-              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
-              console.log("destination");
-            } else {
-              //return origin;
-              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
-              console.log("origin");
-            }  
-            
-          });
+        
+        $.post("/pieces/" + pieceId, {
+          _method: "PUT",
+          piece: {
+          x_coordinate: new_x,
+          y_coordinate: new_y
+          }
+        }).success( function(data) {
+          if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+            console.log("destination");
+            console.log("origin x: " + origin.data("x"));
+            console.log("origin y: " + origin.data("y"));
+            console.log("destination x: " + new_x);
+            console.log("destination y: " + new_y);
+            console.log("passed x: " + data.passed_x);
+            console.log("passed y: " + data.passed_y);
+            console.log("piece updated x: " + data.x_coordinate);
+            console.log("piece updated y: " + data.y_coordinate);
+            console.log("valid move?: " + data.valid_move);
+            console.log("in check?: " + data.in_check);
+            console.log("is_obstructed?: " + data.is_obstructed);
+            console.log("piece_status: " + data.piece_status);
+          } else {
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
+            console.log("origin");
+            console.log("origin x: " + origin.data("x"));
+            console.log("origin y: " + origin.data("y"));
+            console.log("destination x: " + new_x);
+            console.log("destination y: " + new_y);
+            console.log("passed x: " + data.passed_x);
+            console.log("passed y: " + data.passed_y);
+            console.log("piece updated x: " + data.x_coordinate);
+            console.log("piece updated y: " + data.y_coordinate);
+            console.log("valid move?: " + data.valid_move);
+            console.log("in check?: " + data.in_check);
+            console.log("is_obstructed?: " + data.is_obstructed);
+            console.log("piece_status: " + data.piece_status);
+          }  
+          
+        });
 
       }
     });

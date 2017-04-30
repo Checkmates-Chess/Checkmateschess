@@ -45,7 +45,7 @@ class Piece < ApplicationRecord
     check_vertical = start_vertical
     check_horizontal = start_horizontal
     vert_incr = get_incr(start_vertical, end_vertical)
-    hor_incr= get_incr(start_horizontal, end_horizontal)
+    hor_incr = get_incr(start_horizontal, end_horizontal)
     while(check_vertical != end_vertical || 
       check_horizontal != end_horizontal)
       check_vertical += vert_incr

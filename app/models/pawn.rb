@@ -1,5 +1,4 @@
 class Pawn < Piece
-
   def valid_move?(end_vertical, end_horizontal)
     start_row = y_coordinate
     start_col = x_coordinate
@@ -66,5 +65,4 @@ class Pawn < Piece
     end
     false
   end
-
 end
