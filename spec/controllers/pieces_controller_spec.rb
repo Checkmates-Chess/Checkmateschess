@@ -249,19 +249,22 @@ RSpec.describe PiecesController, type: :controller do
 
   describe "valid_move? for Pieces model" do
 		game = FactoryGirl.create(:game)
-		o = nil
-	  e = "end points"
-	  x = "piece"
-		game.board = [
-							[@b_rook1,o,o,o,o,@b_bishop2,o,o],
-							[o,o,o,o,o,o,o,o],
-							[o,o,o,e,e,o,o,o],
-							[o,o,o,o,o,o,o,o],
-							[o,o,o,o,o,o,o,o],
-							[o,o,o,e,e,o,o,o],
-							[o,o,o,o,o,o,o,o],
-							[o,o,@w_bishop1,o,o,o,o,@w_rook2]
-						]
+		#o = nil
+	  #e = "end points"
+	  #x = "piece"
+		#game.board = [
+		#					[@b_rook1,o,o,o,o,@b_bishop2,o,o],
+		#					[o,o,o,o,o,o,o,o],
+		#					[o,o,o,e,e,o,o,o],
+		#					[o,o,o,o,o,o,o,o],
+		#					[o,o,o,o,o,o,o,o],
+		#					[o,o,o,e,e,o,o,o],
+		#					[o,o,o,o,o,o,o,o],
+		#					[o,o,@w_bishop1,o,o,o,o,@w_rook2]
+		#				]
+		game.pieces.where(piece_type: "Pawn").each do |pawn|
+			pawn.update_attributes(x_coordinate: nil, y_coordinate: nil)
+		end
     w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
     b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
     b_rook1 = game.pieces.find_by_piece_name("b_rook1")
