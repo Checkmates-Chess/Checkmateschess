@@ -359,7 +359,6 @@ RSpec.describe PiecesController, type: :controller do
 
 end
 
-
 describe "valid_move? for King" do
  	before(:all) do
   	@user = FactoryGirl.create(:user)
