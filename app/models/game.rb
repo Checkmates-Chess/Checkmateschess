@@ -10,7 +10,6 @@ class Game < ApplicationRecord
     maximum: 30 }
 
   scope :available, -> { where(player_black_id: nil).or(where(player_white_id: nil)) }
-end
 
 # automatically populates game after one is created
     after_create do
