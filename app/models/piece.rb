@@ -14,18 +14,42 @@ class Piece < ApplicationRecord
   scope :queens, -> { where(piece_type: "Queen") }
   scope :kings, -> { where(piece_type: "King") }
 
+  def move_to!(new_y, new_x)
+    if piece_status.include?("first move")
+      piece_status.sub! "|first move", ""
+      update_attributes(piece_status: piece_status)
+    end
+    if capturing_move?(new_y, new_x)
+      captured_piece = game.pieces.where(x_coordinate: new_x, y_coordinate: new_y).first
+      captured_piece_status = captured_piece.piece_status
+      if captured_piece_status.include?("alive")
+        captured_piece_status.sub! "alive", "dead"
+      end
+      captured_piece.update_attributes(x_coordinate: nil, y_coordinate: nil, piece_status: captured_piece_status)
+      update_attributes(x_coordinate: new_x, y_coordinate: new_y)
+    else
+      update_attributes(x_coordinate: new_x, y_coordinate: new_y)
+    end
+  end
 
-  # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
-  # expects open spaces on the board to have the string "open space"
+  #used in valid_move?
   def friendly_on_endpoint?(end_y, end_x) 
     game.pieces.where(x_coordinate: end_x, y_coordinate: end_y, piece_color: piece_color).exists?
   end
 
+  #used in move_to!
   def capturing_move?(end_y, end_x)
     game.pieces.where(x_coordinate: end_x, y_coordinate: end_y).where.not(piece_color: piece_color).exists?
   end
 
+  # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
+  # expects open spaces on the board to have the string "open space"
   def is_obstructed?(board, start_vertical,start_horizontal,end_vertical,end_horizontal)
+    start_vertical = start_vertical.to_i
+    start_horizontal = start_horizontal.to_i
+    end_vertical = end_vertical.to_i
+    end_horizontal = end_horizontal.to_i
+  
     if start_vertical == end_vertical && start_horizontal == end_horizontal
       return true
     end
@@ -66,6 +90,8 @@ class Piece < ApplicationRecord
   end
 
   def valid_move?(new_y, new_x)
+    new_y = new_y.to_i 
+    new_x = new_x.to_i
     # Checks if piece is within board coordinates
     if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
       # If new space is within board, check if there are obstructions.
@@ -79,8 +105,8 @@ class Piece < ApplicationRecord
           board[row][col] = board_piece
         end
       end
-      if ((y_coordinate-new_y).abs == (x_coordinate-new_x).abs) ||
-        y_coordinate == new_y || x_coordinate == new_x
+      if ((y_coordinate.to_i-new_y).abs == (x_coordinate.to_i-new_x).abs) ||
+        y_coordinate.to_i == new_y || x_coordinate.to_i == new_x
         if is_obstructed?(board, y_coordinate, x_coordinate, new_y, new_x)
           return false
         end

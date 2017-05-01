@@ -6,18 +6,19 @@ class PiecesController < ApplicationController
 		@piece = @game.pieces.create(piece_params)
 	end
 
-	def show
-    @piece = Piece.find(params[:id])
-    current_piece_status = @piece.piece_status
-    if current_piece_status.nil?
-      @piece.update_attributes(piece_status: "highlighted")
-    else
-      @piece.update_attributes(piece_status: current_piece_status + "|highlighted")
-    end
-    redirect_to game_path(@piece.game)
-  end
+	#def show
+  #  @piece = Piece.find(params[:id])
+  #  current_piece_status = @piece.piece_status
+  #  if current_piece_status.nil?
+  #    @piece.update_attributes(piece_status: "highlighted")
+  #  else
+  #    @piece.update_attributes(piece_status: current_piece_status + "|highlighted")
+  #  end
+    #redirect_to game_path(@piece.game)
+  #end
 
   def update
+    #a lot of these variables for debugging purposes in console.log()
     @piece = Piece.find(params[:id])
     @game = @piece.game
     old_x = @piece.x_coordinate
@@ -25,7 +26,8 @@ class PiecesController < ApplicationController
     color = @piece.piece_color
     new_x = params[:piece][:x_coordinate]
     new_y = params[:piece][:y_coordinate]
-    valid_move = @piece.valid_move?(new_y.to_i, new_x.to_i)
+    valid_move = @piece.valid_move?(new_y, new_x)
+
     in_check = nil
     board = [[], [], [], [], [], [], [], []]
     8.times do |row|
@@ -34,19 +36,18 @@ class PiecesController < ApplicationController
         board[row][col] = board_piece
       end
     end
-    is_obstructed = @piece.is_obstructed?(board, old_y.to_i, old_x.to_i, new_y.to_i, new_x.to_i)
-    if valid_move
-      @piece.update_attributes(piece_params)
-      status = @piece.piece_status
-      if status.include?("first move")
-        status.sub! "|first move", ""
-        @piece.update_attributes(piece_status: status)
-      end
+    is_obstructed = @piece.is_obstructed?(board, old_y, old_x, new_y, new_x)
+
+    # checking for allowed move and updating piece
+    if @piece.valid_move?(new_y, new_x)
+      @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
       in_check = @game.side_in_check?(color)
-      if in_check
-        @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+      @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+      if !in_check
+        @piece.move_to!(new_y, new_x)
       end
     end
+
     json_piece = {
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
