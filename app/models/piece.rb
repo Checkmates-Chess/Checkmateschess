@@ -17,6 +17,14 @@ class Piece < ApplicationRecord
 
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
   # expects open spaces on the board to have the string "open space"
+  def friendly_on_endpoint?(end_y, end_x) 
+    Piece.where(x_coordinate: x, y_coordinate: y, piece_color: piece_color).exists?
+  end
+
+  def capturing_move?(y, x)
+    Piece.where(x_coordinate: x, y_coordinate: y).where.not(piece_color: piece_color).exists?
+  end
+
   def is_obstructed?(board, start_vertical,start_horizontal,end_vertical,end_horizontal)
     if start_vertical == end_vertical && start_horizontal == end_horizontal
       true
@@ -72,7 +80,9 @@ class Piece < ApplicationRecord
           board[row][col] = board_piece
         end
       end
-      if self.is_obstructed?(board, y_coordinate, x_coordinate, new_y, new_x)
+      if is_obstructed?(board, y_coordinate, x_coordinate, new_y, new_x)
+        false
+      elsif friendly_on_endpoint?(y_coordinate, x_coordinate)
         false
       else
         true
