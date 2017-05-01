@@ -90,10 +90,10 @@ RSpec.describe GamesController, type: :controller do
       black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
       white_pawn.update_attributes(y_coordinate: 3, x_coordinate: 5)
       black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
-      game1.board[6][0] = nil
-      game1.board[0][4] = nil
-      game1.board[3][5] = white_pawn
-      game1.board[2][4] = black_king
+      #game1.board[6][0] = nil
+      #game1.board[0][4] = nil
+      #game1.board[3][5] = white_pawn
+      #game1.board[2][4] = black_king
       expect(game1.in_check?).to eq(true)
     end
 
@@ -103,10 +103,10 @@ RSpec.describe GamesController, type: :controller do
       black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
       white_bishop.update_attributes(y_coordinate: 5, x_coordinate: 1)
       black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
-      game1.board[7][2] = nil
-      game1.board[0][4] = nil
-      game1.board[5][1] = white_bishop
-      game1.board[2][4] = black_king
+      #game1.board[7][2] = nil
+      #game1.board[0][4] = nil
+      #game1.board[5][1] = white_bishop
+      #game1.board[2][4] = black_king
       expect(game1.in_check?).to eq(true)  
     end
 
@@ -116,10 +116,10 @@ RSpec.describe GamesController, type: :controller do
       black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
       white_rook.update_attributes(y_coordinate: 2, x_coordinate: 7)
       black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
-      game1.board[7][0] = nil
-      game1.board[0][4] = nil
-      game1.board[2][7] = white_rook
-      game1.board[2][4] = black_king
+      #game1.board[7][0] = nil
+      #game1.board[0][4] = nil
+      #game1.board[2][7] = white_rook
+      #game1.board[2][4] = black_king
       expect(game1.in_check?).to eq(true)  
     end
 
@@ -129,10 +129,10 @@ RSpec.describe GamesController, type: :controller do
       white_king = game1.pieces.where(piece_type: "King", piece_color: "white").first
       black_pawn.update_attributes(y_coordinate: 4, x_coordinate: 3)
       white_king.update_attributes(y_coordinate: 5, x_coordinate: 4)
-      game1.board[0][1] = nil
-      game1.board[7][4] = nil
-      game1.board[4][3] = black_pawn
-      game1.board[5][4] = white_king
+      #game1.board[0][1] = nil
+      #game1.board[7][4] = nil
+      #game1.board[4][3] = black_pawn
+      #game1.board[5][4] = white_king
       expect(game1.in_check?).to eq(true)  
     end
 
@@ -142,10 +142,10 @@ RSpec.describe GamesController, type: :controller do
       white_king = game1.pieces.where(piece_type: "King", piece_color: "white").first
       black_bishop.update_attributes(y_coordinate: 2, x_coordinate: 1)
       white_king.update_attributes(y_coordinate: 5, x_coordinate: 4)
-      game1.board[0][2] = nil
-      game1.board[7][4] = nil
-      game1.board[2][1] = black_bishop
-      game1.board[5][4] = white_king
+      #game1.board[0][2] = nil
+      #game1.board[7][4] = nil
+      #game1.board[2][1] = black_bishop
+      #game1.board[5][4] = white_king
       expect(game1.in_check?).to eq(true)  
     end
 
@@ -155,10 +155,10 @@ RSpec.describe GamesController, type: :controller do
       white_king = game1.pieces.where(piece_type: "King", piece_color: "white").first
       black_rook.update_attributes(y_coordinate: 2, x_coordinate: 4)
       white_king.update_attributes(y_coordinate: 5, x_coordinate: 4)
-      game1.board[0][0] = nil
-      game1.board[7][4] = nil
-      game1.board[2][4] = black_rook
-      game1.board[5][4] = white_king
+      #game1.board[0][0] = nil
+      #game1.board[7][4] = nil
+      #game1.board[2][4] = black_rook
+      #game1.board[5][4] = white_king
       expect(game1.in_check?).to eq(true)  
     end
 
@@ -173,10 +173,10 @@ RSpec.describe GamesController, type: :controller do
       black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
       white_rook.update_attributes(y_coordinate: 3, x_coordinate: 5)
       black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
-      game1.board[7][0] = nil
-      game1.board[0][4] = nil
-      game1.board[3][5] = white_rook
-      game1.board[2][4] = black_king
+      #game1.board[7][0] = nil
+      #game1.board[0][4] = nil
+      #game1.board[3][5] = white_rook
+      #game1.board[2][4] = black_king
       expect(game1.in_check?).to eq(false)  
     end
   end
