@@ -285,7 +285,7 @@ RSpec.describe PiecesController, type: :controller do
 		it "should prevent piece to move when obstructed" do
 			game = FactoryGirl.create(:game)
 	    piece = game.pieces.find_by_piece_name("w_bishop1")
-
+	    other_piece = game.pieces.where(y_coordinate: 6, x_coordinate: 3).first
 	    expect(piece.valid_move?(5, 4)).to eq(false)
 		end
 	end
@@ -342,22 +342,22 @@ RSpec.describe PiecesController, type: :controller do
 
 		describe "valid moves" do
 			it "should allow a valid move vertically" do
-		        expect(@test_rook.valid_move?(4, 3)).to eq(true)
+		    expect(@test_rook.valid_move?(4, 3)).to eq(true)
 			end
 
 			it "should allow a valid move horizontally" do
-		        expect(@test_rook.valid_move?(3, 4)).to eq(true)
+		    expect(@test_rook.valid_move?(3, 4)).to eq(true)
 			end
 		end
 
 		describe "invalid moves" do
 			it "should not allow diagonal moves" do
-		        expect(@test_rook.valid_move?(4, 4)).to eq(false)
-	    	end
+		    expect(@test_rook.valid_move?(4, 4)).to eq(false)
+	    end
 
-	    	it "should not allow L shaped moves" do
-	        	expect(@test_rook.valid_move?(5, 4)).to eq(false)
-	    	end
+	    it "should not allow L shaped moves" do
+	      expect(@test_rook.valid_move?(5, 4)).to eq(false)
+	    end
 		end
 	end
 
@@ -371,7 +371,6 @@ RSpec.describe PiecesController, type: :controller do
 			get :show, params: { id: piece.id }
 
 			piece.reload
-			#expect(piece.piece_status).to eq("highlighted")
 			expect(piece.piece_status).to eq("first move|highlighted")
 		end
 	end

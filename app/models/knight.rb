@@ -4,10 +4,10 @@ class Knight < Piece
     diff_x = x - x_coordinate
     diff_x_abs = diff_x.abs
     diff_y = y - y_coordinate
-    if piece_color = "black"
-      return super && ((diff_x == 2 && diff_y == 1) || (diff_x == 1 && diff_y == 2))
+    if piece_color == "black"
+      return super && ((diff_x_abs == 2 && diff_y == 1) || (diff_x_abs == 1 && diff_y == 2))
     else 
-      return super && ((diff_x == 2 && diff_y == -1) || (diff_x == 1 && diff_y == -2))
+      return super && ((diff_x_abs == 2 && diff_y == -1) || (diff_x_abs == 1 && diff_y == -2))
     end
   end
 end

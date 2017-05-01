@@ -18,23 +18,23 @@ class Piece < ApplicationRecord
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
   # expects open spaces on the board to have the string "open space"
   def friendly_on_endpoint?(end_y, end_x) 
-    Piece.where(x_coordinate: end_x, y_coordinate: end_y, piece_color: piece_color).exists?
+    game.pieces.where(x_coordinate: end_x, y_coordinate: end_y, piece_color: piece_color).exists?
   end
 
   def capturing_move?(end_y, end_x)
-    Piece.where(x_coordinate: end_x, y_coordinate: end_y).where.not(piece_color: piece_color).exists?
+    game.pieces.where(x_coordinate: end_x, y_coordinate: end_y).where.not(piece_color: piece_color).exists?
   end
 
   def is_obstructed?(board, start_vertical,start_horizontal,end_vertical,end_horizontal)
     if start_vertical == end_vertical && start_horizontal == end_horizontal
-      true
+      return true
     end
     # raises error if invalid move, otherwise runs
     if start_vertical == end_vertical || start_horizontal == end_horizontal    
       move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     elsif ((start_vertical-end_vertical).abs != (start_horizontal - end_horizontal).abs)
       raise 'Invalid Input, not a diagonal horizontal or vertical move'
-    else  move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
+    else move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     end
   end
 
@@ -42,7 +42,7 @@ class Piece < ApplicationRecord
   def get_incr(start_p, end_p)
       incr = end_p - start_p
       if incr != 0
-      incr = incr / incr.abs
+        incr = incr / incr.abs
       end
       return incr
   end
@@ -82,16 +82,17 @@ class Piece < ApplicationRecord
       if ((y_coordinate-new_y).abs == (x_coordinate-new_x).abs) ||
         y_coordinate == new_y || x_coordinate == new_x
         if is_obstructed?(board, y_coordinate, x_coordinate, new_y, new_x)
-          false
+          return false
         end
-      elsif friendly_on_endpoint?(y_coordinate, x_coordinate)
-        false
+      end
+      if friendly_on_endpoint?(new_y, new_x)
+        return false
       else
-        true
+        return true
       end
     # If piece is not within board, it returns false -- not a valid move 
     else
-      false
+      return false
     end 
   end
 
