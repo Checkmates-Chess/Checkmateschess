@@ -1,7 +1,5 @@
 class Piece < ApplicationRecord
   belongs_to :game
-  belongs_to :user
-  attr_accessor :game_id, :piece_type, :piece_color, :piece_status, :x_coordinate, :y_coordinate
 
   self.inheritance_column = :piece_type
 
@@ -16,17 +14,19 @@ class Piece < ApplicationRecord
   scope :queens, -> { where(piece_type: "Queen") }
   scope :kings, -> { where(piece_type: "King") }
 
+
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
-  # if piece doesn't move raises an error, if piece is not on one of the above planes
   # expects open spaces on the board to have the string "open space"
   def is_obstructed?(board, start_vertical,start_horizontal,end_vertical,end_horizontal)
-    # raises error if end position is same as starting
-    raise 'Invalid Input, destination must be different from start' if start_vertical == end_vertical && start_horizontal == end_horizontal
+    if start_vertical == end_vertical && start_horizontal == end_horizontal
+      true
+    end
     # raises error if invalid move, otherwise runs
-    if start_vertical == end_vertical || start_horizontal == end_horizontal
-       move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
+    if start_vertical == end_vertical || start_horizontal == end_horizontal    
+      move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     elsif ((start_vertical-end_vertical).abs != (start_horizontal - end_horizontal).abs)
-          raise 'Invalid Input, not a diagonal horizontal or vertical move'
+      #raise 'Invalid Input, not a diagonal horizontal or vertical move'
+      true
     else  move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
     end
   end
@@ -52,9 +52,27 @@ class Piece < ApplicationRecord
       check_horizontal += hor_incr
       if [[check_horizontal],[check_vertical]] === [[end_horizontal],[end_vertical]]
         return false
-      elsif board[check_vertical][check_horizontal] != "open space"
+      elsif board[check_vertical][check_horizontal] != nil
         return true
       end
     end
   end
+
+  def valid_move?(new_y, new_x)
+    # Checks if piece is within board coordinates
+    if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
+      # If new space is within board, check if there are obstructions.
+      # If there is an obstruction, return false -- not a valid move. 
+      # If there are no obstructions, return true -- is a valid move.
+      if self.is_obstructed?(game.board, y_coordinate, x_coordinate, new_y, new_x)
+        false
+      else
+        true
+      end
+    # If piece is not within board, it returns false -- not a valid move 
+    else
+      false
+    end 
+  end
+
 end

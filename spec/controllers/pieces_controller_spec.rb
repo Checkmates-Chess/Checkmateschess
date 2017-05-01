@@ -1,8 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe PiecesController, type: :controller do
+	describe "piece#create" do
+		it "should successfully create a piece" do
+			user = FactoryGirl.create(:user)
+	        sign_in user
+
+	       	game = FactoryGirl.create(:game)
+
+	        piece = Piece.create(:game_id => game.id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive", :x_coordinate => 7, :y_coordinate => 6)
+	        expect(piece.piece_type).to eq("Pawn")
+	        expect(piece.piece_color).to eq("white")
+		end
+	end
+
 	describe "test is_obstructed? method" do
-		o = "open space"
+		o = nil
 		s = "start point"
 		e = "end points"
 		x = "piece"
@@ -19,15 +32,15 @@ RSpec.describe PiecesController, type: :controller do
 						]
 		# obstructed board
 		board2 = [
-				[e,o,o,e,o,o,e,o],
-				[o,x,o,x,o,x,o,o],
-				[o,o,o,o,o,o,o,o],
-				[e,x,o,s,o,o,x,e],
-				[o,o,o,o,o,o,o,o],
-				[o,x,o,o,o,o,o,o],
-				[e,o,o,x,o,o,x,o],
-				[o,o,o,e,o,o,o,e],
-			]
+							[e,o,o,e,o,o,e,o],
+							[o,x,o,x,o,x,o,o],
+							[o,o,o,o,o,o,o,o],
+							[e,x,o,s,o,o,x,e],
+							[o,o,o,o,o,o,o,o],
+							[o,x,o,o,o,o,o,o],
+							[e,o,o,x,o,o,x,o],
+							[o,o,o,e,o,o,o,e],
+						]
 		piece = Piece.create(game_id: 1, piece_type: "Rook", piece_color: "white", piece_status: "alive", x_coordinate: 3, y_coordinate: 3)
 		describe "when move is valid" do
 			describe "when move is unobstructed" do
@@ -101,14 +114,330 @@ RSpec.describe PiecesController, type: :controller do
 				end
 			end
 		end
-		describe "when move is invalid" do
-			it "should be invalid when piece doesn't move" do
-				expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error(RuntimeError, 'Invalid Input, destination must be different from start')
+		#describe "when move is invalid" do
+	  #	it "should be invalid when piece doesn't move" do
+		#		expect {piece.is_obstructed?(board2,3,3,3,3)}.to raise_error(RuntimeError, 'Invalid Input, destination must be different from start')
+		#	end
+
+		#	it "should be invalid when not a straight or diagonal move" do
+		#		expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error(RuntimeError, 'Invalid Input, not a diagonal horizontal or vertical move')
+		#	end
+		#end
+	end
+
+	describe "valid move method for pawn" do
+		#black piece moves
+		it "should return true for black moving one forward if unobstructed" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			expect(pawn.valid_move?(2, 4)).to eq(true)
+		end
+
+		it "should return true for black moving two forward if unobstructed and first move" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "first move")
+			expect(pawn.valid_move?(3, 4)).to eq(true)
+		end
+
+		it "should return true for black moving one forward if unobstructed and first move" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "first move")
+			expect(pawn.valid_move?(2, 4)).to eq(true)
+		end
+
+		it "should return false for black moving two forward if not first move" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			expect(pawn.valid_move?(3, 4)).to eq(false)
+		end
+
+		it "should return true for black moving one move southwest if that square is occupied by white piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 3, y_coordinate: 2, piece_color: "white", game: pawn.game)
+			expect(pawn.valid_move?(2, 3)).to eq(true)
+		end
+
+		it "should return true for black moving one move southeast if that square is occupied by white piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 2, piece_color: "white", game: pawn.game)
+			expect(pawn.valid_move?(2, 5)).to eq(true)
+		end
+
+		it "should return false for black moving one move southwest if that square is occupied by black piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 3, y_coordinate: 2, piece_color: "black", game: pawn.game)
+			expect(pawn.valid_move?(2, 3)).to eq(false)
+		end
+
+		it "should return false for black moving one move southeast if that square is occupied by black piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 2, piece_color: "black", game: pawn.game)
+			expect(pawn.valid_move?(2, 5)).to eq(false)
+		end
+
+		it "should return false for black moving one move southwest if that square is unoccupied" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			expect(pawn.valid_move?(2, 3)).to eq(false)
+		end
+
+		it "should return false for black moving one move southeast if that square is unoccupied" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			expect(pawn.valid_move?(3, 4)).to eq(false)
+		end
+
+		# white piece moves
+		it "should return true for white moving one forward if unobstructed" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			expect(pawn.valid_move?(5, 6)).to eq(true)
+		end
+
+		it "should return true for white moving two forward if unobstructed and first move" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "first move")
+			expect(pawn.valid_move?(4, 6)).to eq(true)
+		end
+
+		it "should return true for white moving one forward if unobstructed and first move" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "first move")
+			expect(pawn.valid_move?(5, 6)).to eq(true)
+		end
+
+		it "should return false for white moving two forward if not first move" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			expect(pawn.valid_move?(4, 6)).to eq(false)
+		end
+
+		it "should return true for white moving one move northwest if that square is occupied by black piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 5, piece_color: "black", game: pawn.game)
+			expect(pawn.valid_move?(5, 5)).to eq(true)
+		end
+
+		it "should return true for white moving one move northeast if that square is occupied by black piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			enemy_piece = FactoryGirl.create(:piece, x_coordinate: 7, y_coordinate: 5, piece_color: "black", game: pawn.game)
+			expect(pawn.valid_move?(5, 7)).to eq(true)
+		end
+
+		it "should return false for white moving one move northwest if that square is occupied by white piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 5, y_coordinate: 5, piece_color: "white", game: pawn.game)
+			expect(pawn.valid_move?(5, 5)).to eq(false)
+		end
+
+		it "should return false for white moving one move northeast if that square is occupied by white piece" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			friendly_piece = FactoryGirl.create(:piece, x_coordinate: 7, y_coordinate: 5, piece_color: "white", game: pawn.game)
+			expect(pawn.valid_move?(5, 7)).to eq(false)
+		end
+
+		it "should return false for white moving one move northwest if that square is unoccupied" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			expect(pawn.valid_move?(5, 5)).to eq(false)
+		end
+
+		it "should return false for white moving one move northeast if that square is unoccupied" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			expect(pawn.valid_move?(5, 7)).to eq(false)
+		end
+
+		it "should return false for white moving to a square that's not one/two forward or one diagonally" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 6, y_coordinate: 6, piece_color: "white", piece_status: "")
+			expect(pawn.valid_move?(4, 5)).to eq(false)
+		end
+
+		it "should return false for black moving to a square that's not one/two forward or one diagonally" do
+			pawn = FactoryGirl.create(:pawn, x_coordinate: 4, y_coordinate: 1, piece_color: "black", piece_status: "")
+			expect(pawn.valid_move?(0, 3)).to eq(false)
+		end
+  end
+
+  describe "valid_move? for Pieces model" do
+		game = FactoryGirl.create(:game)
+		o = nil
+	  e = "end points"
+	  x = "piece"
+		game.board = [
+							[@b_rook1,o,o,o,o,@b_bishop2,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,o,e,e,o,o,o],
+							[o,o,o,o,o,o,o,o],
+							[o,o,@w_bishop1,o,o,o,o,@w_rook2]
+						]
+    w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
+    b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+    b_rook1 = game.pieces.find_by_piece_name("b_rook1")
+    w_rook2 = game.pieces.find_by_piece_name("w_rook2")
+
+		it "should prevent piece from moving off the board" do
+	    expect(w_bishop1.valid_move?(1, 8)).to eq(false)
+		end
+
+		it "should allow piece to move when valid" do
+	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
+	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
+	    expect(b_rook1.valid_move?(0, 5)).to eq(true)
+	    expect(w_rook2.valid_move?(4, 7)).to eq(true)
+		end
+
+		it "should prevent piece to move when obstructed" do
+			game = FactoryGirl.create(:game)
+	    piece = game.pieces.find_by_piece_name("w_bishop1")
+
+	    expect(piece.valid_move?(5, 4)).to eq(false)
+		end
+	end
+
+	describe "valid_move? for Bishop" do
+			game = FactoryGirl.create(:game)
+			o = nil
+		  e = "end points"
+		  x = "piece"
+			game.board = [
+								[o,o,@b_bishop1,o,o,@b_bishop2,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,o,e,e,o,o,o],
+								[o,o,o,o,o,o,o,o],
+								[o,o,@w_bishop1,o,o,@w_bishop2,o,o]
+							]
+	    w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
+	    w_bishop2 = game.pieces.find_by_piece_name("w_bishop2")
+	    b_bishop1 = game.pieces.find_by_piece_name("b_bishop1")
+	    b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+
+	  it "should allow bishops to move diagonally" do
+	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
+	    expect(w_bishop2.valid_move?(5, 3)).to eq(true)
+	    expect(b_bishop1.valid_move?(2, 4)).to eq(true)
+	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
+	  end
+
+	  it "should prevent bishops from moving horizontally" do
+	    expect(w_bishop1.valid_move?(4, 7)).to eq(false)
+	  end
+
+	  it "should prevent bishops from moving vertically" do
+	    expect(b_bishop2.valid_move?(4, 5)).to eq(false)
+	  end
+
+	  it "should prevent unallowed moves" do
+			expect(w_bishop2.valid_move?(6, 1)).to eq(false)
+	  end
+	end
+
+	describe "valid_move? for Rook" do
+		before(:all) do
+    		@user = FactoryGirl.create(:user)
+    		@game = FactoryGirl.create(:game)
+    		@test_rook = Piece.create :game_id => @game.id, :piece_type => "Rook", :piece_name => "test_rook", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
+  			@game.board[3][3] = @test_rook
+  		end
+
+  		before(:each) {sign_in @user}
+
+		describe "valid moves" do
+			it "should allow a valid move vertically" do
+		        expect(@test_rook.valid_move?(4, 3)).to eq(true)
 			end
 
-			# it "should be invalid when not a straight or diagonal move" do
-			# 	expect {piece.is_obstructed?(board2,3,3,4,7)}.to raise_error(RuntimeError, 'Invalid Input, not a diagonal horizontal or vertical move')
-			# end
+			it "should allow a valid move horizontally" do
+		        expect(@test_rook.valid_move?(3, 4)).to eq(true)
+			end
+		end
+
+		describe "invalid moves" do
+			it "should not allow diagonal moves" do
+		        expect(@test_rook.valid_move?(4, 4)).to eq(false)
+	    	end
+
+	    	it "should not allow L shaped moves" do
+	        	expect(@test_rook.valid_move?(5, 4)).to eq(false)
+	    	end
+		end
+	end
+
+end
+
+describe "valid_move? for King" do
+ 	before(:all) do
+  	@user = FactoryGirl.create(:user)
+  	@game = FactoryGirl.create(:game)
+  	@test_king = Piece.create :game_id => @game.id, :piece_type => "King", :piece_name => "test_king", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
+  	@game.board[3][3] = @test_king
+  end
+
+  before(:each) {sign_in @user}
+
+ 	describe "valid moves" do
+ 		it "should allow a valid move vertically" do
+ 			expect(@test_king.valid_move?(4, 3)).to eq(true)
+  		expect(@test_king.valid_move?(2, 3)).to eq(true)
+ 		end
+
+		it "should allow a valid move horizontally" do
+			expect(@test_king.valid_move?(3, 4)).to eq(true)
+			expect(@test_king.valid_move?(3, 2)).to eq(true)
+		end
+
+		it "should allow a valid move diagonally" do
+			expect(@test_king.valid_move?(4, 4)).to eq(true)
+			expect(@test_king.valid_move?(4, 2)).to eq(true)
+			expect(@test_king.valid_move?(2, 2)).to eq(true)
+			expect(@test_king.valid_move?(2, 4)).to eq(true)
+		end
+	end
+
+	describe "invalid moves" do
+		it "should not move more than one in any direction" do
+			expect(@test_king.valid_move?(5, 3)).to eq(false)
+  		expect(@test_king.valid_move?(1, 3)).to eq(false)
+			expect(@test_king.valid_move?(3, 5)).to eq(false)
+			expect(@test_king.valid_move?(3, 1)).to eq(false)
+			expect(@test_king.valid_move?(5, 5)).to eq(false)
+			expect(@test_king.valid_move?(5, 1)).to eq(false)
+			expect(@test_king.valid_move?(1, 1)).to eq(false)
+			expect(@test_king.valid_move?(1, 5)).to eq(false)
+		end
+
+		it "should not allow L shaped moves" do
+			expect(@test_king.valid_move?(5, 4)).to eq(false)
+		end
+	end
+end
+
+describe "valid_move? for Queen" do
+ 	before(:all) do
+  	@user = FactoryGirl.create(:user)
+  	@game = FactoryGirl.create(:game)
+  	@test_queen = Piece.create :game_id => @game.id, :piece_type => "Queen", :piece_name => "test_queen", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
+  	@game.board[3][3] = @test_queen
+  end
+
+  before(:each) {sign_in @user}
+
+ 	describe "valid moves" do
+ 		it "should allow a valid move vertically" do
+ 			expect(@test_queen.valid_move?(4, 3)).to eq(true)
+  		expect(@test_queen.valid_move?(2, 3)).to eq(true)
+ 		end
+
+		it "should allow a valid move horizontally" do
+			expect(@test_queen.valid_move?(3, 4)).to eq(true)
+			expect(@test_queen.valid_move?(3, 2)).to eq(true)
+		end
+
+		it "should allow a valid move diagonally" do
+			expect(@test_queen.valid_move?(4, 4)).to eq(true)
+			expect(@test_queen.valid_move?(4, 2)).to eq(true)
+			expect(@test_queen.valid_move?(2, 2)).to eq(true)
+			expect(@test_queen.valid_move?(2, 4)).to eq(true)
+		end
+	end
+
+	describe "invalid moves" do
+		it "should not allow L shaped moves" do
+			expect(@test_queen.valid_move?(5, 4)).to eq(false)
 		end
 	end
 end
