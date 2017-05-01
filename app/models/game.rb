@@ -1,7 +1,7 @@
 class Game < ApplicationRecord
   has_many :pieces
-  belongs_to :player_white, class_name: "User"
-  belongs_to :player_black, class_name: "User"
+  #belongs_to :player_white, class_name: "User"
+  #belongs_to :player_black, class_name: "User"
   belongs_to :user
   attr_accessor :board
 
