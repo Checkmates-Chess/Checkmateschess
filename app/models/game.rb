@@ -1,11 +1,15 @@
 class Game < ApplicationRecord
   has_many :pieces
   belongs_to :user
+  #belongs_to :player_white, class_name: "User"
+  #belongs_to :player_black, class_name: "User"
   attr_accessor :board
 
   validates :game_title, presence: true, length: { minimum: 3, 
     maximum: 30 }
 
+  scope :available, -> { where(player_black_id: nil).or(where(player_white_id: nil)) }
+  
     # automatically populates game after one is created
     after_create do
         self.populate_game
@@ -101,3 +105,4 @@ class Game < ApplicationRecord
   end
 
 end
+

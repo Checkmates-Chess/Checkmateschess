@@ -13,7 +13,7 @@ RSpec.describe PiecesController, type: :controller do
 	        expect(piece.piece_color).to eq("white")
 		end
 	end
-  
+
 	describe "test is_obstructed? method" do
 		o = nil
 		s = "start point"
@@ -47,8 +47,8 @@ RSpec.describe PiecesController, type: :controller do
 				describe "diagonal moves" do
 					it "moves ne" do
 						expect(piece.is_obstructed?(board, 3, 3, 0, 6)).to be(false)
-					end			
-					it "moves nw" do 
+					end
+					it "moves nw" do
 						expect(piece.is_obstructed?(board, 3, 3, 0, 0)).to be(false)
 					end
 					it "moves sw" do
@@ -60,11 +60,11 @@ RSpec.describe PiecesController, type: :controller do
 				end
 
 				describe "straight moves(up,down,left,right" do
-					it "moves left" do 
+					it "moves left" do
 						expect(piece.is_obstructed?(board, 3, 3, 3, 0)).to be(false)
 					end
 
-					it "moves right" do 
+					it "moves right" do
 						expect(piece.is_obstructed?(board, 3, 3, 3, 7)).to be(false)
 					end
 
@@ -77,14 +77,14 @@ RSpec.describe PiecesController, type: :controller do
 					end
 				end
 			end
-	
-			
+
+
 			describe "when move is obstructed" do
 				describe "diagonal moves" do
 					it "moves ne" do
 						expect(piece.is_obstructed?(board2, 3, 3, 0, 6)).to be(true)
-					end			
-					it "moves nw" do 
+					end
+					it "moves nw" do
 						expect(piece.is_obstructed?(board2, 3, 3, 0, 0)).to be(true)
 					end
 					it "moves sw" do
@@ -96,11 +96,11 @@ RSpec.describe PiecesController, type: :controller do
 				end
 
 				describe "straight moves(up,down,left,right" do
-					it "moves left" do 
+					it "moves left" do
 						expect(piece.is_obstructed?(board2, 3, 3, 3, 0)).to be(true)
 					end
 
-					it "moves right" do 
+					it "moves right" do
 						expect(piece.is_obstructed?(board2, 3, 3, 3, 7)).to be(true)
 					end
 
@@ -111,7 +111,7 @@ RSpec.describe PiecesController, type: :controller do
 					it "moves down" do
 						expect(piece.is_obstructed?(board2, 3, 3, 7, 3)).to be(true)
 					end
-				end			
+				end
 			end
 		end
 		#describe "when move is invalid" do
@@ -421,4 +421,85 @@ RSpec.describe PiecesController, type: :controller do
 
 end
 
+describe "valid_move? for King" do
+ 	before(:all) do
+  	@user = FactoryGirl.create(:user)
+  	@game = FactoryGirl.create(:game)
+  	@test_king = Piece.create :game_id => @game.id, :piece_type => "King", :piece_name => "test_king", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
+  	@game.board[3][3] = @test_king
+  end
 
+  before(:each) {sign_in @user}
+
+ 	describe "valid moves" do
+ 		it "should allow a valid move vertically" do
+ 			expect(@test_king.valid_move?(4, 3)).to eq(true)
+  		expect(@test_king.valid_move?(2, 3)).to eq(true)
+ 		end
+
+		it "should allow a valid move horizontally" do
+			expect(@test_king.valid_move?(3, 4)).to eq(true)
+			expect(@test_king.valid_move?(3, 2)).to eq(true)
+		end
+
+		it "should allow a valid move diagonally" do
+			expect(@test_king.valid_move?(4, 4)).to eq(true)
+			expect(@test_king.valid_move?(4, 2)).to eq(true)
+			expect(@test_king.valid_move?(2, 2)).to eq(true)
+			expect(@test_king.valid_move?(2, 4)).to eq(true)
+		end
+	end
+
+	describe "invalid moves" do
+		it "should not move more than one in any direction" do
+			expect(@test_king.valid_move?(5, 3)).to eq(false)
+  		expect(@test_king.valid_move?(1, 3)).to eq(false)
+			expect(@test_king.valid_move?(3, 5)).to eq(false)
+			expect(@test_king.valid_move?(3, 1)).to eq(false)
+			expect(@test_king.valid_move?(5, 5)).to eq(false)
+			expect(@test_king.valid_move?(5, 1)).to eq(false)
+			expect(@test_king.valid_move?(1, 1)).to eq(false)
+			expect(@test_king.valid_move?(1, 5)).to eq(false)
+		end
+
+		it "should not allow L shaped moves" do
+			expect(@test_king.valid_move?(5, 4)).to eq(false)
+		end
+	end
+end
+
+describe "valid_move? for Queen" do
+ 	before(:all) do
+  	@user = FactoryGirl.create(:user)
+  	@game = FactoryGirl.create(:game)
+  	@test_queen = Piece.create :game_id => @game.id, :piece_type => "Queen", :piece_name => "test_queen", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
+  	@game.board[3][3] = @test_queen
+  end
+
+  before(:each) {sign_in @user}
+
+ 	describe "valid moves" do
+ 		it "should allow a valid move vertically" do
+ 			expect(@test_queen.valid_move?(4, 3)).to eq(true)
+  		expect(@test_queen.valid_move?(2, 3)).to eq(true)
+ 		end
+
+		it "should allow a valid move horizontally" do
+			expect(@test_queen.valid_move?(3, 4)).to eq(true)
+			expect(@test_queen.valid_move?(3, 2)).to eq(true)
+		end
+
+		it "should allow a valid move diagonally" do
+			expect(@test_queen.valid_move?(4, 4)).to eq(true)
+			expect(@test_queen.valid_move?(4, 2)).to eq(true)
+			expect(@test_queen.valid_move?(2, 2)).to eq(true)
+			expect(@test_queen.valid_move?(2, 4)).to eq(true)
+		end
+	end
+
+	describe "invalid moves" do
+		it "should not allow L shaped moves" do
+			expect(@test_queen.valid_move?(5, 4)).to eq(false)
+		end
+	end
+end
