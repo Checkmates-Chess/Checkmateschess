@@ -15,11 +15,13 @@ class Piece < ApplicationRecord
   scope :kings, -> { where(piece_type: "King") }
 
   def move_to!(new_y, new_x)
+    remove_flag = false
     if piece_status.include?("first move")
       piece_status.sub! "|first move", ""
       update_attributes(piece_status: piece_status)
     end
     if capturing_move?(new_y, new_x)
+      remove_flag = true
       captured_piece = game.pieces.where(x_coordinate: new_x, y_coordinate: new_y).first
       captured_piece_status = captured_piece.piece_status
       if captured_piece_status.include?("alive")
@@ -30,6 +32,7 @@ class Piece < ApplicationRecord
     else
       update_attributes(x_coordinate: new_x, y_coordinate: new_y)
     end
+    return remove_flag
   end
 
   #used in valid_move?
@@ -39,7 +42,8 @@ class Piece < ApplicationRecord
 
   #used in move_to!
   def capturing_move?(end_y, end_x)
-    game.pieces.where(x_coordinate: end_x, y_coordinate: end_y).where.not(piece_color: piece_color).exists?
+    enemy_color = piece_color == "white" ? "black" : "white"
+    game.pieces.where(x_coordinate: end_x, y_coordinate: end_y, piece_color: enemy_color).exists?
   end
 
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.

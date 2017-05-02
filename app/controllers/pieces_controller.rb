@@ -27,16 +27,22 @@ class PiecesController < ApplicationController
     new_x = params[:piece][:x_coordinate]
     new_y = params[:piece][:y_coordinate]
     valid_move = @piece.valid_move?(new_y, new_x)
-
-    in_check = nil
-    board = [[], [], [], [], [], [], [], []]
-    8.times do |row|
-      8.times do |col|
-        board_piece = @game.pieces.where(x_coordinate: col, y_coordinate: row).first
-        board[row][col] = board_piece
-      end
+    remove_flag = false
+    destination_piece = @game.pieces.where(x_coordinate: new_x, y_coordinate: new_y).first
+    destination_piece_id = nil
+    if !destination_piece.nil?
+      destination_piece_id = destination_piece.id
     end
-    is_obstructed = @piece.is_obstructed?(board, old_y, old_x, new_y, new_x)
+
+    in_check = false
+    #board = [[], [], [], [], [], [], [], []]
+    #8.times do |row|
+    #  8.times do |col|
+    #    board_piece = @game.pieces.where(x_coordinate: col, y_coordinate: row).first
+    #    board[row][col] = board_piece
+    #  end
+    #end
+    #is_obstructed = @piece.is_obstructed?(board, old_y, old_x, new_y, new_x)
 
     # checking for allowed move and updating piece
     if @piece.valid_move?(new_y, new_x)
@@ -44,7 +50,7 @@ class PiecesController < ApplicationController
       in_check = @game.side_in_check?(color)
       @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
       if !in_check
-        @piece.move_to!(new_y, new_x)
+        remove_flag = @piece.move_to!(new_y, new_x)
       end
     end
 
@@ -55,8 +61,9 @@ class PiecesController < ApplicationController
       passed_y: new_y,
       valid_move: valid_move, 
       in_check: in_check,
-      is_obstructed: is_obstructed,
-      piece_status: @piece.piece_status
+      piece_status: @piece.piece_status,
+      remove_flag: remove_flag,
+      destination_piece_id: destination_piece_id
     }
     render json: json_piece
   end

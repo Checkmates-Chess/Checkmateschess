@@ -39,7 +39,12 @@
           y_coordinate: new_y
           }
         }).success( function(data) {
-          if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+          if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag) {
+              destination.find("img").remove();
+              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+            //destination.find("img").remove();
+            console.log("remove")
+          } else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
             console.log("destination");
             console.log("origin x: " + origin.data("x"));
