@@ -25,6 +25,7 @@ class PiecesController < ApplicationController
       @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
       if !in_check
         remove_flag = @piece.move_to!(new_y, new_x)
+        @game.switch_turn
       end
     end
 
