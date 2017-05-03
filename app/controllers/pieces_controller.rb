@@ -33,7 +33,7 @@ class PiecesController < ApplicationController
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
       remove_flag: remove_flag,
-      turn: @game.player_turn
+      pawn_promotion: @piece.pawn_promotion?(new_y, new_x)
     }
     render json: json_piece
   end

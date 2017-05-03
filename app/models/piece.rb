@@ -132,5 +132,15 @@ class Piece < ApplicationRecord
     end 
   end
 
+  def pawn_promotion?(new_y, new_x)
+    if piece_type == "Pawn"
+      if (piece_color == "white" && new_y == 0) ||
+        (piece_color == "black" && new_y == 7)
+        return true
+      end
+    end 
+    false
+  end
+
 end
 

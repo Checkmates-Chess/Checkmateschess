@@ -5,6 +5,11 @@
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
 
+<div id="pawn-promotion-top">
+
+</div>
+
+
 <div id="board">   
   <% 8.times do |col| %>     
     <% 8.times do |row| %>       
@@ -13,6 +18,10 @@
   <% end %> 
 </div>
 
+
+<div id="pawn-promotion-bottom">
+
+</div>
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -39,12 +48,18 @@
           y_coordinate: new_y
           }
         }).success( function(data) {
-          if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag) {
+          if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag && data.pawn_promotion) {
+            destination.find("img").remove();
+
+          }
+          else if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag) {
               destination.find("img").remove();
               $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
-          } else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+          } 
+          else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
-          } else {
+          } 
+          else {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
             $(alert("this is not a valid move"));
           }  
