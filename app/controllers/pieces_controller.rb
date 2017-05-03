@@ -6,10 +6,35 @@ class PiecesController < ApplicationController
 		@piece = @game.pieces.create(piece_params)
 	end
 
-	def update
+  def update
     @piece = Piece.find(params[:id])
-    @piece.update_attributes(piece_params)
-    redirect_to game_path(@piece.game)
+    @game = @piece.game
+    old_x = @piece.x_coordinate
+    old_y = @piece.y_coordinate
+    color = @piece.piece_color
+    new_x = params[:piece][:x_coordinate]
+    new_y = params[:piece][:y_coordinate]
+    valid_move = @piece.valid_move?(new_y, new_x)
+    remove_flag = false
+    in_check = false
+    
+
+    # checking for allowed move and updating piece
+    if valid_move
+      @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
+      in_check = @game.side_in_check?(color)
+      @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+      if !in_check
+        remove_flag = @piece.move_to!(new_y, new_x)
+      end
+    end
+
+    json_piece = {
+      x_coordinate: @piece.x_coordinate,
+      y_coordinate: @piece.y_coordinate,
+      remove_flag: remove_flag,
+    }
+    render json: json_piece
   end
 
 	private

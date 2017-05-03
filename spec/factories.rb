@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :user do
     sequence :email do |n|
-      "dummyEmail#{n}@gmail.com"
+      "dummyEmail2#{n}@gmail.com"
     end
     sequence :username do |n|
-      "hippoman#{n}"
+      "hippoman2#{n}"
     end
     password "secretPassword"
     password_confirmation "secretPassword"
@@ -37,7 +37,7 @@ FactoryGirl.define do
   end
 
   factory :queen, parent: :piece, class: 'Queen' do
-    piece_type 'Queen'
+     piece_type 'Queen'
   end
 
   factory :rook, parent: :piece, class: 'Rook' do

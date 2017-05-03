@@ -1,5 +1,10 @@
 class Queen < Piece
   def valid_move?(new_y, new_x)
-    (new_x - x_coordinate).abs <= 7 && (new_y - y_coordinate).abs <= 7 && super
+    if (new_x.to_i - x_coordinate.to_i).abs == (new_y.to_i - y_coordinate.to_i).abs ||
+      new_x.to_i == x_coordinate.to_i || new_y.to_i == y_coordinate.to_i
+      return super
+    else
+      false
+    end
   end
 end
