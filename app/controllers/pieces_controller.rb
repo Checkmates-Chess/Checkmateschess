@@ -17,7 +17,6 @@ class PiecesController < ApplicationController
     valid_move = @piece.valid_move?(new_y, new_x)
     remove_flag = false
     in_check = false
-    
 
     # checking for allowed move and updating piece
     if valid_move
@@ -26,13 +25,14 @@ class PiecesController < ApplicationController
       @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
       if !in_check
         remove_flag = @piece.move_to!(new_y, new_x)
+        @game.switch_turn
       end
     end
 
     json_piece = {
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
-      remove_flag: remove_flag,
+      remove_flag: remove_flag
     }
     render json: json_piece
   end

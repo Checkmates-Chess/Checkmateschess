@@ -12,7 +12,7 @@ FactoryGirl.define do
 
   factory :game do
     game_title 'meat salad forever'
-
+    
     association :user
   end
 
