@@ -12,6 +12,7 @@ class GamesController < ApplicationController
     else
       @game.update_attributes(player_black_id: @game.user_id)
     end
+    @game.update_attributes(player_turn: "white")
     redirect_to root_path
   end
 
