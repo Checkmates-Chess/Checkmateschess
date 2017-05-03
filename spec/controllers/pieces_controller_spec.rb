@@ -445,7 +445,6 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
-end
 
 describe "valid_move? for King" do
 	 	before(:all) do
