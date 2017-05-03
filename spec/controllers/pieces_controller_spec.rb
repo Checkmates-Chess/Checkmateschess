@@ -448,84 +448,94 @@ RSpec.describe PiecesController, type: :controller do
 end
 
 describe "valid_move? for King" do
- 	before(:all) do
-  	@user = FactoryGirl.create(:user)
-  	@game = FactoryGirl.create(:game)
-  	@test_king = Piece.create :game_id => @game.id, :piece_type => "King", :piece_name => "test_king", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
-  	@game.board[3][3] = @test_king
-  end
+	 	before(:all) do
+	  	@user = FactoryGirl.create(:user)
+	  	@game = FactoryGirl.create(:game)
+	  	@test_king = @game.pieces.where(piece_type: "King", piece_color: "white").first
+	  	@test_king.update_attributes(x_coordinate: 3, y_coordinate: 3) 
+	  end
 
-  before(:each) {sign_in @user}
+	  before(:each) {sign_in @user}
 
- 	describe "valid moves" do
- 		it "should allow a valid move vertically" do
- 			expect(@test_king.valid_move?(4, 3)).to eq(true)
-  		expect(@test_king.valid_move?(2, 3)).to eq(true)
- 		end
+	 	describe "valid moves" do
+	 		it "should allow a valid move vertically" do
+	 			@game.update_attributes(player_turn: "white")
+	 			expect(@test_king.valid_move?(4, 3)).to eq(true)
+	  		expect(@test_king.valid_move?(2, 3)).to eq(true)
+	 		end
 
-		it "should allow a valid move horizontally" do
-			expect(@test_king.valid_move?(3, 4)).to eq(true)
-			expect(@test_king.valid_move?(3, 2)).to eq(true)
+			it "should allow a valid move horizontally" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_king.valid_move?(3, 4)).to eq(true)
+				expect(@test_king.valid_move?(3, 2)).to eq(true)
+			end
+
+			it "should allow a valid move diagonally" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_king.valid_move?(4, 4)).to eq(true)
+				expect(@test_king.valid_move?(4, 2)).to eq(true)
+				expect(@test_king.valid_move?(2, 2)).to eq(true)
+				expect(@test_king.valid_move?(2, 4)).to eq(true)
+			end
 		end
 
-		it "should allow a valid move diagonally" do
-			expect(@test_king.valid_move?(4, 4)).to eq(true)
-			expect(@test_king.valid_move?(4, 2)).to eq(true)
-			expect(@test_king.valid_move?(2, 2)).to eq(true)
-			expect(@test_king.valid_move?(2, 4)).to eq(true)
-		end
-	end
+		describe "invalid moves" do
+			it "should not move more than one in any direction" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_king.valid_move?(5, 3)).to eq(false)
+	  		expect(@test_king.valid_move?(1, 3)).to eq(false)
+				expect(@test_king.valid_move?(3, 5)).to eq(false)
+				expect(@test_king.valid_move?(3, 1)).to eq(false)
+				expect(@test_king.valid_move?(5, 5)).to eq(false)
+				expect(@test_king.valid_move?(5, 1)).to eq(false)
+				expect(@test_king.valid_move?(1, 1)).to eq(false)
+				expect(@test_king.valid_move?(1, 5)).to eq(false)
+			end
 
-	describe "invalid moves" do
-		it "should not move more than one in any direction" do
-			expect(@test_king.valid_move?(5, 3)).to eq(false)
-  		expect(@test_king.valid_move?(1, 3)).to eq(false)
-			expect(@test_king.valid_move?(3, 5)).to eq(false)
-			expect(@test_king.valid_move?(3, 1)).to eq(false)
-			expect(@test_king.valid_move?(5, 5)).to eq(false)
-			expect(@test_king.valid_move?(5, 1)).to eq(false)
-			expect(@test_king.valid_move?(1, 1)).to eq(false)
-			expect(@test_king.valid_move?(1, 5)).to eq(false)
-		end
-
-		it "should not allow L shaped moves" do
-			expect(@test_king.valid_move?(5, 4)).to eq(false)
-		end
-	end
-end
-
-describe "valid_move? for Queen" do
- 	before(:all) do
-  	@user = FactoryGirl.create(:user)
-  	@game = FactoryGirl.create(:game)
-  	@test_queen = Piece.create :game_id => @game.id, :piece_type => "Queen", :piece_name => "test_queen", :piece_color => "white", :piece_status => "alive", :x_coordinate => 3, :y_coordinate => 3
-  	@game.board[3][3] = @test_queen
-  end
-
-  before(:each) {sign_in @user}
-
- 	describe "valid moves" do
- 		it "should allow a valid move vertically" do
- 			expect(@test_queen.valid_move?(4, 3)).to eq(true)
-  		expect(@test_queen.valid_move?(2, 3)).to eq(true)
- 		end
-
-		it "should allow a valid move horizontally" do
-			expect(@test_queen.valid_move?(3, 4)).to eq(true)
-			expect(@test_queen.valid_move?(3, 2)).to eq(true)
-		end
-
-		it "should allow a valid move diagonally" do
-			expect(@test_queen.valid_move?(4, 4)).to eq(true)
-			expect(@test_queen.valid_move?(4, 2)).to eq(true)
-			expect(@test_queen.valid_move?(2, 2)).to eq(true)
-			expect(@test_queen.valid_move?(2, 4)).to eq(true)
+			it "should not allow L shaped moves" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_king.valid_move?(5, 4)).to eq(false)
+			end
 		end
 	end
 
-	describe "invalid moves" do
-		it "should not allow L shaped moves" do
-			expect(@test_queen.valid_move?(5, 4)).to eq(false)
+		describe "valid_move? for Queen" do
+		 	before(:all) do
+		  	@user = FactoryGirl.create(:user)
+		  	@game = FactoryGirl.create(:game)
+		  	@test_queen = @game.pieces.where(piece_type: "Queen", piece_color: "white").first
+	  		@test_queen.update_attributes(x_coordinate: 3, y_coordinate: 3) 
+		  end
+
+		  before(:each) {sign_in @user}
+
+		 	describe "valid moves" do
+		 		it "should allow a valid move vertically" do
+		 			@game.update_attributes(player_turn: "white")
+		 			expect(@test_queen.valid_move?(4, 3)).to eq(true)
+		  		expect(@test_queen.valid_move?(2, 3)).to eq(true)
+		 		end
+
+				it "should allow a valid move horizontally" do
+					@game.update_attributes(player_turn: "white")
+					expect(@test_queen.valid_move?(3, 4)).to eq(true)
+					expect(@test_queen.valid_move?(3, 2)).to eq(true)
+				end
+
+				it "should allow a valid move diagonally" do
+					@game.update_attributes(player_turn: "white")
+					expect(@test_queen.valid_move?(4, 4)).to eq(true)
+					expect(@test_queen.valid_move?(4, 2)).to eq(true)
+					expect(@test_queen.valid_move?(2, 2)).to eq(true)
+					expect(@test_queen.valid_move?(2, 4)).to eq(true)
+				end
+			end
+
+			describe "invalid moves" do
+				it "should not allow L shaped moves" do
+					@game.update_attributes(player_turn: "white")
+					expect(@test_queen.valid_move?(5, 4)).to eq(false)
+				end
+			end
 		end
-	end
 end
