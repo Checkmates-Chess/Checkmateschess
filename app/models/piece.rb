@@ -98,9 +98,9 @@ class Piece < ApplicationRecord
     new_x = new_x.to_i
 
     # check if it's the piece's color's turn
-    #if piece_color != game.player_turn
-    #  return false
-    #end
+    if piece_color != game.player_turn
+      return false
+    end
 
     # Checks if piece is within board coordinates
     if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
