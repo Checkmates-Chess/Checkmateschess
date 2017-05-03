@@ -6,29 +6,37 @@ class Pawn < Piece
     end_horizontal = end_horizontal.to_i
     possible_squares = []
 
+    # checks diagonal capture
+    if can_capture?(end_vertical, end_horizontal)
+      return super
+    end
+
     # forward moves
     if piece_color == "black" && start_row + 1 < 8
-      possible_squares << [start_col, start_row + 1]
+      if !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row + 1)
+        possible_squares << [start_col, start_row + 1]
+      end
     elsif piece_color == "white" && start_row - 1 >= 0
-      possible_squares << [start_col, start_row - 1]
+      if !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row - 1)
+        possible_squares << [start_col, start_row - 1]
+      end
     end
 
     if piece_status.include?("first move")
       if piece_color == "black" && start_row + 2 < 8
-        if !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row + 1)
+        if !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row + 1) &&
+          !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row + 2)
           possible_squares << [start_col, start_row + 2]
         end
       elsif piece_color == "white" && start_row - 2 >= 0
-        if !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row - 1)
+        if !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row - 1) &&
+          !game.pieces.exists?(x_coordinate: start_col, y_coordinate: start_row - 2)
           possible_squares << [start_col, start_row - 2]
         end
       end
     end
 
     if possible_squares.include?([end_horizontal, end_vertical])
-      return super
-    end
-    if can_capture?(end_vertical, end_horizontal)
       return super
     end
     false
@@ -83,9 +91,7 @@ class Pawn < Piece
       remove_flag = true
       captured_piece = game.pieces.where(x_coordinate: new_x, y_coordinate: new_y).first
       captured_piece_status = captured_piece.piece_status
-      if captured_piece_status.include?("alive")
-        captured_piece_status.sub! "alive", "dead"
-      end
+      captured_piece_status.sub! "alive", "dead"
       captured_piece.update_attributes(x_coordinate: nil, y_coordinate: nil, piece_status: captured_piece_status)
       update_attributes(x_coordinate: new_x, y_coordinate: new_y)
     else
