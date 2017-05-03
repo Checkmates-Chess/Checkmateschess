@@ -22,4 +22,15 @@
   </div>
 </div>
 
+<div class="col-sm-6">
+  <h2 class="text-center">Available Games</h2>
+  <div class="user-list box">
+    <ul>
+      <% @games.each do |game| %>
+        <li><%= game.game_title %><li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
 </div>

@@ -32,8 +32,7 @@ class PiecesController < ApplicationController
     json_piece = {
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
-      remove_flag: remove_flag,
-      turn: @game.player_turn
+      remove_flag: remove_flag
     }
     render json: json_piece
   end
