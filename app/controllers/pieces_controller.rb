@@ -6,19 +6,7 @@ class PiecesController < ApplicationController
 		@piece = @game.pieces.create(piece_params)
 	end
 
-	#def show
-  #  @piece = Piece.find(params[:id])
-  #  current_piece_status = @piece.piece_status
-  #  if current_piece_status.nil?
-  #    @piece.update_attributes(piece_status: "highlighted")
-  #  else
-  #    @piece.update_attributes(piece_status: current_piece_status + "|highlighted")
-  #  end
-    #redirect_to game_path(@piece.game)
-  #end
-
   def update
-    #a lot of these variables for debugging purposes in console.log()
     @piece = Piece.find(params[:id])
     @game = @piece.game
     old_x = @piece.x_coordinate
@@ -28,7 +16,6 @@ class PiecesController < ApplicationController
     new_y = params[:piece][:y_coordinate]
     valid_move = @piece.valid_move?(new_y, new_x)
     remove_flag = false
-
     in_check = false
 
     # checking for allowed move and updating piece
@@ -44,7 +31,8 @@ class PiecesController < ApplicationController
     json_piece = {
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
-      remove_flag: remove_flag
+      remove_flag: remove_flag,
+      turn: @game.player_turn
     }
     render json: json_piece
   end
