@@ -35,6 +35,24 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script> 
   $( function() {
+
+    $('.pawn-promo-top').css('display', 'block');
+    $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
+      console.log("top rook");
+      var pieceIdTest = $('.pieces').first().data("pid");
+      $.post("/pieces/" + pieceIdTest, {
+          _method: "PUT",
+          piece: {
+          x_coordinate: 4,
+          y_coordinate: 4,
+          piece_status: "promote to rook"
+          }
+      }).success( function(data) {
+        //var new_rook = '<img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />'
+        data.piece_element.appendTo(destination);
+      });
+    });
+
     
     $('.pieces').draggable({
       stack: '#board',
@@ -68,6 +86,9 @@
               $('.pawn-promo-top').css('display', 'block');
               $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
                 console.log("top rook");
+                
+                // update request with piece_status of "promote to..." here
+
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_knight1.svg"]').click( function() {
                 console.log("top knight");
