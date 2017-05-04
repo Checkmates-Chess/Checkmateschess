@@ -18,6 +18,7 @@ class PiecesController < ApplicationController
     remove_flag = false
     in_check = false
     pawn_promotion = false
+    piece_type = @piece.piece_type
 
     # checking for allowed move and updating piece
     if valid_move
@@ -36,7 +37,11 @@ class PiecesController < ApplicationController
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
       remove_flag: remove_flag,
-      pawn_promotion: pawn_promotion
+      pawn_promotion: pawn_promotion,
+      old_x: old_x,
+      old_y: old_y,
+      color: color,
+      piece_type: piece_type
     }
     render json: json_piece
   end

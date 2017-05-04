@@ -36,6 +36,10 @@
 <script> 
   $( function() {
     
+    $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
+      console.log("clicked");
+    });
+
     $('.pieces').draggable({
       stack: '#board',
       containment: '#board'
@@ -48,6 +52,7 @@
         var pieceId = parseInt(ui.draggable.data("pid"));
         var destination = $(this);
         var origin = ui.draggable.parent();
+        var piece = ui.draggable;
         
         $.post("/pieces/" + pieceId, {
           _method: "PUT",
@@ -58,27 +63,67 @@
         }).success( function(data) {
           if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.pawn_promotion) {
+            ui.draggable.css('background-color', 'red');
+            //ui.draggable.remove();
             console.log("pawn promotion");
             if(data.remove_flag) {
               destination.find("img").remove();
             }
             if(new_y == 0) {
-              $('.pawn-promo-top').style.display = 'block';
+              $('.pawn-promo-top').css('display', 'block');
+              $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
+                console.log("top rook");
+              });
+              $('.pawn-promo-top').find('img[src$="/assets/w_knight1.svg"]').click( function() {
+                console.log("top knight");
+              });
+              $('.pawn-promo-top').find('img[src$="/assets/w_bishop1.svg"]').click( function() {
+                console.log("top bishop");
+              });
+              $('.pawn-promo-top').find('img[src$="/assets/w_queen.svg"]').click( function() {
+                console.log("top queen");
+              });
             }
             else {
-              $('.pawn-promo-bottom').style.display = 'block';
+              $('.pawn-promo-bottom').css('display', 'block');
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_rook1.svg"]').click( function() {
+                console.log("bottom rook");
+              });
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_knight1.svg"]').click( function() {
+                console.log("bottom knight");
+              });
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_bishop1.svg"]').click( function() {
+                console.log("bottom bishop");
+              });
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_queen.svg"]').click( function() {
+                console.log("bottom queen");
+              });
             }
           }
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.remove_flag) {
             console.log("captured");
-            console.log(data.pawn_promotion);
+            console.log("x_coordinate: " + data.x_coordinate),
+            console.log("y_coordinate: " + data.y_coordinate),
+            console.log("remove_flag: " + data.remove_flag),
+            console.log("pawn_promotion: " + data.pawn_promotion),
+            console.log("old_x: " + data.old_x),
+            console.log("old_y: " + data.old_y),
+            console.log("color: " + data.color),
+            console.log("piece_type: " + data.piece_type),
             destination.find("img").remove();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
             console.log("no capture");
-            console.log(data.pawn_promotion);
+            console.log("x_coordinate: " + data.x_coordinate),
+            console.log("y_coordinate: " + data.y_coordinate),
+            console.log("remove_flag: " + data.remove_flag),
+            console.log("pawn_promotion: " + data.pawn_promotion),
+            console.log("old_x: " + data.old_x),
+            console.log("old_y: " + data.old_y),
+            console.log("color: " + data.color),
+            console.log("piece_type: " + data.piece_type),
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           else {
