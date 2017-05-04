@@ -56,15 +56,29 @@
           y_coordinate: new_y
           }
         }).success( function(data) {
-          if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag && data.pawn_promotion) {
-            destination.find("img").remove();
-
-          }
-          else if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag) {
+          if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
+            data.pawn_promotion) {
+            console.log("pawn promotion");
+            if(data.remove_flag) {
               destination.find("img").remove();
-              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+            }
+            if(new_y == 0) {
+              $('.pawn-promo-top').style.display = 'block';
+            }
+            else {
+              $('.pawn-promo-bottom').style.display = 'block';
+            }
+          }
+          else if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
+            data.remove_flag) {
+            console.log("captured");
+            console.log(data.pawn_promotion);
+            destination.find("img").remove();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+            console.log("no capture");
+            console.log(data.pawn_promotion);
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           else {

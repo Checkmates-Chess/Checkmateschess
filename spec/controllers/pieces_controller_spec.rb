@@ -446,7 +446,7 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 
-describe "valid_move? for King" do
+	describe "valid_move? for King" do
 	 	before(:all) do
 	  	@user = FactoryGirl.create(:user)
 	  	@game = FactoryGirl.create(:game)
@@ -498,43 +498,59 @@ describe "valid_move? for King" do
 		end
 	end
 
-		describe "valid_move? for Queen" do
-		 	before(:all) do
-		  	@user = FactoryGirl.create(:user)
-		  	@game = FactoryGirl.create(:game)
-		  	@test_queen = @game.pieces.where(piece_type: "Queen", piece_color: "white").first
-	  		@test_queen.update_attributes(x_coordinate: 3, y_coordinate: 3) 
-		  end
+	describe "valid_move? for Queen" do
+	 	before(:all) do
+	  	@user = FactoryGirl.create(:user)
+	  	@game = FactoryGirl.create(:game)
+	  	@test_queen = @game.pieces.where(piece_type: "Queen", piece_color: "white").first
+  		@test_queen.update_attributes(x_coordinate: 3, y_coordinate: 3) 
+	  end
 
-		  before(:each) {sign_in @user}
+	  before(:each) {sign_in @user}
 
-		 	describe "valid moves" do
-		 		it "should allow a valid move vertically" do
-		 			@game.update_attributes(player_turn: "white")
-		 			expect(@test_queen.valid_move?(4, 3)).to eq(true)
-		  		expect(@test_queen.valid_move?(2, 3)).to eq(true)
-		 		end
+	 	describe "valid moves" do
+	 		it "should allow a valid move vertically" do
+	 			@game.update_attributes(player_turn: "white")
+	 			expect(@test_queen.valid_move?(4, 3)).to eq(true)
+	  		expect(@test_queen.valid_move?(2, 3)).to eq(true)
+	 		end
 
-				it "should allow a valid move horizontally" do
-					@game.update_attributes(player_turn: "white")
-					expect(@test_queen.valid_move?(3, 4)).to eq(true)
-					expect(@test_queen.valid_move?(3, 2)).to eq(true)
-				end
-
-				it "should allow a valid move diagonally" do
-					@game.update_attributes(player_turn: "white")
-					expect(@test_queen.valid_move?(4, 4)).to eq(true)
-					expect(@test_queen.valid_move?(4, 2)).to eq(true)
-					expect(@test_queen.valid_move?(2, 2)).to eq(true)
-					expect(@test_queen.valid_move?(2, 4)).to eq(true)
-				end
+			it "should allow a valid move horizontally" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_queen.valid_move?(3, 4)).to eq(true)
+				expect(@test_queen.valid_move?(3, 2)).to eq(true)
 			end
 
-			describe "invalid moves" do
-				it "should not allow L shaped moves" do
-					@game.update_attributes(player_turn: "white")
-					expect(@test_queen.valid_move?(5, 4)).to eq(false)
-				end
+			it "should allow a valid move diagonally" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_queen.valid_move?(4, 4)).to eq(true)
+				expect(@test_queen.valid_move?(4, 2)).to eq(true)
+				expect(@test_queen.valid_move?(2, 2)).to eq(true)
+				expect(@test_queen.valid_move?(2, 4)).to eq(true)
 			end
 		end
+
+		describe "invalid moves" do
+			it "should not allow L shaped moves" do
+				@game.update_attributes(player_turn: "white")
+				expect(@test_queen.valid_move?(5, 4)).to eq(false)
+			end
+		end
+	end
+
+	describe "pawn_promotion? method" do
+		it "should return true when a white pawn is at row 1, and is given new_y of 0" do
+			user = FactoryGirl.create(:user)
+			sign_in user
+			game = FactoryGirl.create(:game)
+			white_pawn = game.pieces.where(piece_type: "Pawn", piece_color: "white", x_coordinate: 0, y_coordinate: 6).first
+			black_rook = game.pieces.where(piece_type: "Rook", piece_color: "black", x_coordinate: 0, y_coordinate: 0).first
+			black_pawn = game.pieces.where(piece_type: "Pawn", piece_color: "black", x_coordinate: 0, y_coordinate: 1).first
+			black_rook.update_attributes(x_coordinate: 1, y_coordinate: 2)
+			black_pawn.update_attributes(x_coordinate: 2, y_coordinate: 2)
+			white_pawn.update_attributes(x_coordinate: 0, y_coordinate: 1)
+			expect(white_pawn.pawn_promotion?(0, 0)).to eq(true)
+		end
+	end
+		
 end
