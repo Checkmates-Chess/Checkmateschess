@@ -4,11 +4,15 @@
 <% if @game.player_black_id.nil? || @game.player_white_id.nil? %>
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
+  
 
-<div id="pawn-promotion-top">
-
-</div>
-
+<div class="pawn-promo-top">
+  <img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />
+  <img class="pawn-promo-top-knight" src="/assets/w_knight1.svg" alt="W knight1" />
+  <img class="pawn-promo-top-bishop" src="/assets/w_bishop1.svg" alt="W bishop1" />
+  <img class="pawn-promo-top-queen" src="/assets/w_queen.svg" alt="W queen" />
+</div>   
+ 
 
 <div id="board">   
   <% 8.times do |col| %>     
@@ -19,9 +23,13 @@
 </div>
 
 
-<div id="pawn-promotion-bottom">
-
-</div>
+<div class="pawn-promo-bottom">
+  <img class="pawn-promo-bottom-rook" src="/assets/b_rook1.svg" alt="B rook1" />
+  <img class="pawn-promo-bottom-knight" src="/assets/b_knight1.svg" alt="B knight1" />
+  <img class="pawn-promo-bottom-bishop" src="/assets/b_bishop1.svg" alt="B bishop1" />
+  <img class="pawn-promo-bottom-queen" src="/assets/b_queen.svg" alt="B queen" />
+</div>   
+ 
 
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
