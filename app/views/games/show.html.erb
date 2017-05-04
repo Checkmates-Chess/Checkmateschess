@@ -36,10 +36,6 @@
 <script> 
   $( function() {
     
-    $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
-      console.log("clicked");
-    });
-
     $('.pieces').draggable({
       stack: '#board',
       containment: '#board'
@@ -63,9 +59,8 @@
         }).success( function(data) {
           if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.pawn_promotion) {
-            ui.draggable.css('background-color', 'red');
-            //ui.draggable.remove();
             console.log("pawn promotion");
+            ui.draggable.css('background-color', 'red');
             if(data.remove_flag) {
               destination.find("img").remove();
             }
