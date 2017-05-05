@@ -36,23 +36,26 @@
 <script> 
   $( function() {
 
+    //for testing
     $('.pawn-promo-top').css('display', 'block');
     $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
-      console.log("top rook");
-      var pieceIdTest = $('.pieces').first().data("pid");
-      $.post("/pieces/" + pieceIdTest, {
-          _method: "PUT",
-          piece: {
-          x_coordinate: 4,
-          y_coordinate: 4,
-          piece_status: "promote to rook"
-          }
-      }).success( function(data) {
-        //var new_rook = '<img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />'
-        data.piece_element.appendTo(destination);
-      });
+      var testPieceName = "w_pawn1";
+      var imageElement = $("img[src*=\"" + testPieceName + "\"]");
+      console.log(imageElement.attr('src'));
+      imageElement.attr('src', '/assets/w_rook1.svg');
+      //var pieceIdTest = $('.pieces').first().data("pid");
+      //$.post("/pieces/" + pieceIdTest, {
+      //  _method: "PUT",
+      //  piece: {
+      //  x_coordinate: 4,
+      //  y_coordinate: 4,
+      //  piece_status: "promote to rook"
+      //  }
+      //}).success( function(data) {
+        
+      //});
     });
-
+    // end for testing
     
     $('.pieces').draggable({
       stack: '#board',
@@ -119,27 +122,27 @@
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.remove_flag) {
             console.log("captured");
-            console.log("x_coordinate: " + data.x_coordinate),
-            console.log("y_coordinate: " + data.y_coordinate),
-            console.log("remove_flag: " + data.remove_flag),
-            console.log("pawn_promotion: " + data.pawn_promotion),
-            console.log("old_x: " + data.old_x),
-            console.log("old_y: " + data.old_y),
-            console.log("color: " + data.color),
-            console.log("piece_type: " + data.piece_type),
+            console.log("x_coordinate: " + data.x_coordinate);
+            console.log("y_coordinate: " + data.y_coordinate);
+            console.log("remove_flag: " + data.remove_flag);
+            console.log("pawn_promotion: " + data.pawn_promotion);
+            console.log("old_x: " + data.old_x);
+            console.log("old_y: " + data.old_y);
+            console.log("color: " + data.color);
+            console.log("piece_type: " + data.piece_type);
             destination.find("img").remove();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
             console.log("no capture");
-            console.log("x_coordinate: " + data.x_coordinate),
-            console.log("y_coordinate: " + data.y_coordinate),
-            console.log("remove_flag: " + data.remove_flag),
-            console.log("pawn_promotion: " + data.pawn_promotion),
-            console.log("old_x: " + data.old_x),
-            console.log("old_y: " + data.old_y),
-            console.log("color: " + data.color),
-            console.log("piece_type: " + data.piece_type),
+            console.log("x_coordinate: " + data.x_coordinate);
+            console.log("y_coordinate: " + data.y_coordinate);
+            console.log("remove_flag: " + data.remove_flag);
+            console.log("pawn_promotion: " + data.pawn_promotion);
+            console.log("old_x: " + data.old_x);
+            console.log("old_y: " + data.old_y);
+            console.log("color: " + data.color);
+            console.log("piece_type: " + data.piece_type);
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           else {
