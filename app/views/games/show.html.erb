@@ -83,7 +83,8 @@
           if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.pawn_promotion) {
             console.log("pawn promotion");
-            ui.draggable.css('background-color', 'red');
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+            destination.css('background-color', 'red');
             // PAWN PROMOTION WITH CAPTURE? REMOVE CAPTURED PIECE
             if(data.remove_flag) {
               destination.find("img").remove();
@@ -95,6 +96,7 @@
                 console.log("top rook");
                 
                 // PAWN PROMOTION TO WHITE ROOK
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/w_rook1.svg');
@@ -108,15 +110,20 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
             
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_knight1.svg"]').click( function() {
                 console.log("top knight");
 
                 // PAWN PROMOTION TO WHITE KNIGHT
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/w_knight1.svg');
@@ -130,15 +137,20 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_bishop1.svg"]').click( function() {
                 console.log("top bishop");
 
                 // PAWN PROMOTION TO WHITE BISHOP
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/w_bishop1.svg');
@@ -152,15 +164,20 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_queen.svg"]').click( function() {
                 console.log("top queen");
 
                 // PAWN PROMOTION TO WHITE QUEEN
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/w_queen.svg');
@@ -174,9 +191,13 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
             }
@@ -187,6 +208,7 @@
                 console.log("bottom rook");
 
                 // PAWN PROMOTION TO BLACK ROOK
+
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/b_rook1.svg');
@@ -200,15 +222,20 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
               $('.pawn-promo-bottom').find('img[src$="/assets/b_knight1.svg"]').click( function() {
                 console.log("bottom knight");
 
                 // PAWN PROMOTION TO BLACK KNIGHT
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/b_knight1.svg');
@@ -222,15 +249,20 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
               $('.pawn-promo-bottom').find('img[src$="/assets/b_bishop1.svg"]').click( function() {
                 console.log("bottom bishop");
 
                 // PAWN PROMOTION TO BLACK BISHOP
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/b_bishop1.svg');
@@ -244,15 +276,20 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
               $('.pawn-promo-bottom').find('img[src$="/assets/b_queen.svg"]').click( function() {
                 console.log("bottom queen");
 
                 // PAWN PROMOTION TO BLACK QUEEN
+                
                 var pieceName = data.piece_name;
                 var imageElement = $("img[src*=\"" + pieceName + "\"]");
                 imageElement.attr('src', '/assets/b_queen.svg');
@@ -266,9 +303,13 @@
                   }
                 }).success( function(data) {
                   console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
                 });
-
-                ui.draggable.css('background-color', 'none');
 
               });
             }
