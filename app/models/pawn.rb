@@ -91,7 +91,7 @@ class Pawn < Piece
       remove_flag = true
       captured_piece = game.pieces.where(x_coordinate: new_x, y_coordinate: new_y).first
       captured_piece_status = captured_piece.piece_status
-      captured_piece_status.sub! "alive", "dead"
+      captured_piece_status.sub! "alive", "captured"
       captured_piece.update_attributes(x_coordinate: nil, y_coordinate: nil, piece_status: captured_piece_status)
       update_attributes(x_coordinate: new_x, y_coordinate: new_y)
     else

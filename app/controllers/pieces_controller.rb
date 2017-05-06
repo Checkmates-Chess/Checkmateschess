@@ -19,10 +19,39 @@ class PiecesController < ApplicationController
     in_check = false
     pawn_promotion = false
 
-    # check for pawn promotion  
-    if @piece.piece_status.include?("promote to")
-      @piece.update_attributes(piece_type: "Rook", piece_status: "alive")
-    # checking for allowed move and updating piece
+    # check for pawn promotion 
+    pawn_promote_status = params[:piece][:piece_status]
+    if pawn_promote_status.include?("promote to")
+      if pawn_promote_status.include?("promote to rook")
+        @piece.update_attributes(piece_type: "Rook", piece_status: "alive|promoted pawn")
+        if color == "black"
+          @piece.update_attributes(piece_name: "b_rook1")
+        else
+          @piece.update_attributes(piece_name: "w_rook1")
+        end
+      elsif pawn_promote_status.include?("promote to bishop")
+        @piece.update_attributes(piece_type: "Bishop", piece_status: "alive|promoted pawn")
+        if color == "black"
+          @piece.update_attributes(piece_name: "b_bishop1")
+        else
+          @piece.update_attributes(piece_name: "w_bishop1")
+        end
+      elsif pawn_promote_status.include?("promote to knight")
+        @piece.update_attributes(piece_type: "Knight", piece_status: "alive|promoted pawn")
+        if color == "black"
+          @piece.update_attributes(piece_name: "b_knight1")
+        else
+          @piece.update_attributes(piece_name: "w_knight1")
+        end
+      else
+        @piece.update_attributes(piece_type: "Queen", piece_status: "alive|promoted pawn")
+        if color == "black"
+          @piece.update_attributes(piece_name: "b_queen")
+        else
+          @piece.update_attributes(piece_name: "w_queen")
+        end
+      end
+    # checking for allowed move and update piece
     elsif valid_move
       @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
       in_check = @game.side_in_check?(color)
@@ -34,22 +63,6 @@ class PiecesController < ApplicationController
       end
     end
 
-    #rook_el = nil
-    #queen_el = nil
-    #bishop_el = nil
-    #knight_el = nil
-    #if color == "black"
-    #  rook_el = image_tag("b_rook1.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #  queen_el = image_tag("b_queen.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #  bishop_el = image_tag("b_bishop1.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    # knight_el = image_tag("b_knight1.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #else
-    # rook_el = image_tag("w_rook1.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #  queen_el = image_tag("w_queen.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #  bishop_el = image_tag("w_bishop1.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #  knight_el = image_tag("w_knight1.svg", class: "pieces", data: {pid: "#{@piece.id}"})
-    #end
-
     json_piece = {
       x_coordinate: @piece.x_coordinate,
       y_coordinate: @piece.y_coordinate,
@@ -60,7 +73,6 @@ class PiecesController < ApplicationController
       color: color,
       piece_type: @piece.piece_type,
       piece_name: @piece.piece_name
-      #image_tag: image_tag
     }
     render json: json_piece
   end

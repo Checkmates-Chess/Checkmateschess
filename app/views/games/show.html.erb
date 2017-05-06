@@ -37,12 +37,12 @@
   $( function() {
 
     //for testing
-    $('.pawn-promo-top').css('display', 'block');
-    $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
-      var testPieceName = "w_pawn1";
-      var imageElement = $("img[src*=\"" + testPieceName + "\"]");
-      console.log(imageElement.attr('src'));
-      imageElement.attr('src', '/assets/w_rook1.svg');
+    //$('.pawn-promo-top').css('display', 'block');
+    //$('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
+      //var testPieceName = "w_pawn1";
+      //var imageElement = $("img[src*=\"" + testPieceName + "\"]");
+      //console.log(imageElement.attr('src'));
+      //imageElement.attr('src', '/assets/w_rook1.svg');
       //var pieceIdTest = $('.pieces').first().data("pid");
       //$.post("/pieces/" + pieceIdTest, {
       //  _method: "PUT",
@@ -54,7 +54,7 @@
       //}).success( function(data) {
         
       //});
-    });
+    //});
     // end for testing
     
     $('.pieces').draggable({
@@ -75,50 +75,205 @@
           _method: "PUT",
           piece: {
           x_coordinate: new_x,
-          y_coordinate: new_y
+          y_coordinate: new_y,
+          piece_status: "no promotion"
           }
         }).success( function(data) {
+          // PAWN PROMOTION
           if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.pawn_promotion) {
             console.log("pawn promotion");
             ui.draggable.css('background-color', 'red');
+            // PAWN PROMOTION WITH CAPTURE? REMOVE CAPTURED PIECE
             if(data.remove_flag) {
               destination.find("img").remove();
             }
+            // WHITE PAWN PROMOTION
             if(new_y == 0) {
               $('.pawn-promo-top').css('display', 'block');
               $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
                 console.log("top rook");
                 
-                // update request with piece_status of "promote to..." here
+                // PAWN PROMOTION TO WHITE ROOK
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_rook1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to rook"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
 
+                ui.draggable.css('background-color', 'none');
+            
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_knight1.svg"]').click( function() {
                 console.log("top knight");
+
+                // PAWN PROMOTION TO WHITE KNIGHT
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_knight1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to knight"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_bishop1.svg"]').click( function() {
                 console.log("top bishop");
+
+                // PAWN PROMOTION TO WHITE BISHOP
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_bishop1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to bishop"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
               $('.pawn-promo-top').find('img[src$="/assets/w_queen.svg"]').click( function() {
                 console.log("top queen");
+
+                // PAWN PROMOTION TO WHITE QUEEN
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_queen.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to queen"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
             }
+            // BLACK PAWN PROMOTION
             else {
               $('.pawn-promo-bottom').css('display', 'block');
               $('.pawn-promo-bottom').find('img[src$="/assets/b_rook1.svg"]').click( function() {
                 console.log("bottom rook");
+
+                // PAWN PROMOTION TO BLACK ROOK
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_rook1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to rook"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
               $('.pawn-promo-bottom').find('img[src$="/assets/b_knight1.svg"]').click( function() {
                 console.log("bottom knight");
+
+                // PAWN PROMOTION TO BLACK KNIGHT
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_knight1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to knight"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
               $('.pawn-promo-bottom').find('img[src$="/assets/b_bishop1.svg"]').click( function() {
                 console.log("bottom bishop");
+
+                // PAWN PROMOTION TO BLACK BISHOP
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_bishop1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to bishop"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
               $('.pawn-promo-bottom').find('img[src$="/assets/b_queen.svg"]').click( function() {
                 console.log("bottom queen");
+
+                // PAWN PROMOTION TO BLACK QUEEN
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_queen.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to queen"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                });
+
+                ui.draggable.css('background-color', 'none');
+
               });
             }
           }
+          // CAPTURE MOVE, NO PAWN PROMOTION
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
             data.remove_flag) {
             console.log("captured");
@@ -133,6 +288,7 @@
             destination.find("img").remove();
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
+          // SUCCESSFUL MOVE, NO CAPTURE OR PAWN PROMOTION
           else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
             console.log("no capture");
             console.log("x_coordinate: " + data.x_coordinate);
@@ -145,6 +301,7 @@
             console.log("piece_type: " + data.piece_type);
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
+          // UNSUCCESSFUL MOVE
           else {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
             $(alert("this is not a valid move"));
