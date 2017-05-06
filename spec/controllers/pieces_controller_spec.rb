@@ -14,6 +14,54 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
+	describe "pieces#update" do
+		it "should update (x, y) of piece to that of passed parameters" do
+			user = FactoryGirl.create(:user)
+			sign_in user
+			game = FactoryGirl.create(:game)
+			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first			
+		  game.update_attributes(player_turn: "white")
+
+			patch :update, params: { 
+				id: white_pawn.id, 
+				piece: {
+					x_coordinate: 0,
+					y_coordinate: 4,
+					piece_status: "no promotion"
+				}
+			}
+
+			white_pawn.reload
+			expect(white_pawn.piece_status).to eq("alive")
+			expect(white_pawn.x_coordinate).to eq(0)
+			expect(white_pawn.y_coordinate).to eq(4)
+		end
+
+		it "should not update piece if it moves king into check" do
+			user = FactoryGirl.create(:user)
+			sign_in user
+			game = FactoryGirl.create(:game)
+			black_king = game.pieces.where(x_coordinate: 4, y_coordinate: 0).first
+			black_king.update_attributes(x_coordinate: 4, y_coordinate: 3)
+			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first
+			white_pawn.update_attributes(x_coordinate: 5, y_coordinate: 5)
+			game.update_attributes(player_turn: "white")
+
+			patch :update, params: { 
+				id: black_king.id, 
+				piece: {
+					x_coordinate: 4,
+					y_coordinate: 4,
+					piece_status: "no promotion"
+				}
+			}
+
+			black_king.reload
+			expect(black_king.x_coordinate).to eq(4)
+			expect(black_king.y_coordinate).to eq(3)
+		end
+	end
+
 	describe "test is_obstructed? method" do
 		o = nil
 		s = "start point"
@@ -382,66 +430,6 @@ RSpec.describe PiecesController, type: :controller do
 				@game.update_attributes(player_turn: "white")
 	      expect(@test_rook.valid_move?(5, 4)).to eq(false)
 	    end
-		end
-	end
-
-	#describe "pieces#show" do
-	#	it "should update piece_status of piece to include 'highlighted'" do
-	#		user = FactoryGirl.create(:user)
-	#		game = FactoryGirl.create(:game)
-	#		sign_in user
-	#		piece = Piece.create(game_id: game.id, piece_status: "first move")
-  #
-	#		get :show, params: { id: piece.id }
-  #
-	#		piece.reload
-	#		expect(piece.piece_status).to eq("first move|highlighted")
-	#	end
-	#end
-
-	describe "pieces#update" do
-		it "should update (x, y) of piece to that of passed parameters" do
-			user = FactoryGirl.create(:user)
-			sign_in user
-			game = FactoryGirl.create(:game)
-			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first			
-		  game.update_attributes(player_turn: "white")
-
-			patch :update, params: { 
-				id: white_pawn.id, 
-				piece: {
-					x_coordinate: 0,
-					y_coordinate: 4
-				}
-			}
-
-			white_pawn.reload
-			expect(white_pawn.piece_status).to eq("alive")
-			expect(white_pawn.x_coordinate).to eq(0)
-			expect(white_pawn.y_coordinate).to eq(4)
-		end
-
-		it "should not update piece if it moves king into check" do
-			user = FactoryGirl.create(:user)
-			sign_in user
-			game = FactoryGirl.create(:game)
-			black_king = game.pieces.where(x_coordinate: 4, y_coordinate: 0).first
-			black_king.update_attributes(x_coordinate: 4, y_coordinate: 3)
-			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first
-			white_pawn.update_attributes(x_coordinate: 5, y_coordinate: 5)
-			game.update_attributes(player_turn: "white")
-
-			patch :update, params: { 
-				id: black_king.id, 
-				piece: {
-					x_coordinate: 4,
-					y_coordinate: 4
-				}
-			}
-
-			black_king.reload
-			expect(black_king.x_coordinate).to eq(4)
-			expect(black_king.y_coordinate).to eq(3)
 		end
 	end
 
