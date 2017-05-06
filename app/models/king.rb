@@ -64,7 +64,15 @@ class King < Piece
 
 
   def move_to!(new_y, new_x)
-    # update_attributes(x_coordinate: @kings_new_x, piece_status: "alive")
+    if @kings_new_x == 6
+      @king_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 7, y_coordinate: y_coordinate, piece_status: "alive|first move")
+      update_attributes(x_coordinate: 6, piece_status: "alive")
+      @king_side_rook.update_attributes(x_coordinate: 5, piece_status: "alive")
+    elsif @kings_new_x == 2
+      @queen_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 0, y_coordinate: y_coordinate, piece_status: "alive|first move")
+      update_attributes(x_coordinate: 2, piece_status: "alive")
+      @queen_side_rook.update_attributes(x_coordinate: 3, piece_status: "alive")
+    end
     return true
   end
 

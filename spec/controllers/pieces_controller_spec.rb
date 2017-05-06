@@ -465,17 +465,17 @@ describe "King" do
   before(:each) {sign_in @user}
 
 	describe "Castling" do
-		it "should be allowed on the king-side rook" do
+			it "should be allowed on the king-side rook" do
 			expect(@black_king.valid_move?(0, 6)).to be(true)
 			
-			# @king_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 5, piece_type: "Rook")
-			# expect(@king_side_rook).not_to eq(nil)
+			@king_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 5, piece_type: "Rook")
+			expect(@king_side_rook).not_to eq(nil)
 		end
 		it "should be allowed on the queen-side rook" do
 			expect(@black_king.valid_move?(0, 2)).to be(true)
 			
-			# @queen_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 3, piece_type: "Rook")
-			# expect(@queen_side_rook).not_to eq(nil)
+			@queen_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 3, piece_type: "Rook")
+			expect(@queen_side_rook).not_to eq(nil)
 		end
 		it "should not be allowed when the king has moved" do
 			# @black_king.update_attributes(x_coordinate: 5)

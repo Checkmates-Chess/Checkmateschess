@@ -105,7 +105,7 @@ class Piece < ApplicationRecord
       board = [[], [], [], [], [], [], [], []]
       8.times do |row|
         8.times do |col|
-          board_piece = game.pieces.where(x_coordinate: col, y_coordinate: row).first
+          board_piece = game.pieces.find_by(x_coordinate: col, y_coordinate: row)
           board[row][col] = board_piece
         end
       end
