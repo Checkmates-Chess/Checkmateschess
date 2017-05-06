@@ -449,17 +449,17 @@ describe "King" do
  	before(:all) do
   	@user = FactoryGirl.create(:user)
   	@game = FactoryGirl.create(:game)
-  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
 		for y in 0..7
-			for x in 0..7
-				if y == 0 || y == 7
-					if x != 0 || x != 4 || x != 7
+			if y == 0 || y == 7
+	 			for x in 0..7
+					if (x > 0 && x < 4) || (x > 4 && x < 7)
 						dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
 						dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
 					end
 				end
 			end
 		end
+  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
   end
 
   before(:each) {sign_in @user}
