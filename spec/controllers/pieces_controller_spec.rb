@@ -446,44 +446,110 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 describe "King" do
- 	before(:all) do
-  	@user = FactoryGirl.create(:user)
-  	@game = FactoryGirl.create(:game)
-		for y in 0..7
-			if y == 0 || y == 7
-	 			for x in 0..7
-					if (x > 0 && x < 4) || (x > 4 && x < 7)
-						dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
-						dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
-					end
-				end
-			end
-		end
-  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
-  end
+ 	# before(:all) do
+  # 	@user = FactoryGirl.create(:user)
+  # 	@game = FactoryGirl.create(:game)
+		# for y in 0..7
+		# 	if y == 0 || y == 7
+	 # 			for x in 0..7
+		# 			if (x > 0 && x < 4) || (x > 4 && x < 7)
+		# 				dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+		# 				dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+		# 			end
+		# 		end
+		# 	end
+		# end
+  # 	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+  # end
 
-  before(:each) {sign_in @user}
+  # before(:each) {sign_in @user}
 
 	describe "Castling" do
 			it "should be allowed on the king-side rook" do
+	  	@user = FactoryGirl.create(:user)
+	  	@game = FactoryGirl.create(:game)
+			for y in 0..7
+				if y == 0 || y == 7
+		 			for x in 0..7
+						if (x > 0 && x < 4) || (x > 4 && x < 7)
+							dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+							dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+						end
+					end
+				end
+			end
+
+	  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
 			expect(@black_king.valid_move?(0, 6)).to be(true)
 			
+			@black_king.castle_move!(0, 6)
 			@king_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 5, piece_type: "Rook")
 			expect(@king_side_rook).not_to eq(nil)
 		end
 		it "should be allowed on the queen-side rook" do
+	  	@user = FactoryGirl.create(:user)
+	  	@game = FactoryGirl.create(:game)
+			for y in 0..7
+				if y == 0 || y == 7
+		 			for x in 0..7
+						if (x > 0 && x < 4) || (x > 4 && x < 7)
+							dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+							dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+						end
+					end
+				end
+			end
+
+	  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+	  	
 			expect(@black_king.valid_move?(0, 2)).to be(true)
 			
+			@black_king.castle_move!(0, 2)			
 			@queen_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 3, piece_type: "Rook")
 			expect(@queen_side_rook).not_to eq(nil)
 		end
 		it "should not be allowed when the king has moved" do
-			# @black_king.update_attributes(x_coordinate: 5)
+	  	@user = FactoryGirl.create(:user)
+	  	@game = FactoryGirl.create(:game)
+			for y in 0..7
+				if y == 0 || y == 7
+		 			for x in 0..7
+						if (x > 0 && x < 4) || (x > 4 && x < 7)
+							dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+							dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+						end
+					end
+				end
+			end
+
+	  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
  
-			# expect(@black_king.valid_move?(0, 2)).to be(false)
+	  	@black_king.move_to!(0, 3)
+	  	@black_king.move_to!(0, 4)
+ 
+			expect(@black_king.castle_valid_move?(0, 2)).to be(false)
 		end
 		it "should not be allowed when the rook has moved" do
-			expect(true).to be(true)
+	  	@user = FactoryGirl.create(:user)
+	  	@game = FactoryGirl.create(:game)
+			for y in 0..7
+				if y == 0 || y == 7
+		 			for x in 0..7
+						if (x > 0 && x < 4) || (x > 4 && x < 7)
+							dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+							dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+						end
+					end
+				end
+			end
+
+	  	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+	  	@queen_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 0)
+
+	  	@queen_side_rook.move_to!(0, 1)
+	  	@queen_side_rook.move_to!(0, 0)
+ 
+			expect(@black_king.castle_valid_move?(0, 2)).to be(false)
 		end
 	end
 	

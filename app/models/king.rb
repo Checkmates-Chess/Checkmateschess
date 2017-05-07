@@ -13,6 +13,7 @@ class King < Piece
   def castle_valid_move?(new_y, new_x)
     # Ending on the appropriate square
     return false unless (new_x == 2 || new_x == 6) 
+    return false unless piece_status.include?("first move")
 
     # # Make sure king hasn't moved
     # return false unless piece_status.include?("first move") 
@@ -22,7 +23,6 @@ class King < Piece
       return false unless y_coordinate == 0 && new_y == 0
     elsif piece_color == "white"
       return false unless y_coordinate == 7 && new_y == 7
-
     end
 
     # Store rooks into variables
@@ -31,45 +31,33 @@ class King < Piece
 
     #  Determines if on King Side
     if new_x == 6
+      @king_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 7, y_coordinate: y_coordinate, piece_status: "alive|first move")
+      return false unless !@king_side_rook.nil?
       @kings_new_x = 6
       @rooks_new_x = 5
-      return castle_move!(new_y, new_x)
+      return true
     end
 
     #  Determines if on Queen Side
     if new_x == 2
-      @kings_new_x = 2
-      @rooks_new_x = 3
-      return castle_move!(new_y, new_x)
-    end
-
-  end
-
-  # Actually Moves the Pieces
-  def castle_move!(new_y, new_x)
- 
-    if @kings_new_x == 6
-      @king_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 7, y_coordinate: y_coordinate, piece_status: "alive|first move")
-      return false unless !@king_side_rook.nil?
- 
-      return move_to!(new_y, new_x)
-    elsif @kings_new_x == 2
       @queen_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 0, y_coordinate: y_coordinate, piece_status: "alive|first move")
       return false unless !@queen_side_rook.nil?
- 
-      return move_to!(new_y, new_x)
-    else return false
+      @kings_new_x = 2
+      @rooks_new_x = 3
+      return true
     end
+
   end
 
+  def castle_move!(new_y, new_x)
+    if new_x == 6
+      @king_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 7, piece_color: piece_color)
 
-  def move_to!(new_y, new_x)
-    if @kings_new_x == 6
-      @king_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 7, y_coordinate: y_coordinate, piece_status: "alive|first move")
       update_attributes(x_coordinate: 6, piece_status: "alive")
       @king_side_rook.update_attributes(x_coordinate: 5, piece_status: "alive")
-    elsif @kings_new_x == 2
-      @queen_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 0, y_coordinate: y_coordinate, piece_status: "alive|first move")
+    elsif new_x == 2
+      @queen_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 0, piece_color: piece_color)
+
       update_attributes(x_coordinate: 2, piece_status: "alive")
       @queen_side_rook.update_attributes(x_coordinate: 3, piece_status: "alive")
     end
