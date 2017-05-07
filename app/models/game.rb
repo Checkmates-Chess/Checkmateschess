@@ -104,15 +104,12 @@ class Game < ApplicationRecord
     return false
   end
 
-  def switch_turn(color)
-    if color == "white"
+  def switch_turn
+    if player_turn == "white"
       update_attributes(player_turn: "black")
-    else
+    elsif player_turn == "black"
       update_attributes(player_turn: "white")
     end
   end
-
-
+  
 end
-
-

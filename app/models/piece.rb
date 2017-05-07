@@ -25,7 +25,7 @@ class Piece < ApplicationRecord
       captured_piece = game.pieces.where(x_coordinate: new_x, y_coordinate: new_y).first
       captured_piece_status = captured_piece.piece_status
       if captured_piece_status.include?("alive")
-        captured_piece_status.sub! "alive", "dead"
+        captured_piece_status.sub! "alive", "captured"
       end
       captured_piece.update_attributes(x_coordinate: nil, y_coordinate: nil, piece_status: captured_piece_status)
       update_attributes(x_coordinate: new_x, y_coordinate: new_y)
@@ -96,6 +96,12 @@ class Piece < ApplicationRecord
   def valid_move?(new_y, new_x)
     new_y = new_y.to_i 
     new_x = new_x.to_i
+
+    # check if it's the piece's color's turn
+    if piece_color != game.player_turn
+      return false
+    end
+
     # Checks if piece is within board coordinates
     if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
       # If new space is within board, check if there are obstructions.
@@ -124,6 +130,18 @@ class Piece < ApplicationRecord
     else
       return false
     end 
+  end
+
+  def pawn_promotion?(new_y, new_x)
+    new_y = new_y.to_i
+    new_x = new_x.to_i 
+    if piece_type == "Pawn"
+      if (piece_color == "white" && new_y == 0) ||
+        (piece_color == "black" && new_y == 7)
+        return true
+      end
+    end 
+    false
   end
 
 end

@@ -5,6 +5,26 @@
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
 
+<div class="your-color">
+  <% if @game.player_black_id === current_user.id %>
+    <%= "black" %>
+  <% elsif @game.player_white_id === current_user.id %>
+    <%= "white" %>
+  <% end %>
+</div> 
+
+<div class="player-turn">
+  <%= "#{@game.player_turn}" %>
+</div>
+
+<div class="pawn-promo-top">
+  <img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />
+  <img class="pawn-promo-top-knight" src="/assets/w_knight1.svg" alt="W knight1" />
+  <img class="pawn-promo-top-bishop" src="/assets/w_bishop1.svg" alt="W bishop1" />
+  <img class="pawn-promo-top-queen" src="/assets/w_queen.svg" alt="W queen" />
+</div>   
+ 
+
 <div id="board">   
   <% 8.times do |col| %>     
     <% 8.times do |row| %>       
@@ -14,15 +34,36 @@
 </div>
 
 
+<div class="pawn-promo-bottom">
+  <img class="pawn-promo-bottom-rook" src="/assets/b_rook1.svg" alt="B rook1" />
+  <img class="pawn-promo-bottom-knight" src="/assets/b_knight1.svg" alt="B knight1" />
+  <img class="pawn-promo-bottom-bishop" src="/assets/b_bishop1.svg" alt="B bishop1" />
+  <img class="pawn-promo-bottom-queen" src="/assets/b_queen.svg" alt="B queen" />
+</div>   
+ 
+
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script> 
   $( function() {
     
-    $('.pieces').draggable({
-      stack: '#board',
-      containment: '#board'
-    });
+    var yourColor = $('.your-color').text().trim();
+    var playerTurn = $('.player-turn').text().trim();
+
+    if(yourColor === "white") {      
+      console.log("white clause");
+      $('.white, .black').find("img[src*=\"w_\"]").draggable({
+        stack: '#board',
+        containment: '#board'
+      });
+    }
+    else if(yourColor === "black"){
+      console.log("black clause");
+      $('.white, .black').find("img[src*=\"b_\"]").draggable({
+        stack: '#board',
+        containment: '#board'
+      });
+    }
 
     $('.white, .black').droppable({
       drop: function(ev, ui) {
@@ -31,20 +72,297 @@
         var pieceId = parseInt(ui.draggable.data("pid"));
         var destination = $(this);
         var origin = ui.draggable.parent();
+        var piece = ui.draggable;
         
         $.post("/pieces/" + pieceId, {
           _method: "PUT",
           piece: {
-          x_coordinate: new_x,
-          y_coordinate: new_y
+            x_coordinate: new_x,
+            y_coordinate: new_y,
+            piece_status: "no promotion"
           }
         }).success( function(data) {
-          if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag) {
-              destination.find("img").remove();
-              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
-          } else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+          // HIGHLIGHT AVAILABLE PIECES
+          //if(data.player_turn === yourColor) {
+          //  var colorLetter = "";
+          //  if(yourColor === "black") {
+          //    colorLetter = "b_";
+          //  }
+          //  else {
+          //    colorLetter = "w_";
+          //  }
+          //
+          //  $('.white, .black').find("img[src*=\"" + colorLetter + "\"]").parent().css('background-color', '#7240C2');
+          //  $('.white').not("img[src*=\"" + colorLetter + "\"]").parent().css('background-color', '#FFD3AE');
+          //  $('.black').not("img[src*=\"" + colorLetter + "\"]").parent().css('background-color', '#C57148');
+
+          //}
+
+          // PAWN PROMOTION
+          if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
+            data.pawn_promotion) {
+            console.log("pawn promotion");
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
-          } else {
+            destination.css('background-color', 'red');
+            // PAWN PROMOTION WITH CAPTURE? REMOVE CAPTURED PIECE
+            if(data.remove_flag) {
+              destination.find("img").remove();
+            }
+            // WHITE PAWN PROMOTION
+            if(new_y === 0) {
+              $('.pawn-promo-top').css('display', 'block');
+              $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
+                console.log("top rook");
+                
+                // PAWN PROMOTION TO WHITE ROOK
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_rook1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to rook"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+            
+              });
+              $('.pawn-promo-top').find('img[src$="/assets/w_knight1.svg"]').click( function() {
+                console.log("top knight");
+
+                // PAWN PROMOTION TO WHITE KNIGHT
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_knight1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to knight"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+              $('.pawn-promo-top').find('img[src$="/assets/w_bishop1.svg"]').click( function() {
+                console.log("top bishop");
+
+                // PAWN PROMOTION TO WHITE BISHOP
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_bishop1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to bishop"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+              $('.pawn-promo-top').find('img[src$="/assets/w_queen.svg"]').click( function() {
+                console.log("top queen");
+
+                // PAWN PROMOTION TO WHITE QUEEN
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/w_queen.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to queen"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+            }
+            // BLACK PAWN PROMOTION
+            else {
+              $('.pawn-promo-bottom').css('display', 'block');
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_rook1.svg"]').click( function() {
+                console.log("bottom rook");
+
+                // PAWN PROMOTION TO BLACK ROOK
+
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_rook1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to rook"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_knight1.svg"]').click( function() {
+                console.log("bottom knight");
+
+                // PAWN PROMOTION TO BLACK KNIGHT
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_knight1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to knight"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_bishop1.svg"]').click( function() {
+                console.log("bottom bishop");
+
+                // PAWN PROMOTION TO BLACK BISHOP
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_bishop1.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to bishop"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+              $('.pawn-promo-bottom').find('img[src$="/assets/b_queen.svg"]').click( function() {
+                console.log("bottom queen");
+
+                // PAWN PROMOTION TO BLACK QUEEN
+                
+                var pieceName = data.piece_name;
+                var imageElement = $("img[src*=\"" + pieceName + "\"]");
+                imageElement.attr('src', '/assets/b_queen.svg');
+              
+                $.post("/pieces/" + pieceId, {
+                  _method: "PUT",
+                  piece: {
+                  x_coordinate: new_x,
+                  y_coordinate: new_y,
+                  piece_status: "promote to queen"
+                  }
+                }).success( function(data) {
+                  console.log("piece type" + data.piece_type);
+                  if(destination.hasClass('white')) {
+                    destination.css('background-color', '#FFD3AE');
+                  }
+                  else if(destination.hasClass('black')) {
+                    destination.css('background-color', '#C57148');
+                  }
+                });
+
+              });
+            }
+          }
+          // CAPTURE MOVE, NO PAWN PROMOTION
+          else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
+            data.remove_flag) {
+            console.log("captured");
+            console.log("x_coordinate: " + data.x_coordinate);
+            console.log("y_coordinate: " + data.y_coordinate);
+            console.log("remove_flag: " + data.remove_flag);
+            console.log("pawn_promotion: " + data.pawn_promotion);
+            console.log("old_x: " + data.old_x);
+            console.log("old_y: " + data.old_y);
+            console.log("color: " + data.color);
+            console.log("piece_type: " + data.piece_type);
+            destination.find("img").remove();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+          } 
+          // SUCCESSFUL MOVE, NO CAPTURE OR PAWN PROMOTION
+          else if(data.x_coordinate === new_x && data.y_coordinate === new_y) {
+            console.log("no capture");
+            console.log("x_coordinate: " + data.x_coordinate);
+            console.log("y_coordinate: " + data.y_coordinate);
+            console.log("remove_flag: " + data.remove_flag);
+            console.log("pawn_promotion: " + data.pawn_promotion);
+            console.log("old_x: " + data.old_x);
+            console.log("old_y: " + data.old_y);
+            console.log("color: " + data.color);
+            console.log("piece_type: " + data.piece_type);
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+          } 
+          // UNSUCCESSFUL MOVE
+          else {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
             $(alert("this is not a valid move"));
           }  
