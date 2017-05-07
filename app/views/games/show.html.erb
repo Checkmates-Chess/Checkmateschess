@@ -4,7 +4,18 @@
 <% if @game.player_black_id.nil? || @game.player_white_id.nil? %>
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
-  
+
+<div class="your-color">
+  <% if @game.player_black_id === current_user.id %>
+    <%= "black" %>
+  <% elsif @game.player_white_id === current_user.id %>
+    <%= "white" %>
+  <% end %>
+</div> 
+
+<div class="player-turn">
+  <%= "#{@game.player_turn}" %>
+</div>
 
 <div class="pawn-promo-top">
   <img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />
@@ -36,10 +47,23 @@
 <script> 
   $( function() {
     
-    $('.pieces').draggable({
-      stack: '#board',
-      containment: '#board'
-    });
+    var yourColor = $('.your-color').text().trim();
+    var playerTurn = $('.player-turn').text().trim();
+
+    if(yourColor === "white") {      
+      console.log("white clause");
+      $('.white, .black').find("img[src*=\"w_\"]").draggable({
+        stack: '#board',
+        containment: '#board'
+      });
+    }
+    else if(yourColor === "black"){
+      console.log("black clause");
+      $('.white, .black').find("img[src*=\"b_\"]").draggable({
+        stack: '#board',
+        containment: '#board'
+      });
+    }
 
     $('.white, .black').droppable({
       drop: function(ev, ui) {
@@ -53,13 +77,29 @@
         $.post("/pieces/" + pieceId, {
           _method: "PUT",
           piece: {
-          x_coordinate: new_x,
-          y_coordinate: new_y,
-          piece_status: "no promotion"
+            x_coordinate: new_x,
+            y_coordinate: new_y,
+            piece_status: "no promotion"
           }
         }).success( function(data) {
+          // HIGHLIGHT AVAILABLE PIECES
+          //if(data.player_turn === yourColor) {
+          //  var colorLetter = "";
+          //  if(yourColor === "black") {
+          //    colorLetter = "b_";
+          //  }
+          //  else {
+          //    colorLetter = "w_";
+          //  }
+          //
+          //  $('.white, .black').find("img[src*=\"" + colorLetter + "\"]").parent().css('background-color', '#7240C2');
+          //  $('.white').not("img[src*=\"" + colorLetter + "\"]").parent().css('background-color', '#FFD3AE');
+          //  $('.black').not("img[src*=\"" + colorLetter + "\"]").parent().css('background-color', '#C57148');
+
+          //}
+
           // PAWN PROMOTION
-          if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
+          if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
             data.pawn_promotion) {
             console.log("pawn promotion");
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
@@ -69,7 +109,7 @@
               destination.find("img").remove();
             }
             // WHITE PAWN PROMOTION
-            if(new_y == 0) {
+            if(new_y === 0) {
               $('.pawn-promo-top').css('display', 'block');
               $('.pawn-promo-top').find('img[src$="/assets/w_rook1.svg"]').click( function() {
                 console.log("top rook");
@@ -294,7 +334,7 @@
             }
           }
           // CAPTURE MOVE, NO PAWN PROMOTION
-          else if(data.x_coordinate == new_x && data.y_coordinate == new_y && 
+          else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
             data.remove_flag) {
             console.log("captured");
             console.log("x_coordinate: " + data.x_coordinate);
@@ -309,7 +349,7 @@
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           } 
           // SUCCESSFUL MOVE, NO CAPTURE OR PAWN PROMOTION
-          else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+          else if(data.x_coordinate === new_x && data.y_coordinate === new_y) {
             console.log("no capture");
             console.log("x_coordinate: " + data.x_coordinate);
             console.log("y_coordinate: " + data.y_coordinate);

@@ -72,7 +72,8 @@ class PiecesController < ApplicationController
       old_y: old_y,
       color: color,
       piece_type: @piece.piece_type,
-      piece_name: @piece.piece_name
+      piece_name: @piece.piece_name,
+      piece_turn: @game.piece_turn
     }
     render json: json_piece
   end

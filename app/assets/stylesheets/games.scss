@@ -36,10 +36,18 @@
 }
 
 .pawn-promo-top {
-  display: block;
+  display: none;
 }
 
 .pawn-promo-bottom {
+  display: none;
+}
+
+.your-color {
+  display: none;
+}
+
+.player-turn {
   display: none;
 }
 
