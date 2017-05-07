@@ -61,7 +61,7 @@ RSpec.describe PiecesController, type: :controller do
 			expect(black_king.y_coordinate).to eq(3)
 		end
 	end
-
+  
 	describe "test is_obstructed? method" do
 		o = nil
 		s = "start point"
@@ -432,7 +432,6 @@ RSpec.describe PiecesController, type: :controller do
 	    end
 		end
 	end
-
 
 	describe "valid_move? for King" do
 	 	before(:all) do

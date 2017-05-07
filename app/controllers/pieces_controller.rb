@@ -73,7 +73,7 @@ class PiecesController < ApplicationController
       color: color,
       piece_type: @piece.piece_type,
       piece_name: @piece.piece_name
-    }
+      }
     render json: json_piece
   end
 
