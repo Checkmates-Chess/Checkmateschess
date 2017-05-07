@@ -62,17 +62,6 @@ class Game < ApplicationRecord
               ]
   end
 
-  #def board
-  #  board = [[], [], [], [], [], [], [], []]
-  #    8.times do |row|
-  #      8.times do |col|
-  #        board_piece = pieces.where(x_coordinate: col, y_coordinate: row).first
-  #        board[row][col] = board_piece
-  #      end
-  #    end
-  #  board
-  #end
-
   def in_check?
     side_in_check?("black") || side_in_check?("white")
   end
