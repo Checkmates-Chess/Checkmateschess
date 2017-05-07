@@ -25,11 +25,7 @@ class PiecesController < ApplicationController
       in_check = @game.side_in_check?(color)
       @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
       if !in_check
-        if @piece.piece_type == "King" && @piece.castle_valid_move?(new_y, new_x)
-          @piece.castle_move!(new_y, new_x)
-        else
-          remove_flag = @piece.move_to!(new_y, new_x)
-        end
+        remove_flag = @piece.move_to!(new_y, new_x)
       end
     end
 
