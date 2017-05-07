@@ -43,6 +43,8 @@ gem 'simple_form'
 gem "font-awesome-rails"
 gem "omniauth-facebook"
 
+gem 'jquery-ui-rails'
+
 # Factory_Girl
 gem 'factory_girl'
 # Figaro secures our secret keys

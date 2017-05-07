@@ -5,10 +5,55 @@
   <p><%= link_to "Join Game!", game_path(@game), method: :patch %></p>
 <% end %>
 
-<div id="board">
-  <% 8.times do |row| %>
-    <% 8.times do |col| %>
-      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black") %>
-    <% end %>
-  <% end %>
+<div id="board">   
+  <% 8.times do |col| %>     
+    <% 8.times do |row| %>       
+      <%= content_tag(:div, place_pieces(row, col), class: (row + col) % 2  == 0 ? "white" : "black", data: {x: "#{row}", y: "#{col}"} ) %>     
+    <% end %>   
+  <% end %> 
 </div>
+
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script> 
+  $( function() {
+    
+    $('.pieces').draggable({
+      stack: '#board',
+      containment: '#board'
+    });
+
+    $('.white, .black').droppable({
+      drop: function(ev, ui) {
+        var new_x = parseInt($(this).data("x"));
+        var new_y = parseInt($(this).data("y"));
+        var pieceId = parseInt(ui.draggable.data("pid"));
+        var destination = $(this);
+        var origin = ui.draggable.parent();
+        
+        $.post("/pieces/" + pieceId, {
+          _method: "PUT",
+          piece: {
+          x_coordinate: new_x,
+          y_coordinate: new_y
+          }
+        }).success( function(data) {
+          if(data.x_coordinate == new_x && data.y_coordinate == new_y && data.remove_flag) {
+              destination.find("img").remove();
+              $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+          } else if(data.x_coordinate == new_x && data.y_coordinate == new_y) {
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
+          } else {
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
+            $(alert("this is not a valid move"));
+          }  
+          
+        });
+
+      }
+    });
+
+  });
+
+</script>
