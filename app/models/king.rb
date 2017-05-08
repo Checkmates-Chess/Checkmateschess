@@ -33,15 +33,13 @@ class King < Piece
     if new_x == 6
       @king_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 7, y_coordinate: y_coordinate, piece_status: "alive|first move")
       return false unless !@king_side_rook.nil?
-      @kings_new_x = 6
-      @rooks_new_x = 5
+ 
       return true
     #  Determines if on Queen Side
     elsif new_x == 2
       @queen_side_rook = game.pieces.find_by(piece_type: "Rook", x_coordinate: 0, y_coordinate: y_coordinate, piece_status: "alive|first move")
       return false unless !@queen_side_rook.nil?
-      @kings_new_x = 2
-      @rooks_new_x = 3
+ 
       return true
     else
       return false

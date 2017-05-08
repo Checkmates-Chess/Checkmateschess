@@ -26,8 +26,7 @@ RSpec.describe PiecesController, type: :controller do
 				id: white_pawn.id, 
 				piece: {
 					x_coordinate: 0,
-					y_coordinate: 4,
-					piece_status: "no promotion"
+					y_coordinate: 4
 				}
 			}
 
@@ -353,7 +352,7 @@ RSpec.describe PiecesController, type: :controller do
 				id: white_pawn.id, 
 				piece: {
 					x_coordinate: 0,
-					y_coordinate: 4
+					y_coordinate: 4 
 				}
 			}
 
@@ -410,6 +409,7 @@ RSpec.describe PiecesController, type: :controller do
         it "should be allowed on the king-side rook" do
         @user = FactoryGirl.create(:user)
         @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
         for y in 0..7
           if y == 0 || y == 7
             for x in 0..7
@@ -431,6 +431,7 @@ RSpec.describe PiecesController, type: :controller do
       it "should be allowed on the queen-side rook" do
         @user = FactoryGirl.create(:user)
         @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
         for y in 0..7
           if y == 0 || y == 7
             for x in 0..7
@@ -453,6 +454,7 @@ RSpec.describe PiecesController, type: :controller do
       it "should not be allowed when the king has moved" do
         @user = FactoryGirl.create(:user)
         @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
         for y in 0..7
           if y == 0 || y == 7
             for x in 0..7
@@ -474,6 +476,7 @@ RSpec.describe PiecesController, type: :controller do
       it "should not be allowed when the rook has moved" do
         @user = FactoryGirl.create(:user)
         @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
         for y in 0..7
           if y == 0 || y == 7
             for x in 0..7
