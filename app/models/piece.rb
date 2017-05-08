@@ -144,4 +144,13 @@ class Piece < ApplicationRecord
     false
   end
 
+  def creates_check?(new_y, new_x)
+    old_x = x_coordinate
+    old_y = y_coordinate
+    update_attributes(x_coordinate: new_x, y_coordinate: new_y)
+    game_in_check = game.side_in_check?(piece_color)
+    update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+    return game_in_check
+  end 
+
 end

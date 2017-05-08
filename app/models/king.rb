@@ -58,6 +58,17 @@ class King < Piece
     return true
   end
 
+  def has_valid_move?
+    8.times do |row|
+      8.times do |col|
+        if valid_move?(row, col)
+          return true
+        end
+      end
+    end
+    false
+  end
+
   def can_be_captured?
     opponents = self.games.where.not(piece_color: self.piece_color).all
     opponents.each do |opponent|

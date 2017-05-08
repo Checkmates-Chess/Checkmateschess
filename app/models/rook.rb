@@ -6,4 +6,15 @@ class Rook < Piece
   		return false
   	end
   end
+
+  def has_valid_move?
+    8.times do |row|
+      8.times do |col|
+        if valid_move?(row, col)
+          return true
+        end
+      end
+    end
+    false
+  end
 end
