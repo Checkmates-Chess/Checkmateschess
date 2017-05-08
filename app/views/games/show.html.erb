@@ -16,19 +16,15 @@
 <div class="checkmate">
   <h2>Checkmate</h2>
   <% if @game.player_turn == "black" %>
-    <h3>Black Wins</h3>
-  <% else %>
     <h3>White Wins</h3>
+  <% else %>
+    <h3>Black Wins</h3>
   <% end %>
 </div>
 
 <div class="stalemate">
   <h2>Stalemate</h2>
 </div>
-
-<!--<div class="player-turn">
-  <%= #"#{@game.player_turn}" %>
-</div> -->
 
 <div class="pawn-promo-top">
   <img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />
@@ -119,10 +115,22 @@
           // CHECKMATE
           if(data.checkmate) {
             $('.checkmate').css('display', 'block');
+            console.log("checkmate clause");
+            console.log("stalemate: " + data.stalemate);
+            console.log("checkmate: " + data.checkmate);
+            destination.find("img").remove();
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           }
           // STALEMATE
           else if(data.stalemate) {
             $('.stalemate').css('display', 'block');
+            console.log("stalemate clause");
+            console.log("stalemate: " + data.stalemate);
+            console.log("checkmate: " + data.checkmate);
+            if(data.remove_flag){
+              destination.find("img").remove();
+            }
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
           }
           // PAWN PROMOTION
           else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
@@ -431,6 +439,21 @@
           else {
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(origin);
             $(alert("this is not a valid move"));
+            console.log("x_coordinate: " + data.x_coordinate);
+            console.log("y_coordinate: " + data.y_coordinate);
+            console.log("remove_flag: " + data.remove_flag);
+            console.log("pawn_promotion: " + data.pawn_promotion);
+            console.log("old_x: " + data.old_x);
+            console.log("old_y: " + data.old_y);
+            console.log("color: " + data.color);
+            console.log("piece_type: " + data.piece_type);
+            console.log("stalemate: " + data.stalemate);
+            console.log("checkmate: " + data.checkmate);
+            console.log("new_x: " + data.new_x);
+            console.log("new_y: " + data.new_y);
+            console.log("valid move: " + data.valid_move);
+            console.log("player turn: " + data.player_turn);
+            console.log("in check: " + data.in_check);
           }  
           
         });

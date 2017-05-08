@@ -154,7 +154,31 @@ class Piece < ApplicationRecord
   end
 
   def prevents_check?(new_y, new_x) 
-    return false unless game.side_in_check(piece_color)
+    if !game.side_in_check?(piece_color)
+      raise "side is not in check"
+    end
+
     !creates_check?(new_y, new_x)
+  end
+
+  def can_prevent_check?
+    if !game.side_in_check?(piece_color)
+      raise "side is not in check"
+    end
+
+    8.times do |x|
+      8.times do |y|
+        if valid_move?(y, x) && prevents_check?(y, x)
+          return true
+        end
+      end
+    end
+    false
+  end
+
+  def checkmate?(new_y, new_x)
+    enemy_color = piece_color == "white" ? "black" : "white"
+    enemy_king = game.pieces.where(piece_type: "King", piece_color: enemy_color).first
+    enemy_king.y_coordinate == new_y && enemy_king.x_coordinate == new_x
   end
 end

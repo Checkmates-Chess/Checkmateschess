@@ -33,11 +33,15 @@ class PiecesController < ApplicationController
       end
     end
 
-    # stalemate and checkmate
-    if @game.checkmate?(enemy_color)
-      checkmate = true
-    elsif @game.stalemate?
-      stalemate = true
+    # will new move put in check?
+    @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
+      in_check = @game.side_in_check?(color)
+      stalemate = @game.stalemate?
+    @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
+    checkmate = @piece.checkmate?(new_y, new_x)
+
+    if checkmate || stalemate
+      remove_flag = @piece.move_to!(new_y, new_x)
     # check for pawn promotion 
     elsif !pawn_promote_status.nil?
       if pawn_promote_status.include?("promote to")
@@ -74,17 +78,14 @@ class PiecesController < ApplicationController
     elsif castle_flag
       @piece.castle_move!(new_y, new_x)
       @game.switch_turn
-    # checking for allowed move and update piece
+    # checking for allowed move and update piece      
     elsif valid_move
-      @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
-      in_check = @game.side_in_check?(color)
-      @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
       if !in_check
         remove_flag = @piece.move_to!(new_y, new_x)
-        pawn_promotion = @piece.pawn_promotion?(new_y, new_x)
         @game.switch_turn
       end
     end
+      
 
     json_piece = {
       x_coordinate: @piece.x_coordinate,
@@ -98,7 +99,12 @@ class PiecesController < ApplicationController
       piece_name: @piece.piece_name,
       castle_flag: castle_flag,
       stalemate: stalemate,
-      checkmate: checkmate
+      checkmate: checkmate,
+      new_x: new_x,
+      new_y: new_y,
+      valid_move: valid_move,
+      player_turn: @game.player_turn,
+      in_check: in_check
       }
     render json: json_piece
   end

@@ -101,11 +101,6 @@ class Game < ApplicationRecord
     end
   end
   
-  def checkmate?(color)
-    enemy_color = color == "white" ? "black" : "white"
-    side_in_check(color) && player_turn == enemy_color
-  end
-
   def stalemate?
     king = pieces.where(piece_type: "King", piece_color: player_turn).last
     friendly_pieces = pieces.where(piece_color: king.piece_color).where.not(x_coordinate: nil, y_coordinate: nil).all
@@ -128,6 +123,21 @@ class Game < ApplicationRecord
       end
     end
     true
+  end
+
+  def check_preventable?(color)
+    if !side_in_check?(color)
+      raise "this side is not in check"
+    end
+
+    friendly_pieces = pieces.where(piece_color: color).where.not(x_coordinate: nil, y_coordinate: nil).all
+
+    friendly_pieces.each do |piece|
+      if piece.can_prevent_check?
+        return true
+      end
+    end
+    false
   end
 
 end
