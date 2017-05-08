@@ -13,9 +13,22 @@
   <% end %>
 </div> 
 
-<div class="player-turn">
-  <%= "#{@game.player_turn}" %>
+<div class="checkmate">
+  <h2>Checkmate</h2>
+  <% if @game.player_turn == "black" %>
+    <h3>Black Wins</h3>
+  <% else %>
+    <h3>White Wins</h3>
+  <% end %>
 </div>
+
+<div class="stalemate">
+  <h2>Stalemate</h2>
+</div>
+
+<!--<div class="player-turn">
+  <%= #"#{@game.player_turn}" %>
+</div> -->
 
 <div class="pawn-promo-top">
   <img class="pawn-promo-top-rook" src="/assets/w_rook1.svg" alt="W rook1" />
@@ -48,7 +61,7 @@
   $( function() {
     
     var yourColor = $('.your-color').text().trim();
-    var playerTurn = $('.player-turn').text().trim();
+    //var playerTurn = $('.player-turn').text().trim();
 
     if(yourColor === "white") {      
       console.log("white clause");
@@ -103,8 +116,16 @@
 
           //}
 
+          // CHECKMATE
+          if(data.checkmate) {
+            $('.checkmate').css('display', 'block');
+          }
+          // STALEMATE
+          else if(data.stalemate) {
+            $('.stalemate').css('display', 'block');
+          }
           // PAWN PROMOTION
-          if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
+          else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
             data.pawn_promotion) {
             console.log("pawn promotion");
             $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination);
@@ -338,6 +359,7 @@
               });
             }
           }
+
           // CASTLE MOVE, NO PROMOTION OR CAPTURE
           else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
             data.castle_flag) {

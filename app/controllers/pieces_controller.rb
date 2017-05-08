@@ -12,25 +12,34 @@ class PiecesController < ApplicationController
     old_x = @piece.x_coordinate
     old_y = @piece.y_coordinate
     color = @piece.piece_color
+    enemy_color = color == "white" ? "black" : "white"
     new_x = params[:piece][:x_coordinate]
     new_y = params[:piece][:y_coordinate]
     valid_move = @piece.valid_move?(new_y, new_x)
     remove_flag = false
     in_check = false
     pawn_promotion = false
-    
+    stalemate = false
+    checkmate = false
+    pawn_promote_status = params[:piece][:piece_status]
+
     castled_rook_x = nil
     castle_flag = false
+
+    # castle flag
     if @piece.piece_type == "King"
       if @piece.castle_valid_move?(new_y, new_x)
         castle_flag = true
       end
     end
 
-
+    # stalemate and checkmate
+    if @game.checkmate?(enemy_color)
+      checkmate = true
+    elsif @game.stalemate?
+      stalemate = true
     # check for pawn promotion 
-    pawn_promote_status = params[:piece][:piece_status]
-    if !pawn_promote_status.nil?
+    elsif !pawn_promote_status.nil?
       if pawn_promote_status.include?("promote to")
         if pawn_promote_status.include?("promote to rook")
           @piece.update_attributes(piece_type: "Rook", piece_status: "alive|promoted pawn")
@@ -87,7 +96,9 @@ class PiecesController < ApplicationController
       color: color,
       piece_type: @piece.piece_type,
       piece_name: @piece.piece_name,
-      castle_flag: castle_flag
+      castle_flag: castle_flag,
+      stalemate: stalemate,
+      checkmate: checkmate
       }
     render json: json_piece
   end
