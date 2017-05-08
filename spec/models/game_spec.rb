@@ -9,7 +9,7 @@ RSpec.describe Game, type: :model do
 
    describe "#switch_turn" do
      it "should update player_turn" do
-       expect(@game.switch_turn(@king.game.player_turn)).to eq(true)
+       expect(@game.switch_turn).to eq(true)
      end
    end
 
