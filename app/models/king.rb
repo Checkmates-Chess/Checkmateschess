@@ -58,4 +58,15 @@ class King < Piece
     return true
   end
 
+  def can_be_captured?
+    opponents = self.games.where.not(piece_color: self.piece_color).all
+    opponents.each do |opponent|
+     if opponent.valid_move?(self.x_coordinate, self.y_coordinate)
+       #We can capture the piece
+       return true
+     end
+    end
+    return false
+  end
+
 end
