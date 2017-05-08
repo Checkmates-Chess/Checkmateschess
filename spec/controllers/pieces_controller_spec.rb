@@ -26,8 +26,7 @@ RSpec.describe PiecesController, type: :controller do
 				id: white_pawn.id, 
 				piece: {
 					x_coordinate: 0,
-					y_coordinate: 4,
-					piece_status: "no promotion"
+					y_coordinate: 4
 				}
 			}
 
@@ -327,57 +326,231 @@ RSpec.describe PiecesController, type: :controller do
 		end
 	end
 
-	describe "valid_move? for King" do
-	 	before(:all) do
-	  	@user = FactoryGirl.create(:user)
-	  	@game = FactoryGirl.create(:game)
-	  	@test_king = @game.pieces.where(piece_type: "King", piece_color: "white").first
-	  	@test_king.update_attributes(x_coordinate: 3, y_coordinate: 3) 
-	  end
+	#describe "pieces#show" do
+	#	it "should update piece_status of piece to include 'highlighted'" do
+	#		user = FactoryGirl.create(:user)
+	#		game = FactoryGirl.create(:game)
+	#		sign_in user
+	#		piece = Piece.create(game_id: game.id, piece_status: "first move")
+  #
+	#		get :show, params: { id: piece.id }
+  #
+	#		piece.reload
+	#		expect(piece.piece_status).to eq("first move|highlighted")
+	#	end
+	#end
 
-	  before(:each) {sign_in @user}
+	describe "pieces#update" do
+		it "should update (x, y) of piece to that of passed parameters" do
+			user = FactoryGirl.create(:user)
+			sign_in user
+			game = FactoryGirl.create(:game)
+			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first			
+		  game.update_attributes(player_turn: "white")
 
-	 	describe "valid moves" do
-	 		it "should allow a valid move vertically" do
-	 			@game.update_attributes(player_turn: "white")
-	 			expect(@test_king.valid_move?(4, 3)).to eq(true)
-	  		expect(@test_king.valid_move?(2, 3)).to eq(true)
-	 		end
+			patch :update, params: { 
+				id: white_pawn.id, 
+				piece: {
+					x_coordinate: 0,
+					y_coordinate: 4 
+				}
+			}
 
-			it "should allow a valid move horizontally" do
-				@game.update_attributes(player_turn: "white")
-				expect(@test_king.valid_move?(3, 4)).to eq(true)
-				expect(@test_king.valid_move?(3, 2)).to eq(true)
-			end
-
-			it "should allow a valid move diagonally" do
-				@game.update_attributes(player_turn: "white")
-				expect(@test_king.valid_move?(4, 4)).to eq(true)
-				expect(@test_king.valid_move?(4, 2)).to eq(true)
-				expect(@test_king.valid_move?(2, 2)).to eq(true)
-				expect(@test_king.valid_move?(2, 4)).to eq(true)
-			end
+			white_pawn.reload
+			expect(white_pawn.piece_status).to eq("alive")
+			expect(white_pawn.x_coordinate).to eq(0)
+			expect(white_pawn.y_coordinate).to eq(4)
 		end
 
-		describe "invalid moves" do
-			it "should not move more than one in any direction" do
-				@game.update_attributes(player_turn: "white")
-				expect(@test_king.valid_move?(5, 3)).to eq(false)
-	  		expect(@test_king.valid_move?(1, 3)).to eq(false)
-				expect(@test_king.valid_move?(3, 5)).to eq(false)
-				expect(@test_king.valid_move?(3, 1)).to eq(false)
-				expect(@test_king.valid_move?(5, 5)).to eq(false)
-				expect(@test_king.valid_move?(5, 1)).to eq(false)
-				expect(@test_king.valid_move?(1, 1)).to eq(false)
-				expect(@test_king.valid_move?(1, 5)).to eq(false)
-			end
+		it "should not update piece if it moves king into check" do
+			user = FactoryGirl.create(:user)
+			sign_in user
+			game = FactoryGirl.create(:game)
+			black_king = game.pieces.where(x_coordinate: 4, y_coordinate: 0).first
+			black_king.update_attributes(x_coordinate: 4, y_coordinate: 3)
+			white_pawn = game.pieces.where(x_coordinate: 0, y_coordinate: 6).first
+			white_pawn.update_attributes(x_coordinate: 5, y_coordinate: 5)
+			game.update_attributes(player_turn: "white")
 
-			it "should not allow L shaped moves" do
-				@game.update_attributes(player_turn: "white")
-				expect(@test_king.valid_move?(5, 4)).to eq(false)
-			end
+			patch :update, params: { 
+				id: black_king.id, 
+				piece: {
+					x_coordinate: 4,
+					y_coordinate: 4
+				}
+			}
+
+			black_king.reload
+			expect(black_king.x_coordinate).to eq(4)
+			expect(black_king.y_coordinate).to eq(3)
 		end
 	end
+
+  describe "King" do
+    # before(:all) do
+    # 	@user = FactoryGirl.create(:user)
+    # 	@game = FactoryGirl.create(:game)
+      # for y in 0..7
+      # 	if y == 0 || y == 7
+     # 			for x in 0..7
+      # 			if (x > 0 && x < 4) || (x > 4 && x < 7)
+      # 				dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+      # 				dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+      # 			end
+      # 		end
+      # 	end
+      # end
+    # 	@black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+    # end
+
+    # before(:each) {sign_in @user}
+
+    describe "Castling" do
+        it "should be allowed on the king-side rook" do
+        @user = FactoryGirl.create(:user)
+        @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
+        for y in 0..7
+          if y == 0 || y == 7
+            for x in 0..7
+              if (x > 0 && x < 4) || (x > 4 && x < 7)
+                dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+                dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+              end
+            end
+          end
+        end
+
+        @black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+        expect(@black_king.valid_move?(0, 6)).to be(true)
+
+        @black_king.castle_move!(0, 6)
+        @king_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 5, piece_type: "Rook")
+        expect(@king_side_rook).not_to eq(nil)
+      end
+      it "should be allowed on the queen-side rook" do
+        @user = FactoryGirl.create(:user)
+        @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
+        for y in 0..7
+          if y == 0 || y == 7
+            for x in 0..7
+              if (x > 0 && x < 4) || (x > 4 && x < 7)
+                dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+                dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+              end
+            end
+          end
+        end
+
+        @black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+
+        expect(@black_king.valid_move?(0, 2)).to be(true)
+
+        @black_king.castle_move!(0, 2)			
+        @queen_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 3, piece_type: "Rook")
+        expect(@queen_side_rook).not_to eq(nil)
+      end
+      it "should not be allowed when the king has moved" do
+        @user = FactoryGirl.create(:user)
+        @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
+        for y in 0..7
+          if y == 0 || y == 7
+            for x in 0..7
+              if (x > 0 && x < 4) || (x > 4 && x < 7)
+                dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+                dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+              end
+            end
+          end
+        end
+
+        @black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+
+        @black_king.move_to!(0, 3)
+        @black_king.move_to!(0, 4)
+
+        expect(@black_king.castle_valid_move?(0, 2)).to be(false)
+      end
+      it "should not be allowed when the rook has moved" do
+        @user = FactoryGirl.create(:user)
+        @game = FactoryGirl.create(:game)
+        @game.update_attributes(player_turn: "black")
+        for y in 0..7
+          if y == 0 || y == 7
+            for x in 0..7
+              if (x > 0 && x < 4) || (x > 4 && x < 7)
+                dead_piece = @game.pieces.find_by(y_coordinate: y, x_coordinate: x)
+                dead_piece.update_attributes(y_coordinate: nil, x_coordinate: nil)
+              end
+            end
+          end
+        end
+
+        @black_king = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 4)
+        @queen_side_rook = @game.pieces.find_by(y_coordinate: 0, x_coordinate: 0)
+
+        @queen_side_rook.move_to!(0, 1)
+        @queen_side_rook.move_to!(0, 0)
+
+        expect(@black_king.castle_valid_move?(0, 2)).to be(false)
+      end
+    end
+
+  end
+
+  describe "valid_move? for King" do
+    before(:all) do
+      @user = FactoryGirl.create(:user)
+      @game = FactoryGirl.create(:game)
+      @test_king = @game.pieces.where(piece_type: "King", piece_color: "white").first
+      @test_king.update_attributes(x_coordinate: 3, y_coordinate: 3) 
+    end
+
+    before(:each) {sign_in @user}
+
+    describe "valid moves" do
+      it "should allow a valid move vertically" do
+        @game.update_attributes(player_turn: "white")
+        expect(@test_king.valid_move?(4, 3)).to eq(true)
+        expect(@test_king.valid_move?(2, 3)).to eq(true)
+      end
+
+      it "should allow a valid move horizontally" do
+        @game.update_attributes(player_turn: "white")
+        expect(@test_king.valid_move?(3, 4)).to eq(true)
+        expect(@test_king.valid_move?(3, 2)).to eq(true)
+      end
+
+      it "should allow a valid move diagonally" do
+        @game.update_attributes(player_turn: "white")
+        expect(@test_king.valid_move?(4, 4)).to eq(true)
+        expect(@test_king.valid_move?(4, 2)).to eq(true)
+        expect(@test_king.valid_move?(2, 2)).to eq(true)
+        expect(@test_king.valid_move?(2, 4)).to eq(true)
+      end
+    end
+
+    describe "invalid moves" do
+      it "should not move more than one in any direction" do
+        @game.update_attributes(player_turn: "white")
+        expect(@test_king.valid_move?(5, 3)).to eq(false)
+        expect(@test_king.valid_move?(1, 3)).to eq(false)
+        expect(@test_king.valid_move?(3, 5)).to eq(false)
+        expect(@test_king.valid_move?(3, 1)).to eq(false)
+        expect(@test_king.valid_move?(5, 5)).to eq(false)
+        expect(@test_king.valid_move?(5, 1)).to eq(false)
+        expect(@test_king.valid_move?(1, 1)).to eq(false)
+        expect(@test_king.valid_move?(1, 5)).to eq(false)
+      end
+
+      it "should not allow L shaped moves" do
+        @game.update_attributes(player_turn: "white")
+        expect(@test_king.valid_move?(5, 4)).to eq(false)
+      end
+    end
+  end
 
 	describe "valid_move? for Queen" do
 	 	before(:all) do

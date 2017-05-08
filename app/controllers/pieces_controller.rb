@@ -21,34 +21,36 @@ class PiecesController < ApplicationController
 
     # check for pawn promotion 
     pawn_promote_status = params[:piece][:piece_status]
-    if pawn_promote_status.include?("promote to")
-      if pawn_promote_status.include?("promote to rook")
-        @piece.update_attributes(piece_type: "Rook", piece_status: "alive|promoted pawn")
-        if color == "black"
-          @piece.update_attributes(piece_name: "b_rook1")
+    if !pawn_promote_status.nil?
+      if pawn_promote_status.include?("promote to")
+        if pawn_promote_status.include?("promote to rook")
+          @piece.update_attributes(piece_type: "Rook", piece_status: "alive|promoted pawn")
+          if color == "black"
+            @piece.update_attributes(piece_name: "b_rook1")
+          else
+            @piece.update_attributes(piece_name: "w_rook1")
+          end
+        elsif pawn_promote_status.include?("promote to bishop")
+          @piece.update_attributes(piece_type: "Bishop", piece_status: "alive|promoted pawn")
+          if color == "black"
+            @piece.update_attributes(piece_name: "b_bishop1")
+          else
+            @piece.update_attributes(piece_name: "w_bishop1")
+          end
+        elsif pawn_promote_status.include?("promote to knight")
+          @piece.update_attributes(piece_type: "Knight", piece_status: "alive|promoted pawn")
+          if color == "black"
+            @piece.update_attributes(piece_name: "b_knight1")
+          else
+            @piece.update_attributes(piece_name: "w_knight1")
+          end
         else
-          @piece.update_attributes(piece_name: "w_rook1")
-        end
-      elsif pawn_promote_status.include?("promote to bishop")
-        @piece.update_attributes(piece_type: "Bishop", piece_status: "alive|promoted pawn")
-        if color == "black"
-          @piece.update_attributes(piece_name: "b_bishop1")
-        else
-          @piece.update_attributes(piece_name: "w_bishop1")
-        end
-      elsif pawn_promote_status.include?("promote to knight")
-        @piece.update_attributes(piece_type: "Knight", piece_status: "alive|promoted pawn")
-        if color == "black"
-          @piece.update_attributes(piece_name: "b_knight1")
-        else
-          @piece.update_attributes(piece_name: "w_knight1")
-        end
-      else
-        @piece.update_attributes(piece_type: "Queen", piece_status: "alive|promoted pawn")
-        if color == "black"
-          @piece.update_attributes(piece_name: "b_queen")
-        else
-          @piece.update_attributes(piece_name: "w_queen")
+          @piece.update_attributes(piece_type: "Queen", piece_status: "alive|promoted pawn")
+          if color == "black"
+            @piece.update_attributes(piece_name: "b_queen")
+          else
+            @piece.update_attributes(piece_name: "w_queen")
+          end
         end
       end
     # checking for allowed move and update piece
