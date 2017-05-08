@@ -151,6 +151,10 @@ class Piece < ApplicationRecord
     game_in_check = game.side_in_check?(piece_color)
     update_attributes(x_coordinate: old_x, y_coordinate: old_y)
     return game_in_check
-  end 
+  end
 
+  def prevents_check?(new_y, new_x) 
+    return false unless game.side_in_check(piece_color)
+    !creates_check?(new_y, new_x)
+  end
 end

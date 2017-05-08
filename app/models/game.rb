@@ -102,33 +102,32 @@ class Game < ApplicationRecord
   end
   
   def checkmate?(color)
-     # find the king
-     checked_king = self.pieces.where(piece_type: "King",piece_color: color).last
-     return false unless side_in_check?(color)
-     !checked_king.move_out_of_check?
+    enemy_color = color == "white" ? "black" : "white"
+    side_in_check(color) && player_turn == enemy_color
   end
 
-  def stalemate?(color)
-    king = self.pieces.where(piece_type: "King", piece_color: color).last
-    friendly_pieces = self.pieces.where(piece_color: king.piece_color).where.not(x_coordinate:nil, y_coordinate: nil, piece_type: "King").all
+  def stalemate?
+    king = pieces.where(piece_type: "King", piece_color: player_turn).last
+    friendly_pieces = pieces.where(piece_color: king.piece_color).where.not(x_coordinate: nil, y_coordinate: nil).all
 
     return false if side_in_check?(king.piece_color) #can't be in check
 
-    (0..7).to_a.each do |x|
-     (0..7).to_a.each do |y|
-       friendly_pieces.each do |friendly_piece|
-         if (friendly_piece.valid_move?(x,y) && !side_in_check?(king.piece_color))
+    8.times do |x|
+      8.times do |y|
+        friendly_pieces.each do |friendly_piece|
+          if friendly_piece.valid_move?(y, x)
+          # if friendly_piece.valid_move?(y, x) && !friendly_piece.creates_check?(y, x)
            #Rails.logger.info("x: #{friendly_piece.x_coordinate}
            #                  y: #{friendly_piece.y_coordinate}
            #                  piece_type: #{friendly_piece.piece_type}
            #                  piece_color: #{friendly_piece.piece_color}
            #")
-           return false
-         end
-       end
-     end
+            return false
+          end
+        end
+      end
     end
     true
   end
-  
+
 end
