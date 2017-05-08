@@ -12,7 +12,8 @@ FactoryGirl.define do
 
   factory :game do
     game_title 'meat salad forever'
-
+    player_turn 'white'
+    
     association :user
   end
 
