@@ -18,6 +18,15 @@ class PiecesController < ApplicationController
     remove_flag = false
     in_check = false
     pawn_promotion = false
+    
+    castled_rook_x = nil
+    castle_flag = false
+    if @piece.piece_type == "King"
+      if @piece.castle_valid_move?(new_y, new_x)
+        castle_flag = true
+      end
+    end
+
 
     # check for pawn promotion 
     pawn_promote_status = params[:piece][:piece_status]
@@ -53,6 +62,9 @@ class PiecesController < ApplicationController
           end
         end
       end
+    elsif castle_flag
+      @piece.castle_move!(new_y, new_x)
+      @game.switch_turn
     # checking for allowed move and update piece
     elsif valid_move
       @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
@@ -74,7 +86,8 @@ class PiecesController < ApplicationController
       old_y: old_y,
       color: color,
       piece_type: @piece.piece_type,
-      piece_name: @piece.piece_name
+      piece_name: @piece.piece_name,
+      castle_flag: castle_flag
       }
     render json: json_piece
   end

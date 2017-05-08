@@ -65,6 +65,11 @@
       });
     }
 
+    // allows any piece to move
+      // $('.pieces').draggable({
+      //   stack: '#board',
+      //   containment: '#board'
+      // });
     $('.white, .black').droppable({
       drop: function(ev, ui) {
         var new_x = parseInt($(this).data("x"));
@@ -78,8 +83,8 @@
           _method: "PUT",
           piece: {
             x_coordinate: new_x,
-            y_coordinate: new_y,
-            piece_status: "no promotion"
+            y_coordinate: new_y
+            // piece_status: "castle move"
           }
         }).success( function(data) {
           // HIGHLIGHT AVAILABLE PIECES
@@ -333,6 +338,45 @@
               });
             }
           }
+          // CASTLE MOVE, NO PROMOTION OR CAPTURE
+          else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
+            data.castle_flag) {
+            $(ui.draggable).detach().css({top: 0,left: 0}).appendTo(destination); 
+            if(data.x_coordinate === 2 && data.y_coordinate === 0) {
+              // black queen side
+              var old_rook_space = $('.white[data-x="0"][data-y="0"]');
+              var rook_space = $('.black[data-x="3"][data-y="0"]');
+              var rook_image = old_rook_space.find("img");
+
+              $(rook_image).detach().css({top: 0,left: 0}).appendTo(rook_space); 
+            }
+            else if(data.x_coordinate === 6 && data.y_coordinate === 0) {
+              // black king side
+              var old_rook_space = $('.black[data-x="7"][data-y="0"]');
+              var rook_space = $('.black[data-x="5"][data-y="0"]');
+              var rook_image = old_rook_space.find("img");
+
+              $(rook_image).detach().css({top: 0,left: 0}).appendTo(rook_space); 
+            }
+            else if(data.x_coordinate === 2 && data.y_coordinate === 7) {
+              // white queen side
+              var old_rook_space = $('.black[data-x="0"][data-y="7"]');
+              var rook_space = $('.white[data-x="3"][data-y="7"]');
+              var rook_image = old_rook_space.find("img");
+
+              $(rook_image).detach().css({top: 0,left: 0}).appendTo(rook_space); 
+            }
+            else if(data.x_coordinate === 6 && data.y_coordinate === 7) {
+              // white king side
+              var old_rook_space = $('.white[data-x="7"][data-y="7"]');
+              var rook_space = $('.white[data-x="5"][data-y="7"]');
+              var rook_image = old_rook_space.find("img");
+
+              $(rook_image).detach().css({top: 0,left: 0}).appendTo(rook_space); 
+            }
+          }
+
+
           // CAPTURE MOVE, NO PAWN PROMOTION
           else if(data.x_coordinate === new_x && data.y_coordinate === new_y && 
             data.remove_flag) {
