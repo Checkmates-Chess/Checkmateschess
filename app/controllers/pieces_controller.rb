@@ -33,15 +33,16 @@ class PiecesController < ApplicationController
       end
     end
 
-    # establish in check, stalemate, checkmate
+    # establish in check, stalemate, checkmate by updating to new position and checking, then updating back
     @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
       in_check = @game.side_in_check?(color)
       stalemate = @game.stalemate?
+      checkmate = @game.checkmate?(enemy_color)
     @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
-    checkmate = @piece.checkmate?(new_y, new_x)
+  
 
     # check for checkmate or stalemate
-    if checkmate || stalemate
+    if stalemate || checkmate
       remove_flag = @piece.move_to!(new_y, new_x)
     # check for pawn promotion 
     elsif !pawn_promote_status.nil?
