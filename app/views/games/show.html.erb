@@ -59,26 +59,26 @@
     var yourColor = $('.your-color').text().trim();
     //var playerTurn = $('.player-turn').text().trim();
 
-    if(yourColor === "white") {      
-      console.log("white clause");
-      $('.white, .black').find("img[src*=\"w_\"]").draggable({
-        stack: '#board',
-        containment: '#board'
-      });
-    }
-    else if(yourColor === "black"){
-      console.log("black clause");
-      $('.white, .black').find("img[src*=\"b_\"]").draggable({
-        stack: '#board',
-        containment: '#board'
-      });
-    }
+    //if(yourColor === "white") {      
+    //  console.log("white clause");
+    //  $('.white, .black').find("img[src*=\"w_\"]").draggable({
+    //    stack: '#board',
+    //    containment: '#board'
+    // });
+    //}
+    //else if(yourColor === "black"){
+    //  console.log("black clause");
+    //  $('.white, .black').find("img[src*=\"b_\"]").draggable({
+     //   stack: '#board',
+     //   containment: '#board'
+     // });
+    //}
 
-    // allows any piece to move
-      // $('.pieces').draggable({
-      //   stack: '#board',
-      //   containment: '#board'
-      // });
+     allows any piece to move
+      $('.pieces').draggable({
+        stack: '#board',
+        containment: '#board'
+      });
     $('.white, .black').droppable({
       drop: function(ev, ui) {
         var new_x = parseInt($(this).data("x"));

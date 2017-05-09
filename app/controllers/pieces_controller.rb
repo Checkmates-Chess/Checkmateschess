@@ -33,13 +33,14 @@ class PiecesController < ApplicationController
       end
     end
 
-    # will new move put in check?
+    # establish in check, stalemate, checkmate
     @piece.update_attributes(x_coordinate: new_x, y_coordinate: new_y)
       in_check = @game.side_in_check?(color)
       stalemate = @game.stalemate?
     @piece.update_attributes(x_coordinate: old_x, y_coordinate: old_y)
     checkmate = @piece.checkmate?(new_y, new_x)
 
+    # check for checkmate or stalemate
     if checkmate || stalemate
       remove_flag = @piece.move_to!(new_y, new_x)
     # check for pawn promotion 
@@ -85,7 +86,6 @@ class PiecesController < ApplicationController
         @game.switch_turn
       end
     end
-      
 
     json_piece = {
       x_coordinate: @piece.x_coordinate,

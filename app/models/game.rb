@@ -140,4 +140,11 @@ class Game < ApplicationRecord
     false
   end
 
+  def checkmate?(color)
+    new_y = new_y.to_i
+    new_x = new_x.to_i
+    return false unless player_turn == color
+    return false unless side_in_check?(color)
+    return !check_preventable?(color)
+  end
 end

@@ -98,9 +98,9 @@ class Piece < ApplicationRecord
     new_x = new_x.to_i
 
     # check if it's the piece's color's turn
-    if piece_color != game.player_turn
-      return false
-    end
+    #if piece_color != game.player_turn
+    #  return false
+    #end
 
     # Checks if piece is within board coordinates
     if (new_x <= 7 && new_x >= 0) && (new_y <= 7 && new_y >= 0)
@@ -145,8 +145,10 @@ class Piece < ApplicationRecord
   end
 
   def creates_check?(new_y, new_x)
-    old_x = x_coordinate
-    old_y = y_coordinate
+    new_y = new_y.to_i
+    new_x = new_x.to_i
+    old_x = x_coordinate.to_i
+    old_y = y_coordinate.to_i
     update_attributes(x_coordinate: new_x, y_coordinate: new_y)
     game_in_check = game.side_in_check?(piece_color)
     update_attributes(x_coordinate: old_x, y_coordinate: old_y)
@@ -176,9 +178,4 @@ class Piece < ApplicationRecord
     false
   end
 
-  def checkmate?(new_y, new_x)
-    enemy_color = piece_color == "white" ? "black" : "white"
-    enemy_king = game.pieces.where(piece_type: "King", piece_color: enemy_color).first
-    enemy_king.y_coordinate == new_y && enemy_king.x_coordinate == new_x
-  end
 end
