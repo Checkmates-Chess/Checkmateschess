@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :user do
     sequence :email do |n|
-      "dummyEmail#{n}@gmail.com"
+      "dummyEmail2#{n}@gmail.com"
     end
     sequence :username do |n|
-      "hippoman#{n}"
+      "hippoman2#{n}"
     end
     password "secretPassword"
     password_confirmation "secretPassword"
@@ -12,12 +12,12 @@ FactoryGirl.define do
 
   factory :game do
     game_title 'meat salad forever'
-
+    player_turn 'white'
+    
     association :user
   end
 
   factory :piece do
-    piece_type 'Bishop'
     piece_color 'black'
     x_coordinate 5
     y_coordinate 5
@@ -31,6 +31,18 @@ FactoryGirl.define do
 
   factory :bishop, parent: :piece, class: 'Bishop' do
     piece_type 'Bishop'
+  end
+
+  factory :king, parent: :piece, class: 'King' do
+    piece_type 'King'
+  end
+
+  factory :queen, parent: :piece, class: 'Queen' do
+     piece_type 'Queen'
+  end
+
+  factory :rook, parent: :piece, class: 'Rook' do
+    piece_type 'Rook'
   end
 
 end

@@ -46,21 +46,6 @@ RSpec.describe GamesController, type: :controller do
           expect(piece2.x_coordinate).to eq(0)
         end
       end
-
-      describe "creates the @board variable" do
-        it "should place a Rook at board[0][0]" do
-          expect(@game.board[0][0].piece_type).to eq("Rook")
-        end
-        it "should place w_rook2 at board[7][7]" do
-          expect(@game.board[7][7].piece_name).to eq("w_rook2")
-        end
-        it "should place nothing (and have nil) at board[4][4]" do
-          expect(@game.board[4][4]).to eq(nil)
-        end
-        it "should place w_queen at board[7][4]" do
-          expect(@game.board[7][4].piece_name).to eq("w_queen")
-        end
-      end
     end
 
     describe "create board" do
@@ -129,5 +114,90 @@ RSpec.describe GamesController, type: :controller do
   #     expect(game_to_join.player_white_id).to eq game_to_join.user_id
   #   end
   # end
+
+  describe "in check method" do
+    it "should return true for black king in check from white pawn" do 
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "white"
+      white_pawn = game1.pieces.where(piece_type: "Pawn", piece_color: "white", x_coordinate: 0, y_coordinate: 6).first
+      black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
+      white_pawn.update_attributes(y_coordinate: 3, x_coordinate: 5)
+      black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
+      
+      expect(game1.side_in_check?("black")).to eq(true)
+    end
+
+    it "should return true for black king in check from white bishop" do
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "white"
+      white_bishop = game1.pieces.where(piece_type: "Bishop", piece_color: "white", x_coordinate: 2, y_coordinate: 7).first
+      black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
+      white_bishop.update_attributes(y_coordinate: 5, x_coordinate: 1)
+      black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
+      
+      expect(game1.side_in_check?("black")).to eq(true)  
+    end
+
+    it "should return true for black king in check from white rook" do
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "white"
+      white_rook = game1.pieces.where(piece_type: "Rook", piece_color: "white", x_coordinate: 0, y_coordinate: 7).first
+      black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
+      white_rook.update_attributes(y_coordinate: 2, x_coordinate: 7)
+      black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
+      
+      expect(game1.side_in_check?("black")).to eq(true)  
+    end
+
+    it "should return true for white king in check from black pawn" do
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "black"
+      black_pawn = game1.pieces.where(piece_type: "Pawn", piece_color: "black", x_coordinate: 0, y_coordinate: 1).first
+      white_king = game1.pieces.where(piece_type: "King", piece_color: "white").first
+      black_pawn.update_attributes(y_coordinate: 4, x_coordinate: 3)
+      white_king.update_attributes(y_coordinate: 5, x_coordinate: 4)
+      
+      expect(game1.side_in_check?("white")).to eq(true)  
+    end
+
+    it "should return true for white king in check from black bishop" do
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "black"
+      black_bishop = game1.pieces.where(piece_type: "Bishop", piece_color: "black", x_coordinate: 2, y_coordinate: 0).first
+      white_king = game1.pieces.where(piece_type: "King", piece_color: "white").first
+      black_bishop.update_attributes(y_coordinate: 2, x_coordinate: 1)
+      white_king.update_attributes(y_coordinate: 5, x_coordinate: 4)
+     
+      expect(game1.side_in_check?("white")).to eq(true)  
+    end
+
+    it "should return true for white king in check from black rook" do
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "black"
+      black_rook = game1.pieces.where(piece_type: "Rook", piece_color: "black", x_coordinate: 0, y_coordinate: 0).first
+      white_king = game1.pieces.where(piece_type: "King", piece_color: "white").first
+      black_rook.update_attributes(y_coordinate: 2, x_coordinate: 4)
+      white_king.update_attributes(y_coordinate: 5, x_coordinate: 4)
+      
+      expect(game1.side_in_check?("white")).to eq(true)  
+    end
+
+    it "should return false for beginning board state" do
+      game1 = FactoryGirl.create(:game)
+      expect(game1.side_in_check?("black")).to eq(false) 
+    end
+
+    it "should return false for black king not in check from white rook" do
+      game1 = FactoryGirl.create(:game)
+      game1.player_turn = "white"
+      white_rook = game1.pieces.where(piece_type: "Rook", piece_color: "white", x_coordinate: 0, y_coordinate: 7).first
+      black_king = game1.pieces.where(piece_type: "King", piece_color: "black").first
+      white_rook.update_attributes(y_coordinate: 3, x_coordinate: 5)
+      black_king.update_attributes(y_coordinate: 2, x_coordinate: 4)
+      
+      expect(game1.in_check?).to eq(false)  
+    end
+  end
+
 end
 
