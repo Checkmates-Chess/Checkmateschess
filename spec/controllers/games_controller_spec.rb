@@ -24,9 +24,10 @@ RSpec.describe GamesController, type: :controller do
         } 
       }
 
-      expect(response).to redirect_to root_path
-
       game = Game.last
+      
+      expect(response).to redirect_to game_path(game)
+
       expect(game.game_title).to eq("best game 1")
       expect(game.user).to eq(@user)
     end
