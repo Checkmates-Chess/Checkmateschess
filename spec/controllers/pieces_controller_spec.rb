@@ -271,19 +271,19 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "valid_move? for Bishop" do
-			@w_bishop1 = Piece.create :game_id => 1, :piece_type => "Bishop", :piece_name => "w_bishop1", :piece_color => "white", :piece_status => "alive|first move", :x_coordinate => 3, :y_coordinate => 3
+			w_bishop1 = Piece.create :game_id => 1, :piece_type => "Bishop", :piece_name => "w_bishop1", :piece_color => "white", :piece_status => "alive|first move", :x_coordinate => 3, :y_coordinate => 3
 
 
 	  it "should allow bishops to move diagonally" do
 	    expect(w_bishop1.valid_move?(4, 4)).to eq(true)
-	    expect(w_bishop2.valid_move?(2, 2)).to eq(true)
+	    expect(w_bishop1.valid_move?(2, 2)).to eq(true)
 	  end
 
 	  it "should prevent bishops from moving horizontally" do
 	    expect(w_bishop1.valid_move?(1, 3)).to eq(false)
 	  end
 	  it "should prevent bishops from moving vertically" do
-	    expect(b_bishop2.valid_move?(3, 5)).to eq(false)
+	    expect(w_bishop1.valid_move?(3, 5)).to eq(false)
 	  end
 	  it "should prevent unallowed moves" do
 
