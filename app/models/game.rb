@@ -1,12 +1,10 @@
 class Game < ApplicationRecord
   has_many :pieces
   belongs_to :user
-<<<<<<< HEAD
 
-=======
   #belongs_to :player_white, class_name: "User"
   #belongs_to :player_black, class_name: "User"
->>>>>>> 4d18f90d49894ebcd2ed2212e27bb4d1346b3d9d
+
   attr_accessor :board
 
   validates :game_title, presence: true, length: { minimum: 3,
@@ -65,8 +63,6 @@ class Game < ApplicationRecord
                [@w_rook1, @w_knight1, @w_bishop1, @w_queen, @w_king, @w_bishop2, @w_knight2, @w_rook2]
               ]
   end
-<<<<<<< HEAD
-=======
 
   def in_check?
     side_in_check?("black") || side_in_check?("white")
@@ -106,6 +102,4 @@ class Game < ApplicationRecord
       update_attributes(player_turn: "white")
     end
   end
-  
->>>>>>> 4d18f90d49894ebcd2ed2212e27bb4d1346b3d9d
 end

@@ -13,7 +13,7 @@ class GamesController < ApplicationController
       @game.update_attributes(player_black_id: @game.user_id)
     end
     @game.update_attributes(player_turn: "white")
-    redirect_to root_path
+    redirect_to game_path(@game)
   end
 
   def show
