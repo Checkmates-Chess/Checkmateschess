@@ -271,35 +271,23 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "valid_move? for Bishop" do
-			game = FactoryGirl.create(:game)
-		
-	    w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
-	    w_bishop2 = game.pieces.find_by_piece_name("w_bishop2")
-	    b_bishop1 = game.pieces.find_by_piece_name("b_bishop1")
-	    b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+			@w_bishop1 = Piece.create :game_id => 1, :piece_type => "Bishop", :piece_name => "w_bishop1", :piece_color => "white", :piece_status => "alive|first move", :x_coordinate => 3, :y_coordinate => 3
+
 
 	  it "should allow bishops to move diagonally" do
-	  	game.player_turn = "white"
-	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
-	    expect(w_bishop2.valid_move?(5, 3)).to eq(true)
-	    game.player_turn = "black"
-	    expect(b_bishop1.valid_move?(2, 4)).to eq(true)
-	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
+	    expect(w_bishop1.valid_move?(4, 4)).to eq(true)
+	    expect(w_bishop2.valid_move?(2, 2)).to eq(true)
 	  end
 
 	  it "should prevent bishops from moving horizontally" do
-	  	game.player_turn = "white"
-	    expect(w_bishop1.valid_move?(4, 7)).to eq(false)
+	    expect(w_bishop1.valid_move?(1, 3)).to eq(false)
 	  end
-
 	  it "should prevent bishops from moving vertically" do
-	  	game.player_turn = "black"
-	    expect(b_bishop2.valid_move?(4, 5)).to eq(false)
+	    expect(b_bishop2.valid_move?(3, 5)).to eq(false)
 	  end
-
 	  it "should prevent unallowed moves" do
-	  	game.player_turn = "white"
-			expect(w_bishop2.valid_move?(6, 1)).to eq(false)
+
+			expect(w_bishop1.valid_move?(6, 1)).to eq(false)
 	  end
 	end
 
