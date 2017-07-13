@@ -13,7 +13,7 @@ Devise.setup do |config|
   # note that it will be overwritten if you use your own mailer class
   # with default "from" parameter.
   config.mailer_sender = 'please-change-me-at-config-initializers-devise@example.com'
-  config.omniauth :facebook, ENV["FACEBOOK_ID"], ENV["FACEBOOK_KEY"]
+  config.omniauth :facebook, ENV["FACEBOOK_ID"], ENV["FACEBOOK_KEY"], callback_url: "https://check-mates-chess.herokuapp.com/"
 
   # Configure the class responsible to send e-mails.
   # config.mailer = 'Devise::Mailer'
@@ -27,6 +27,7 @@ Devise.setup do |config|
   # available as additional gems.
   require 'devise/orm/active_record'
 
+redirect_uri=https://check-mates-chess.herokuapp.com/_oauth/facebook?close
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
   # just :email. You can configure it to use [:username, :subdomain], so for
