@@ -13,21 +13,14 @@
 </div>
 
 
-<div class="col-sm-6">
-  <h2 class="text-center">Current Games</h2>
-  <div class="user-list box">
-    <% 10.times do |i| %>
-      <p>Current game: dummy-user-<%= i %> vs dummy-user-<%= i + 1 %></p>
-    <% end %>
-  </div>
-</div>
 
 <div class="col-sm-6">
   <h2 class="text-center">Available Games</h2>
   <div class="user-list box">
     <ul>
       <% @games.each do |game| %>
-        <li><%= game.game_title %><li>
+        <li><%= game.game_title %><br>
+        <%= link_to "Join!", game_path(game) %></li>
       <% end %>
     </ul>
   </div>

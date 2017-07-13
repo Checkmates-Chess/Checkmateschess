@@ -48,21 +48,20 @@ class Piece < ApplicationRecord
 
   # checks if a move is obstructed on horizontal, vertical, and 4 diagonal planes.
   # expects open spaces on the board to have the string "open space"
-  def is_obstructed?(board, start_vertical,start_horizontal,end_vertical,end_horizontal)
-    start_vertical = start_vertical.to_i
-    start_horizontal = start_horizontal.to_i
+  def is_obstructed?(end_vertical,end_horizontal)
+    start_vertical = self.y_coordinate.to_i
+    start_horizontal = self.x_coordinate.to_i
     end_vertical = end_vertical.to_i
     end_horizontal = end_horizontal.to_i
-  
-    if start_vertical == end_vertical && start_horizontal == end_horizontal
+    if start_vertical === end_vertical && start_horizontal === end_horizontal
       return true
     end
     # raises error if invalid move, otherwise runs
-    if start_vertical == end_vertical || start_horizontal == end_horizontal    
-      move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
+    if start_vertical === end_vertical || start_horizontal === end_horizontal    
+      move_by_one(end_vertical, end_horizontal)
     elsif ((start_vertical-end_vertical).abs != (start_horizontal - end_horizontal).abs)
       raise 'Invalid Input, not a diagonal horizontal or vertical move'
-    else move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
+    else move_by_one(end_vertical, end_horizontal)
     end
   end
 
@@ -75,19 +74,21 @@ class Piece < ApplicationRecord
       return incr
   end
 
-  # iterates by one square in whichever direction we specify and checks for "open space"
-  def move_by_one(board, start_vertical, start_horizontal, end_vertical, end_horizontal)
-    check_vertical = start_vertical
-    check_horizontal = start_horizontal
-    vert_incr = get_incr(start_vertical, end_vertical)
-    hor_incr = get_incr(start_horizontal, end_horizontal)
+  # iterates by one square in whichever direction we specify and checks for nil
+  # 
+  def move_by_one(end_vertical, end_horizontal)
+    check_vertical = y_coordinate.to_i
+    check_horizontal = x_coordinate.to_i
+    vert_incr = get_incr(check_vertical, end_vertical)
+    hor_incr = get_incr(check_horizontal, end_horizontal)
     while(check_vertical != end_vertical || 
       check_horizontal != end_horizontal)
       check_vertical += vert_incr
       check_horizontal += hor_incr
-      if [[check_horizontal],[check_vertical]] === [[end_horizontal],[end_vertical]]
+      position = Piece.find_by(y_coordinate: check_vertical, x_coordinate: check_horizontal)
+      if check_horizontal === end_horizontal && check_vertical === end_vertical
         return false
-      elsif board[check_vertical][check_horizontal] != nil
+      elsif position != nil
         return true
       end
     end
@@ -117,7 +118,7 @@ class Piece < ApplicationRecord
       end
       if ((y_coordinate.to_i-new_y).abs == (x_coordinate.to_i-new_x).abs) ||
         y_coordinate.to_i == new_y || x_coordinate.to_i == new_x
-        if is_obstructed?(board, y_coordinate, x_coordinate, new_y, new_x)
+        if is_obstructed?(new_y, new_x)
           return false
         end
       end

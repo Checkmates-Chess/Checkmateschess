@@ -62,101 +62,113 @@ RSpec.describe PiecesController, type: :controller do
 	end
   
 	describe "test is_obstructed? method" do
-		o = nil
-		s = "start point"
-		e = "end points"
-		x = "piece"
-		# unobstructed board
-		board = [
-							[e,o,o,o,o,o,e,o],
-							[o,o,o,o,o,o,o,o],
-							[o,o,o,o,o,o,o,o],
-							[e,o,o,s,o,o,o,e],
-							[o,o,o,o,o,o,o,o],
-							[o,o,o,o,o,o,o,o],
-							[e,o,o,o,o,o,o,o],
-							[o,o,o,o,o,o,o,e],
-						]
-		# obstructed board
-		board2 = [
-							[e,o,o,e,o,o,e,o],
-							[o,x,o,x,o,x,o,o],
-							[o,o,o,o,o,o,o,o],
-							[e,x,o,s,o,o,x,e],
-							[o,o,o,o,o,o,o,o],
-							[o,x,o,o,o,o,o,o],
-							[e,o,o,x,o,o,x,o],
-							[o,o,o,e,o,o,o,e],
-						]
+		before(:all) {Piece.destroy_all}
+		# o = nil
+		# s = "start point"
+		# e = "end points"
+		# x = "piece"
+		# # unobstructed board
+		# board = [
+		# 					[e,o,o,o,o,o,e,o],
+		# 					[o,o,o,o,o,o,o,o],
+		# 					[o,o,o,o,o,o,o,o],
+		# 					[e,o,o,s,o,o,o,e],
+		# 					[o,o,o,o,o,o,o,o],
+		# 					[o,o,o,o,o,o,o,o],
+		# 					[e,o,o,o,o,o,o,o],
+		# 					[o,o,o,o,o,o,o,e],
+		# 				]
+		# # obstructed board
+		# board2 = [
+		# 					[e,o,o,e,o,o,e,o],
+		# 					[o,x,o,x,o,x,o,o],
+		# 					[o,o,o,o,o,o,o,o],
+		# 					[e,x,o,s,o,o,x,e],
+		# 					[o,o,o,o,o,o,o,o],
+		# 					[o,x,o,o,o,o,o,o],
+		# 					[e,o,o,x,o,o,x,o],
+		# 					[o,o,o,e,o,o,o,e],
+		# 				]
+		
 		piece = Piece.create(game_id: 1, piece_type: "Rook", piece_color: "white", piece_status: "alive", x_coordinate: 3, y_coordinate: 3)
 		describe "when move is valid" do
 			describe "when move is unobstructed" do
 				describe "diagonal moves" do
 					it "moves ne" do
-						expect(piece.is_obstructed?(board, 3, 3, 0, 6)).to be(false)
+						expect(piece.is_obstructed?(0, 6)).to be(false)
 					end
 					it "moves nw" do
-						expect(piece.is_obstructed?(board, 3, 3, 0, 0)).to be(false)
+						expect(piece.is_obstructed?(0, 0)).to be(false)
 					end
 					it "moves sw" do
-						expect(piece.is_obstructed?(board, 3, 3, 6, 0)).to be(false)
+						expect(piece.is_obstructed?(6, 0)).to be(false)
 					end
 					it "moves se" do
-						expect(piece.is_obstructed?(board, 3, 3, 7, 7)).to be(false)
+						expect(piece.is_obstructed?(7, 7)).to be(false)
 					end
 				end
 
-				describe "straight moves(up,down,left,right" do
+				describe "straight moves" do
 					it "moves left" do
-						expect(piece.is_obstructed?(board, 3, 3, 3, 0)).to be(false)
+						expect(piece.is_obstructed?(3, 0)).to be(false)
 					end
 
 					it "moves right" do
-						expect(piece.is_obstructed?(board, 3, 3, 3, 7)).to be(false)
+						expect(piece.is_obstructed?(3, 7)).to be(false)
 					end
 
 					it "moves up" do
-						expect(piece.is_obstructed?(board, 3, 3, 7, 3)).to be(false)
+						expect(piece.is_obstructed?(0, 3)).to be(false)
 					end
 
 					it "moves down" do
-						expect(piece.is_obstructed?(board, 3, 3, 7, 3)).to be(false)
+						expect(piece.is_obstructed?(7, 3)).to be(false)
 					end
 				end
 			end
 
 
 			describe "when move is obstructed" do
+				before(:all) do
+					ne = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "ne", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 5, :y_coordinate => 1
+					nw = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "nw", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 1, :y_coordinate => 1
+					sw = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "sw", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 1, :y_coordinate => 5
+					se = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "se", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 6, :y_coordinate => 6
+					left = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "left", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 1, :y_coordinate => 3
+					right = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "right", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 6, :y_coordinate => 3
+					up = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "up", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 3, :y_coordinate => 1
+					down = Piece.create :game_id => 1, :piece_type => "Rook", :piece_name => "down", :piece_color => "black", :piece_status => "alive|first move", :x_coordinate => 3, :y_coordinate => 6
+				end
 				describe "diagonal moves" do
 					it "moves ne" do
-						expect(piece.is_obstructed?(board2, 3, 3, 0, 6)).to be(true)
+						expect(piece.is_obstructed?(0, 6)).to be(true)
 					end
 					it "moves nw" do
-						expect(piece.is_obstructed?(board2, 3, 3, 0, 0)).to be(true)
+						expect(piece.is_obstructed?(0, 0)).to be(true)
 					end
 					it "moves sw" do
-						expect(piece.is_obstructed?(board2, 3, 3, 6, 0)).to be(true)
+						expect(piece.is_obstructed?(6, 0)).to be(true)
 					end
 					it "moves se" do
-						expect(piece.is_obstructed?(board2, 3, 3, 7, 7)).to be(true)
+						expect(piece.is_obstructed?(7, 7)).to be(true)
 					end
 				end
 
-				describe "straight moves(up,down,left,right" do
+				describe "straight moves" do
 					it "moves left" do
-						expect(piece.is_obstructed?(board2, 3, 3, 3, 0)).to be(true)
+						expect(piece.is_obstructed?(3, 0)).to be(true)
 					end
 
 					it "moves right" do
-						expect(piece.is_obstructed?(board2, 3, 3, 3, 7)).to be(true)
+						expect(piece.is_obstructed?(3, 7)).to be(true)
 					end
 
 					it "moves up" do
-						expect(piece.is_obstructed?(board2, 3, 3, 7, 3)).to be(true)
+						expect(piece.is_obstructed?(0, 3)).to be(true)
 					end
 
 					it "moves down" do
-						expect(piece.is_obstructed?(board2, 3, 3, 7, 3)).to be(true)
+						expect(piece.is_obstructed?(7, 3)).to be(true)
 					end
 				end
 			end
@@ -259,35 +271,23 @@ RSpec.describe PiecesController, type: :controller do
 	end
 
 	describe "valid_move? for Bishop" do
-			game = FactoryGirl.create(:game)
-		
-	    w_bishop1 = game.pieces.find_by_piece_name("w_bishop1")
-	    w_bishop2 = game.pieces.find_by_piece_name("w_bishop2")
-	    b_bishop1 = game.pieces.find_by_piece_name("b_bishop1")
-	    b_bishop2 = game.pieces.find_by_piece_name("b_bishop2")
+			w_bishop1 = Piece.create :game_id => 1, :piece_type => "Bishop", :piece_name => "w_bishop1", :piece_color => "white", :piece_status => "alive|first move", :x_coordinate => 3, :y_coordinate => 3
+
 
 	  it "should allow bishops to move diagonally" do
-	  	game.player_turn = "white"
-	    expect(w_bishop1.valid_move?(5, 4)).to eq(true)
-	    expect(w_bishop2.valid_move?(5, 3)).to eq(true)
-	    game.player_turn = "black"
-	    expect(b_bishop1.valid_move?(2, 4)).to eq(true)
-	    expect(b_bishop2.valid_move?(2, 3)).to eq(true)
+	    expect(w_bishop1.valid_move?(4, 4)).to eq(true)
+	    expect(w_bishop1.valid_move?(2, 2)).to eq(true)
 	  end
 
 	  it "should prevent bishops from moving horizontally" do
-	  	game.player_turn = "white"
-	    expect(w_bishop1.valid_move?(4, 7)).to eq(false)
+	    expect(w_bishop1.valid_move?(1, 3)).to eq(false)
 	  end
-
 	  it "should prevent bishops from moving vertically" do
-	  	game.player_turn = "black"
-	    expect(b_bishop2.valid_move?(4, 5)).to eq(false)
+	    expect(w_bishop1.valid_move?(3, 5)).to eq(false)
 	  end
-
 	  it "should prevent unallowed moves" do
-	  	game.player_turn = "white"
-			expect(w_bishop2.valid_move?(6, 1)).to eq(false)
+
+			expect(w_bishop1.valid_move?(6, 1)).to eq(false)
 	  end
 	end
 

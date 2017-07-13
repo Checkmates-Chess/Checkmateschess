@@ -1,8 +1,10 @@
 class Game < ApplicationRecord
   has_many :pieces
   belongs_to :user
+
   #belongs_to :player_white, class_name: "User"
   #belongs_to :player_black, class_name: "User"
+
   attr_accessor :board
 
   validates :game_title, presence: true, length: { minimum: 3,
@@ -100,5 +102,4 @@ class Game < ApplicationRecord
       update_attributes(player_turn: "white")
     end
   end
-  
 end
