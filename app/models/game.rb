@@ -52,16 +52,16 @@ class Game < ApplicationRecord
     @w_pawn7 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn7", :piece_color => "white", :piece_status => "alive|first move", :x_coordinate => 6, :y_coordinate => 6
     @w_pawn8 = Piece.create :game_id => id, :piece_type => "Pawn", :piece_name => "w_pawn8", :piece_color => "white", :piece_status => "alive|first move", :x_coordinate => 7, :y_coordinate => 6
 
-    @board =  [
-               [@b_rook1, @b_knight1, @b_bishop1, @b_queen, @b_king, @b_bishop2, @b_knight2, @b_rook2],
-               [@b_pawn8, @b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7],
-               [nil, nil, nil, nil, nil, nil, nil, nil],
-               [nil, nil, nil, nil, nil, nil, nil, nil],
-               [nil, nil, nil, nil, nil, nil, nil, nil],
-               [nil, nil, nil, nil, nil, nil, nil, nil],
-               [@w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8],
-               [@w_rook1, @w_knight1, @w_bishop1, @w_queen, @w_king, @w_bishop2, @w_knight2, @w_rook2]
-              ]
+    # @board =  [
+    #            [@b_rook1, @b_knight1, @b_bishop1, @b_queen, @b_king, @b_bishop2, @b_knight2, @b_rook2],
+    #            [@b_pawn8, @b_pawn1, @b_pawn2, @b_pawn3, @b_pawn4, @b_pawn5, @b_pawn6, @b_pawn7],
+    #            [nil, nil, nil, nil, nil, nil, nil, nil],
+    #            [nil, nil, nil, nil, nil, nil, nil, nil],
+    #            [nil, nil, nil, nil, nil, nil, nil, nil],
+    #            [nil, nil, nil, nil, nil, nil, nil, nil],
+    #            [@w_pawn1, @w_pawn2, @w_pawn3, @w_pawn4, @w_pawn5, @w_pawn6, @w_pawn7, @w_pawn8],
+    #            [@w_rook1, @w_knight1, @w_bishop1, @w_queen, @w_king, @w_bishop2, @w_knight2, @w_rook2]
+    #           ]
   end
 
   def in_check?
