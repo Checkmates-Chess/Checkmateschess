@@ -8,7 +8,9 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       set_flash_message(:notice, :success, :kind => "Facebook") if is_navigational_format?
     else
       session["devise.facebook_data"] = request.env["omniauth.auth"]
-      redirect_to root_path
+      request.env["omniauth.strategy"].options[:callback_url] = "https://check-mates-chess.herokuapp.com/users/auth/facebook/callback"
+
+      redirect_to new_user_registration_url
     end
   end
 
